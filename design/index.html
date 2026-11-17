@@ -338,6 +338,44 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-sheetprint svg { margin: 0 auto 6px; }
 .qs-toast { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; align-items: center; gap: 20px; padding: 10px 10px 10px 22px; border-radius: var(--rm); background: #17231E; color: #fff; font-size: 1.25rem; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,.3); white-space: nowrap; }
 .qs-toast .btn { min-height: 56px; font-size: 1.25rem; padding: 0 22px; }
+/* live queue page */
+.qs-qhead { background: #fff; text-align: center; padding: 10px 16px 16px; display: flex; flex-direction: column; align-items: center; gap: 2px; box-shadow: 0 1px 0 var(--line); }
+.qs-lang { align-self: flex-end; display: inline-flex; gap: 2px; padding: 3px; border-radius: var(--rs); background: var(--mist); margin-bottom: 2px; }
+.qs-lang button { min-height: 44px; min-width: 48px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent; color: var(--slate); font: inherit; font-size: .875rem; font-weight: 700; }
+.qs-lang button.on { background: #fff; color: var(--p700); box-shadow: var(--sh); font-weight: 800; }
+.qs-qlogo { width: 56px; height: 56px; border-radius: var(--rm); background: var(--p700); color: #fff; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; margin-bottom: 6px; }
+.qs-qname { font-size: 1.375rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; }
+.qs-qsub { display: flex; align-items: center; gap: 6px; font-size: .875rem; font-weight: 600; color: var(--slate); }
+.qs-qsub .live { width: 8px; height: 8px; border-radius: 50%; background: #24935F; box-shadow: 0 0 0 3px #D3EEDF; }
+.qs-qcard2 { border-radius: var(--rm); padding: 18px 16px 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; box-shadow: 0 6px 18px rgba(15,46,37,.12); }
+.qs-qcard2.waiting { background: var(--w500); color: #17231E; }
+.qs-qcard2.called { background: var(--p600); color: #fff; }
+.qs-qcard2.gone { background: #E7EDEA; color: #33413B; box-shadow: none; }
+.qs-qcard2 .lbl { font-size: .9375rem; font-weight: 700; }
+.qs-qcard2 .no { font-size: 5rem; line-height: 1; font-weight: 800; letter-spacing: -.04em; margin: 2px 0 4px; }
+.qs-qcard2 .meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; font-weight: 700; }
+.qs-qcard2 .meta .dot { width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: .6; }
+.qs-qcard2 .pill { min-height: 44px; padding: 0 14px; border: 0; border-radius: var(--rs); background: rgba(255,255,255,.55); color: inherit; font: inherit; font-size: .875rem; font-weight: 800; }
+.qs-qcard2 .time { font-size: .875rem; font-weight: 600; }
+.qs-qcard2 .stats { display: grid; grid-template-columns: 1fr 1fr; width: 100%; margin-top: 6px; border-radius: var(--rs); background: rgba(255,255,255,.5); }
+.qs-qcard2.called .stats { background: rgba(255,255,255,.14); }
+.qs-qcard2 .stats.one { grid-template-columns: 1fr; }
+.qs-qcard2 .stats > div { padding: 10px 6px; } .qs-qcard2 .stats > div + div { box-shadow: -1px 0 0 rgba(23,35,30,.15); }
+.qs-qcard2 .stats b { display: block; font-size: 1.5rem; font-weight: 800; line-height: 1.15; letter-spacing: -.02em; }
+.qs-qcard2 .stats span { font-size: .875rem; font-weight: 600; }
+.qs-qcard2 .btn { margin-top: 8px; }
+.dev .btn-white { --bs-btn-bg: #fff; --bs-btn-color: #17231E; --bs-btn-border-color: #fff; --bs-btn-hover-bg: #F2F5F3; --bs-btn-hover-color: #17231E; --bs-btn-hover-border-color: #F2F5F3; --bs-btn-active-bg: #DCE4E0; --bs-btn-active-border-color: #DCE4E0; padding: 0 20px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.qs-qsec { background: #fff; border-radius: var(--rm); box-shadow: var(--sh); overflow: hidden; }
+.qs-qsec h2 { display: flex; align-items: center; gap: 8px; font-size: 1.0625rem; font-weight: 800; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.qs-callrow { display: flex; align-items: center; gap: 12px; padding: 12px 16px; }
+.qs-cchip { flex: 0 0 auto; min-width: 76px; height: 56px; padding: 0 14px; border-radius: var(--rm); background: var(--p100); color: var(--p700); font-size: 1.5rem; font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.qs-qrow { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 16px; border-bottom: 1px solid var(--line); }
+.qs-qrow:last-child { border-bottom: 0; }
+.qs-qrow .qn { width: 60px; height: 40px; border-radius: var(--rs); background: var(--w50); color: var(--w800); font-weight: 800; display: flex; align-items: center; justify-content: center; }
+.qs-qrow.called .qn { background: var(--p100); color: var(--p700); }
+.qs-qrow .px { font-weight: 600; color: var(--slate); }
+.qs-qrow.me { background: #FFF6D6; }
+.qs-qrow.me .qn { background: var(--w500); color: #17231E; } .qs-qrow.me .px { color: #17231E; font-weight: 700; }
 @media (prefers-reduced-motion: no-preference) { .dev .btn, .qs-cat, .qs-opt { transition: background-color .12s, box-shadow .12s, color .12s; } }
 </style>
 </head>
@@ -345,13 +383,13 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 <div class="board fit" id="board">
   <header class="board-head">
     <h1>QuickServe UI screens</h1>
-    <p>23 screens and 72 states for the browser-based POS, drawn in Bootstrap 5 with Bootstrap Icons so each one can be built as shown. The grey note under a frame says what triggers that state.</p>
+    <p>23 screens and 73 states for the browser-based POS, drawn in Bootstrap 5 with Bootstrap Icons so each one can be built as shown. The grey note under a frame says what triggers that state.</p>
     
 <details class="report" open>
   <summary>验收报告 v2 <span>2026 年 11 月 17 日 · UI 对照简报 + UX 体验走查 + 自动检测</span></summary>
 
   <div class="kpi">
-    <div><b>72</b>个状态，全部检测</div>
+    <div><b>73</b>个状态，全部检测</div>
     <div><b>0</b>处手机文字小于 14px</div>
     <div><b>0</b>个手机按钮低于 44px</div>
     <div><b>0</b>处文字对比度不达标 (WCAG AA)</div>
@@ -364,6 +402,13 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
     <li><b>字体：</b>旧版用系统字体，每台电脑显示不同；中文 Windows 会变成微软雅黑，英文显得挤、突兀。现在统一用 Plus Jakarta Sans（印尼雅加达设计，也是 ui-ux-pro-max 对“友好型应用”的推荐）。只用一种字体、4 个粗细，金额数字等宽对齐。字体文件 27 KB，可以自己托管。</li>
     <li><b>颜色：</b>品牌绿扩成深浅 6 级，顾客页面顶部改成深绿色带；新增一个辅助色“拉茶焦糖色”，只用在食物相关的地方（分类、招牌菜、辣度、会员）。页面底色改成浅灰绿，卡片用白底加柔和阴影，取代原来满屏的灰色边框。</li>
     <li><b>图标：</b>统一成带底色的“图标方块”。菜单分类用食物图标（煎蛋=饭类、篮子=面类、饼=Roti、热饮、冰饮、蛋糕）。底部导航选中时换成实心图标。每个状态都是图标加文字，不只靠颜色。</li>
+    <li><b>排队页：</b>参考 Sushi Mentai 的排队页重做：品牌头部、大号码卡、“正在叫号”、“当前队伍”列表、修改人数、保存号码、EN / BM / 中文切换。同时修了参考页的 5 个问题：<ul>
+      <li>金底白字看不清：改成琥珀底深色字，对比度达标</li>
+      <li>浮动语言按钮挡住列表：移到头部</li>
+      <li>同一号码既显示“叫号”又显示“等待”：状态统一</li>
+      <li>列表里找不到自己：高亮自己那一行并标“You”</li>
+      <li>没有等待时间：加上前面几组和预计等待</li>
+    </ul>号码卡的颜色就是状态：等待时琥珀色，叫号时绿色，过号后灰色。</li>
     <li><b>版面：</b>菜单改成分类块和白色菜品卡；排队号码做成票据造型，并用一排小图标显示前面还有几组；桌子格子加了状态图标；库存改成水位条，中间的竖线是最低库存。</li>
   </ul>
 
@@ -377,7 +422,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
   <h3>4. 验收方法和工具</h3>
   <ul>
     <li>从 GitHub 下载了两个前端 skill：<b>ui-ux-pro-max</b>（nextlevelbuilder），以及 Anthropic 官方的 <b>frontend-design</b>（和这里已安装的版本完全相同）。ui-ux-pro-max 的脚本被安全检查拦下，没有运行，改为直接读它的数据表：餐饮类推荐、配色、字体搭配，以及交付前检查清单。</li>
-    <li>自动检测用 Playwright 在浏览器里跑全部 72 个状态：逐个元素检查字号、点击区域高度、文字和背景的对比度、颜色用途、渐变、emoji、溢出和实际渲染的字体。</li>
+    <li>自动检测用 Playwright 在浏览器里跑全部 73 个状态：逐个元素检查字号、点击区域高度、文字和背景的对比度、颜色用途、渐变、emoji、溢出和实际渲染的字体。</li>
     <li>没有在真实手机上测试；二维码仍是占位图，不能扫描。</li>
   </ul>
 </details>
@@ -411,28 +456,64 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
       <h3>My ticket</h3>
       <div class="meta">Customer, phone · Table module (Clement)</div>
       <div class="states" tabindex="0" role="group" aria-label="My ticket states">
-        <figure class="state state-ph"><figcaption>My ticket · Waiting</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Walk-in queue</div></div></header><main class="qs-body">
-    <div class="qs-ticket">
-      <div class="top"><div class="small fw-semibold text-secondary">Your queue number</div><div class="qs-big text-primary my-2">A023</div><div class="fw-semibold">Nurul, party of 4</div></div>
-      <div class="cut"></div>
-      <div class="bot">
-        <div class="qs-qline" role="img" aria-label="A019 called, 4 groups waiting, then you"><span class="g called"><i class="bi bi-megaphone-fill" aria-hidden="true"></i></span><span class="g"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span class="g"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span class="g"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span class="g"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span class="you">You</span></div>
-        <div class="qs-wait2"><div><b>5</b><span>groups ahead</span></div><div><b>~15 min</b><span>estimated wait</span></div></div>
-      </div>
-    </div>
-    <div class="qs-list"><div><span class="qs-tile"><i class="bi bi-megaphone" aria-hidden="true"></i></span><span class="flex-grow-1 fw-semibold">Now calling</span><span class="num">A019</span></div></div>
-    <div class="alert alert-secondary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-bell" aria-hidden="true"></i></span><div><div class="fw-semibold">Keep this page open</div><div class="small">We alert you here with a sound and vibration. There is no SMS, so do not close this tab.</div></div></div>
-    <div class="text-center"><div class="qs-upd"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Updated just now</div></div></main><div class="qs-bar"><button type="button" class="btn btn-outline-secondary w-100">Leave the queue</button></div></div><p class="note">Groups ahead and wait time refresh by polling (within 5 s). Amber is used only for waiting.</p></figure>
-        <figure class="state state-ph"><figcaption>My ticket · Turn on alerts</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Walk-in queue</div></div></header><main class="qs-body">
-    <div class="qs-ticket"><div class="top"><div class="small fw-semibold text-secondary">Your queue number</div><div class="qs-big text-primary my-2">A023</div><div class="fw-semibold">Nurul, party of 4</div></div></div></main><div class="qs-overlay qs-sheet"><div class="modal-content qs-modal" style="width:480px" role="dialog" aria-label="Get alerted when it's your turn"><div class="modal-header"><h2 class="modal-title fs-5">Get alerted when it's your turn</h2><button type="button" class="btn-close" aria-label="Close"></button></div><div class="modal-body d-flex flex-column gap-3"><div class="d-flex flex-column align-items-center text-center gap-2"><span class="qs-tile xl"><i class="bi bi-volume-up" aria-hidden="true"></i></span><div>We'll ring, vibrate and flash this page when your table is ready. Keep it open and your volume up.</div></div></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary">Not now</button><button type="button" class="btn btn-primary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Turn on alerts</button></div></div></div></div><p class="note">Shown once, right after joining. Browsers only play sound after a tap, so this tap unlocks the alarm sound and asks to keep the screen awake. Without it the Called alert would be silent.</p></figure>
-        <figure class="state state-ph"><figcaption>My ticket · Leave the queue?</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Walk-in queue</div></div></header><main class="qs-body">
-    <div class="qs-ticket"><div class="top"><div class="small fw-semibold text-secondary">Your queue number</div><div class="qs-big text-primary my-2">A023</div><div class="fw-semibold">Nurul, party of 4</div></div></div></main><div class="qs-overlay qs-sheet"><div class="modal-content qs-modal" style="width:480px" role="dialog" aria-label="Leave the queue?"><div class="modal-header"><h2 class="modal-title fs-5">Leave the queue?</h2><button type="button" class="btn-close" aria-label="Close"></button></div><div class="modal-body d-flex flex-column gap-3"><div>A023 will be cancelled. To come back you will need a new number at the back of the queue.</div></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary">Stay in queue</button><button type="button" class="btn btn-danger">Leave queue</button></div></div></div></div><p class="note">Leaving cannot be undone, so it asks once. Staying is the default button.</p></figure>
-        <figure class="state state-ph"><figcaption>My ticket · Called</figcaption><div class="dev dev-ph qs-called"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><main class="qs-body">
-    <div class="text-center d-flex flex-column align-items-center gap-2 pt-4"><span class="qs-tile onband xl"><i class="bi bi-bell-fill" aria-hidden="true"></i></span><div class="qs-big mt-2">A023</div><h1 class="h-page">Your table is ready</h1><div>Please come to the counter now.</div></div>
-    <div class="card text-center"><div class="card-body"><div class="small text-secondary">Show this number to our staff</div><div class="fw-medium">Held until 7:42 pm (5 minutes)</div></div></div>
-    <div class="mt-auto"><button type="button" class="btn btn-outline-secondary w-100">Stop sound</button></div></main></div><p class="note">When staff tap Call, the whole page turns brand green, flashes, plays a sound and vibrates.</p></figure>
-        <figure class="state state-ph"><figcaption>My ticket · No-show</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Walk-in queue</div></div></header><main class="qs-body">
-    <div class="text-center d-flex flex-column align-items-center gap-2 pt-4"><span class="qs-tile gray xl"><i class="bi bi-x-lg" aria-hidden="true"></i></span><div class="qs-mid mt-2 text-secondary text-decoration-line-through">A023</div><h1 class="fs-4">This ticket has expired</h1><div class="text-body-secondary">We called A023 at 7:37 pm and released the table after 5 minutes.</div></div>
+        <figure class="state state-ph"><figcaption>My ticket · Waiting</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body">
+    <section class="qs-qcard2 waiting" aria-label="Your queue ticket">
+  <div class="lbl">Your queue number</div>
+  <div class="no">A023</div>
+  <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>Waiting</span><button type="button" class="pill">Edit pax</button></div>
+  <div class="time">Joined 17 Nov 2026, 7:31 pm</div>
+  <div class="stats"><div><b>4</b><span>groups ahead</span></div><div><b>~12 min</b><span>estimated wait</span></div></div>
+  <button type="button" class="btn btn-white"><i class="bi bi-download me-2" aria-hidden="true"></i>Save ticket</button>
+</section>
+    
+    <section class="qs-qsec"><h2>Now calling</h2><div class="qs-callrow"><span class="qs-cchip">A019</span><span class="small text-secondary">Called 2 min ago. Your turn is coming.</span></div></section>
+    <section class="qs-qsec"><h2>Current queue <span class="badge qs-b-wait-solid">6</span></h2>
+      <div class="qs-qrow called"><span class="qn">A019</span><span class="px">2 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-solid">Called</span></span></div><div class="qs-qrow"><span class="qn">A020</span><span class="px">2 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-neutral">Waiting</span></span></div><div class="qs-qrow"><span class="qn">A021</span><span class="px">5 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-neutral">Waiting</span></span></div><div class="qs-qrow"><span class="qn">A022</span><span class="px">3 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-neutral">Waiting</span></span></div><div class="qs-qrow me"><span class="qn">A023</span><span class="px">4 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-wait-solid">You</span><span class="badge qs-b-neutral">Waiting</span></span></div><div class="qs-qrow"><span class="qn">A024</span><span class="px">2 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-neutral">Waiting</span></span></div></section>
+    <div class="alert alert-secondary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-bell" aria-hidden="true"></i></span><div><div class="fw-semibold">Keep this page open</div><div class="small">We ring and vibrate here when it is your turn. There is no SMS. Save ticket keeps a picture of your number; it does not alert you.</div></div></div>
+    <div class="text-center"><div class="qs-upd"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Updated just now</div></div></main><div class="qs-bar"><button type="button" class="btn btn-outline-secondary w-100">Leave the queue</button></div></div><p class="note">The card colour is the status: amber while waiting, green when called, grey after a no-show. Your own row is marked in the list. Only ticket numbers and party sizes are shown, never names. Everything refreshes by polling within 5 s.</p></figure>
+        <figure class="state state-ph"><figcaption>My ticket · Turn on alerts</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body"><section class="qs-qcard2 waiting" aria-label="Your queue ticket">
+  <div class="lbl">Your queue number</div>
+  <div class="no">A023</div>
+  <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>Waiting</span></div>
+  <div class="time">Joined 17 Nov 2026, 7:31 pm</div>
+  <div class="stats"><div><b>4</b><span>groups ahead</span></div><div><b>~12 min</b><span>estimated wait</span></div></div>
+  
+</section></main><div class="qs-overlay qs-sheet"><div class="modal-content qs-modal" style="width:480px" role="dialog" aria-label="Get alerted when it's your turn"><div class="modal-header"><h2 class="modal-title fs-5">Get alerted when it's your turn</h2><button type="button" class="btn-close" aria-label="Close"></button></div><div class="modal-body d-flex flex-column gap-3"><div class="d-flex flex-column align-items-center text-center gap-2"><span class="qs-tile xl"><i class="bi bi-volume-up" aria-hidden="true"></i></span><div>We'll ring, vibrate and flash this page when your table is ready. Keep it open and your volume up.</div></div></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary">Not now</button><button type="button" class="btn btn-primary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Turn on alerts</button></div></div></div></div><p class="note">Shown once, right after joining. Browsers only play sound after a tap, so this tap unlocks the alarm sound and asks to keep the screen awake. Without it the Called alert would be silent.</p></figure>
+        <figure class="state state-ph"><figcaption>My ticket · Edit pax</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body"><section class="qs-qcard2 waiting" aria-label="Your queue ticket">
+  <div class="lbl">Your queue number</div>
+  <div class="no">A023</div>
+  <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>Waiting</span></div>
+  <div class="time">Joined 17 Nov 2026, 7:31 pm</div>
+  <div class="stats"><div><b>4</b><span>groups ahead</span></div><div><b>~12 min</b><span>estimated wait</span></div></div>
+  
+</section></main><div class="qs-overlay qs-sheet"><div class="modal-content qs-modal" style="width:480px" role="dialog" aria-label="How many people?"><div class="modal-header"><h2 class="modal-title fs-5">How many people?</h2><button type="button" class="btn-close" aria-label="Close"></button></div><div class="modal-body d-flex flex-column gap-3"><div class="d-flex align-items-center justify-content-between"><span class="fw-semibold">Party size</span><div class="qs-step" role="group" aria-label="Quantity"><button type="button" class="btn btn-link" aria-label="Decrease"><i class="bi bi-dash-lg" aria-hidden="true"></i></button><span>5</span><button type="button" class="btn btn-link" aria-label="Increase"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></div></div><div class="small text-secondary">1 to 12 people. Your place in the queue stays the same.</div></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary">Cancel</button><button type="button" class="btn btn-primary">Save</button></div></div></div></div><p class="note">Party size can change while waiting. A bigger group may need a bigger table, so the wait estimate is recalculated after saving.</p></figure>
+        <figure class="state state-ph"><figcaption>My ticket · Leave the queue?</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body"><section class="qs-qcard2 waiting" aria-label="Your queue ticket">
+  <div class="lbl">Your queue number</div>
+  <div class="no">A023</div>
+  <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>Waiting</span></div>
+  <div class="time">Joined 17 Nov 2026, 7:31 pm</div>
+  <div class="stats"><div><b>4</b><span>groups ahead</span></div><div><b>~12 min</b><span>estimated wait</span></div></div>
+  
+</section></main><div class="qs-overlay qs-sheet"><div class="modal-content qs-modal" style="width:480px" role="dialog" aria-label="Leave the queue?"><div class="modal-header"><h2 class="modal-title fs-5">Leave the queue?</h2><button type="button" class="btn-close" aria-label="Close"></button></div><div class="modal-body d-flex flex-column gap-3"><div>A023 will be cancelled. To come back you will need a new number at the back of the queue.</div></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary">Stay in queue</button><button type="button" class="btn btn-danger">Leave queue</button></div></div></div></div><p class="note">Leaving cannot be undone, so it asks once. Staying is the default button.</p></figure>
+        <figure class="state state-ph"><figcaption>My ticket · Called</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body">
+    <section class="qs-qcard2 called" aria-label="Your queue ticket">
+  <div class="lbl">Your table is ready</div>
+  <div class="no">A023</div>
+  <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>Called 7:37 pm</span></div>
+  <div class="time">Please come to the counter now</div>
+  
+  <div class="stats one"><div><b>7:42 pm</b><span>table held until (5 minutes)</span></div></div>
+</section>
+    <div class="alert alert-primary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-person-check" aria-hidden="true"></i></span><div><div class="fw-semibold">Show this number to our staff</div><div class="small">They will take you to your table.</div></div></div></main><div class="qs-bar"><button type="button" class="btn btn-outline-secondary w-100"><i class="bi bi-volume-mute me-2" aria-hidden="true"></i>Stop sound</button></div></div><p class="note">When staff tap Call, the card turns green, the page flashes, plays a sound and vibrates.</p></figure>
+        <figure class="state state-ph"><figcaption>My ticket · No-show</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body">
+    <section class="qs-qcard2 gone" aria-label="Your queue ticket">
+  <div class="lbl">This ticket has expired</div>
+  <div class="no text-decoration-line-through">A023</div>
+  <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>No-show</span></div>
+  <div class="time">Called 7:37 pm, released 7:42 pm</div>
+  
+  
+</section>
     <div class="alert alert-secondary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-info-circle" aria-hidden="true"></i></span><div><div class="small">Still here? Speak to our staff at the counter or take a new number.</div></div></div></main><div class="qs-bar"><button type="button" class="btn btn-primary btn-lg w-100">Get a new queue number</button></div></div><p class="note">Staff marked No-show 5 minutes after calling.</p></figure>
       </div>
     </section>
