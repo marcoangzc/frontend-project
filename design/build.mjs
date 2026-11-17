@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import customer from './src/customer.mjs';
 import staff from './src/staff.mjs';
 import owner from './src/owner.mjs';
+import report from './src/report.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const read = (p) => readFileSync(join(here, p), 'utf8');
@@ -14,6 +15,8 @@ const read = (p) => readFileSync(join(here, p), 'utf8');
 const bootstrap = read('vendor/bootstrap.min.css').replace(/\/\*# sourceMappingURL=.*?\*\//, '');
 const woff2 = readFileSync(join(here, 'vendor/bootstrap-icons.woff2')).toString('base64');
 const icons = read('vendor/bootstrap-icons.min.css').replace(/src:url\([^}]*\}/, `src:url("data:font/woff2;base64,${woff2}") format("woff2")}`);
+const jakarta = readFileSync(join(here, 'vendor/plus-jakarta-sans-latin-wght-normal.woff2')).toString('base64');
+const fontFace = `@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url("data:font/woff2;base64,${jakarta}") format("woff2")}`;
 const theme = read('src/qs.css');
 
 const roles = [
@@ -29,6 +32,7 @@ const body = `
   <header class="board-head">
     <h1>QuickServe UI screens</h1>
     <p>${roles.reduce((a, r) => a + r.sections.length, 0)} screens and ${count} states for the browser-based POS, drawn in Bootstrap 5 with Bootstrap Icons so each one can be built as shown. The grey note under a frame says what triggers that state.</p>
+    ${report(count)}
     <div class="board-tools">
       <div class="zoom" role="group" aria-label="Tablet and PC frame size"><span>Tablet and PC frames</span><button type="button" id="z-fit" aria-pressed="true">60%</button><button type="button" id="z-full" aria-pressed="false">100%</button></div>
     </div>
@@ -63,6 +67,7 @@ const head = `<title>QuickServe UI Screens</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>${bootstrap}</style>
 <style>${icons}</style>
+<style>${fontFace}</style>
 <style>${theme}</style>`;
 
 writeFileSync(join(here, 'index.html'), `<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n${head}\n</head>\n<body>${body}\n</body>\n</html>\n`);

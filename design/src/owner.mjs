@@ -1,4 +1,4 @@
-import { i, btn, iconBtn, badge, field, toggle, kv, alert, emp, qr, tbl, mod, tabs, pc, section } from './lib.mjs';
+import { tile, i, btn, iconBtn, badge, field, toggle, kv, alert, emp, qr, tbl, mod, tabs, pc, section } from './lib.mjs';
 
 const acts = (name, extra = '') => `<div class="d-flex gap-2 justify-content-end">${extra}${iconBtn('pencil', 'Edit ' + name)}${iconBtn('trash', 'Remove ' + name)}</div>`;
 const searchBox = (ph, w = 280) => `<div style="width:${w}px">${field(null, ph, { ph: 1, pre: i('search'), aria: ph })}</div>`;
@@ -57,12 +57,14 @@ const menu = [
 ];
 
 /* ---------- Inventory ---------- */
-const irow = (name, stock, min, used, low) => ({ cls: low ? 'table-danger' : '', c: [`<b>${name}</b>`, low ? `<b>${stock}</b> ${badge('Low', 'danger-solid')}` : stock, min, `<span class="${low ? '' : 'text-body-secondary'}">${used}</span>`, `<div class="d-flex gap-2 justify-content-end">${btn('Stock in', 'outline-primary', { sm: 1 })}${btn('Adjust', 'outline-secondary', { sm: 1 })}${iconBtn('trash', 'Remove ' + name)}</div>`] });
+const irow = (name, stock, min, used, pct, low) => ({ cls: low ? 'table-danger' : '', c: [`<b>${name}</b>`,
+  `<div class="qs-meter${low ? ' low' : ''}"><span class="trk" role="img" aria-label="${stock} in stock, minimum ${min}"><i style="width:${pct}%"></i><em></em></span><span><b>${stock}</b> <span class="text-body-secondary">min ${min}</span></span>${low ? badge('Low', 'danger-solid') : ''}</div>`,
+  `<span class="${low ? '' : 'text-body-secondary'}">${used}</span>`, `<div class="d-flex gap-2 justify-content-end">${btn('Stock in', 'outline-primary', { sm: 1 })}${btn('Adjust', 'outline-secondary', { sm: 1 })}${iconBtn('trash', 'Remove ' + name)}</div>`] });
 const invRows = [
-  irow('Egg', '12 pcs', '30 pcs', '4 dishes', true), irow('Santan (coconut milk)', '1.5 L', '3 L', '2 dishes', true),
-  irow('Rice', '18.4 kg', '10 kg', '5 dishes'), irow('Chicken', '6.2 kg', '4 kg', '6 dishes'), irow('Yellow noodles', '4.5 kg', '3 kg', '2 dishes'),
-  irow('Condensed milk', '9 cans', '6 cans', '3 dishes'), irow('Tea dust', '2.1 kg', '1 kg', '2 dishes'), irow('Pandan leaves', '14 bunches', '5 bunches', 'Not in any recipe')];
-const invPage = `${tabs(['All ingredients <span class="badge qs-b-neutral ms-2">24</span>', 'Low stock <span class="badge qs-b-danger-solid ms-2">2</span>'])}<div class="qs-toolbar">${searchBox('Search ingredients')}<div class="ms-auto small text-body-secondary">Stock drops automatically when an order is confirmed</div></div>${tbl(['Ingredient', 'In stock', 'Minimum', 'Used in', { h: '', ...R }], invRows)}`;
+  irow('Egg', '12 pcs', '30 pcs', '4 dishes', 20, true), irow('Santan (coconut milk)', '1.5 L', '3 L', '2 dishes', 25, true),
+  irow('Rice', '18.4 kg', '10 kg', '5 dishes', 92), irow('Chicken', '6.2 kg', '4 kg', '6 dishes', 78), irow('Yellow noodles', '4.5 kg', '3 kg', '2 dishes', 75),
+  irow('Condensed milk', '9 cans', '6 cans', '3 dishes', 75), irow('Tea dust', '2.1 kg', '1 kg', '2 dishes', 100), irow('Pandan leaves', '14 bunches', '5 bunches', 'Not in any recipe', 100)];
+const invPage = `<div class="d-flex gap-3">${stat('Ingredients', '24', 'Tracked by recipe')}${stat('Below minimum', '2', 'Egg and Santan')}${stat('Last stock-in', 'Today, 10:15 am', 'Rice 25 kg from Pasar Borong')}</div>${tabs(['All ingredients <span class="badge qs-b-neutral ms-2">24</span>', 'Low stock <span class="badge qs-b-danger-solid ms-2">2</span>'])}<div class="qs-toolbar">${searchBox('Search ingredients')}<div class="ms-auto small text-body-secondary">Stock drops automatically when an order is confirmed</div></div>${tbl(['Ingredient', 'Stock level', 'Used in', { h: '', ...R }], invRows)}`;
 const iset = (name, o) => pc(`Inventory · ${name}`, 'Inventory', 'Inventory', { low: 2, act: btn('Add ingredient', 'primary', { i: 'plus-lg' }), ...o }, invPage);
 const inventory = [
   iset('Stock list', { note: 'Rows under the minimum are red, carry a Low badge and sort to the top. Red is used for nothing else on this page.' }),
@@ -94,7 +96,7 @@ const reports = [
       ['R-20261117-0041', '7:51 pm', 'T12', 'E-wallet', 'Self-paid', badge('Paid', 'brand'), 'RM14.30'],
       ['R-20261117-0040', '7:40 pm', 'T1', 'Cash', 'Kumar', badge('Paid', 'brand'), 'RM28.60'],
       ['R-20261117-0039', '7:15 pm', 'T10', 'Cash', 'Aina', badge('Paid', 'brand'), 'RM19.80'],
-      { cls: 'qs-void', c: ['R-20261117-0038', '7:02 pm', 'T6', 'Cash', 'Aina', badge('Voided', 'danger') + ' <span class="small">by Mei Ling, 8:12 pm</span>', '<span class="amt">RM51.89</span>'] },
+      { cls: 'qs-void', c: ['R-20261117-0038', '7:02 pm', 'T6', 'Cash', 'Aina', badge('Voided', 'neutral') + ' <span class="small">by Mei Ling, 8:12 pm</span>', '<span class="amt">RM51.89</span>'] },
       ['R-20261117-0037', '6:48 pm', 'T5', 'Card', 'Self-paid', badge('Paid', 'brand'), 'RM22.40']])}
     <div class="small text-body-secondary">Showing 6 of 40 transactions today</div>`),
   pc('Reports · Empty date range', 'Reports', 'Reports', { upd: false, sub: '1 to 7 Jun 2026', note: 'A range with no sales says so and offers the nearest useful action, not a page of zero tables.' }, `
@@ -140,4 +142,8 @@ export default [
   section('staff-settings', 'Staff accounts and settings', 'Owner, PC · Shared', staff),
 ];
 
-function stat(label, value, sub) { return `<div class="card flex-fill"><div class="card-body"><div class="small text-body-secondary">${label}</div><div class="fs-3 fw-semibold lh-sm">${value}</div><div class="small text-body-secondary">${sub}</div></div></div>`; }
+function stat(label, value, sub) {
+  const ic = {"Orders today": "clipboard2-check", "Open tables": "grid-3x3-gap", "Queue": "people", "Sales today": "wallet2", "Revenue": "wallet2", "Average bill": "receipt", "Voids and refunds": "slash-circle", "Ingredients": "box-seam", "Below minimum": "exclamation-triangle-fill", "Last stock-in": "box-arrow-in-down"}[label] || 'info-circle';
+  const tone = label === 'Below minimum' ? 'red' : label === 'Voids and refunds' ? 'gray' : '';
+  return `<div class="qs-stat">${tile(ic, tone, 'lg')}<div class="min-w-0"><span>${label}</span><b>${value}</b><span>${sub}</span></div></div>`;
+}

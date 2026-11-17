@@ -1,4 +1,4 @@
-import { i, btn, iconBtn, badge, field, kv, alert, upd, step, emp, mod, tabs, ph, sp, tb, ct, section } from './lib.mjs';
+import { tile, i, btn, iconBtn, badge, field, kv, alert, upd, step, emp, mod, tabs, ph, sp, tb, ct, section } from './lib.mjs';
 
 /* ---------- Staff login ---------- */
 const login = (name, al, o = {}) => ph(`Staff login · ${name}`, { url: 'quickserve.my/staff', head: '', note: o.note }, `
@@ -16,8 +16,8 @@ const logins = [
 ];
 
 /* ---------- Home ---------- */
-const row = (icon, label, num, sub, tone) => `<a href="#"><span class="flex-grow-1"><span class="d-block fw-medium">${i(icon, 'me-2 text-secondary')}${label}</span>${sub ? `<span class="d-block small text-body-secondary">${sub}</span>` : ''}</span>${tone ? badge(num, tone) : `<span class="num">${num}</span>`}${i('chevron-right')}</a>`;
-const todo = (icon, text, action) => `<div><span class="flex-grow-1 fw-medium">${i(icon, 'me-2')}${text}</span>${btn(action, 'outline-primary', { sm: 1 })}</div>`;
+const row = (icon, label, num, sub, tone) => `<a href="#">${tile(icon, tone === 'danger-solid' ? 'red' : '')}<span class="flex-grow-1"><span class="d-block fw-semibold">${label}</span>${sub ? `<span class="d-block small text-body-secondary">${sub}</span>` : ''}</span>${tone ? badge(num, tone) : `<span class="num">${num}</span>`}${i('chevron-right')}</a>`;
+const todo = (icon, text, action) => `<div>${tile(icon, 'wait')}<span class="flex-grow-1 fw-semibold">${text}</span>${btn(action, 'outline-primary', { sm: 1 })}</div>`;
 const day = '<div class="d-flex justify-content-between align-items-center"><div class="small text-body-secondary">Tue 17 Nov 2026 · Aina, Cashier</div>';
 const home = [
   sp('Home · Busy day', 'Home', 'Home', { note: 'Things that need a tap come first; the four counts below link to their pages. No charts or trend arrows.' }, `
@@ -33,7 +33,7 @@ const home = [
       ${row('box-seam', 'Low stock', 0, 'All ingredients above minimum')}</div></section>`),
   sp('Home · Quiet morning', 'Home', 'Home', { note: 'Zeros are shown as zeros, with one line saying what will appear here.' }, `
     <div class="d-flex justify-content-between align-items-center"><div class="small text-body-secondary">Tue 17 Nov 2026 · Aina, Cashier</div>${upd()}</div>
-    <section><h2 class="fs-6 mb-2">Needs attention</h2><div class="qs-list"><div class="text-body-secondary">Nothing right now. New QR orders, waiter calls and queue tickets appear here.</div></div></section>
+    <section><h2 class="fs-6 mb-2">Needs attention</h2><div class="qs-list"><div class="text-body-secondary">${tile('check-lg', 'gray')}Nothing right now. New QR orders, waiter calls and queue tickets appear here.</div></div></section>
     <section><h2 class="fs-6 mb-2">Today</h2><div class="qs-list">
       ${row('journal-text', 'Orders', 0, 'No orders yet today')}
       ${row('table', 'Open tables', '0 of 15', 'All tables free')}
@@ -41,7 +41,7 @@ const home = [
       ${row('box-seam', 'Low stock', 0, 'All ingredients above minimum')}</div></section>`),
   sp('Home · Low-stock warning', 'Home', 'Home', { low: 2, note: 'Appears on staff and owner screens when an ingredient falls below the owner\'s minimum. The count also sits in the app bar on every page.' }, `
     <div class="d-flex justify-content-between align-items-center"><div class="small text-body-secondary">Tue 17 Nov 2026 · Aina, Cashier</div>${upd()}</div>
-    <div class="alert alert-danger d-flex flex-column gap-2 mb-0" role="alert"><div class="fw-semibold">${i('exclamation-triangle-fill', 'me-2')}2 ingredients are low</div>
+    <div class="alert alert-danger d-flex flex-column gap-2 mb-0" role="alert"><div class="d-flex align-items-center gap-2 fw-semibold"><span class="qs-ai">${i('exclamation-triangle-fill')}</span>2 ingredients are low</div>
       <div class="small">${kv('Egg', '12 pcs left · minimum 30')}${kv('Santan (coconut milk)', '1.5 L left · minimum 3 L')}</div>
       <div class="small">Affects Nasi Lemak Ayam, Mee Goreng Mamak and Nasi Goreng Kampung.</div>
       ${btn('Mark dishes unavailable', 'danger', { block: 1 })}</div>
@@ -53,10 +53,10 @@ const home = [
 ];
 
 /* ---------- Queue list ---------- */
-const qrow = (no, name, size, wait, o = {}) => `<div class="card${o.called ? ' border-primary' : ''}"><div class="card-body d-flex flex-column gap-2 p-3">
-  <div class="d-flex align-items-center gap-3"><div class="fs-3 fw-bold lh-1">${no}</div><div class="flex-grow-1"><div class="fw-medium">${name} · ${size} ${size === 1 ? 'person' : 'people'}</div><div class="small text-body-secondary">${wait}</div></div>${o.called ? badge('Called', 'solid') : badge('Waiting', 'wait')}</div>
-  <div class="d-flex gap-2">${o.called ? btn('No-show', 'outline-secondary', { c: 'flex-fill', dis: o.early }) + btn('Seated', 'primary', { c: 'flex-fill', i: 'check-lg' }) : btn('Call ' + no, 'outline-primary', { c: 'flex-fill', i: 'bell' })}</div>
-  ${o.early ? '<div class="small text-body-secondary">No-show can be marked 5 minutes after calling (in 3 min).</div>' : ''}</div></div>`;
+const qrow = (no, name, size, wait, o = {}) => `<div class="qs-qcard${o.called ? ' called' : ''}">
+  <div class="d-flex align-items-center gap-3"><div class="qs-qno">${no}</div><div class="flex-grow-1 min-w-0"><div class="fw-bold">${name}</div><div class="small text-body-secondary">${i('people-fill')} ${size} ${size === 1 ? 'person' : 'people'}, ${wait.toLowerCase()}</div></div>${o.called ? badge('Called', 'solid') : badge('Waiting', 'wait')}</div>
+  <div class="d-flex gap-2">${o.called ? btn('No-show', 'outline-secondary', { c: 'flex-fill', dis: o.early }) + btn('Seated', 'primary', { c: 'flex-fill', i: 'check-lg' }) : btn('Call ' + no, 'outline-primary', { c: 'flex-fill', i: 'megaphone' })}</div>
+  ${o.early ? '<div class="small text-body-secondary">No-show can be marked 5 minutes after calling (in 3 min).</div>' : ''}</div>`;
 const queue = [
   sp('Queue · Several waiting', 'Queue', 'Queue', { note: 'Oldest ticket first. Call makes the customer\'s ticket page flash, sound and vibrate. Then staff mark Seated, or No-show after 5 minutes.' }, `
     <div class="d-flex justify-content-between align-items-center"><div class="fw-medium">5 groups · longest wait 18 min</div>${upd()}</div>
@@ -71,7 +71,7 @@ const queue = [
 ];
 
 /* ---------- Table grid ---------- */
-const t = (no, cls, line, o = {}) => `<a href="#" class="qs-t${cls ? ' ' + cls : ''}${o.call ? ' call' : ''}${o.sel ? ' sel' : ''}"><b>${no}</b><span>${line}</span>${o.call ? `<span class="bell" aria-label="Waiter called">${i('bell-fill')}</span>` : ''}</a>`;
+const t = (no, cls, line, o = {}) => `<a href="#" class="qs-t${cls ? ' ' + cls : ''}${o.call ? ' call' : ''}${o.sel ? ' sel' : ''}"><b>${no}</b><span>${cls === 'food' ? i('clock-fill') : cls === 'pay' ? i('wallet-fill') : ''}${line}</span>${o.call ? `<span class="bell" aria-label="Waiter called">${i('bell-fill')}</span>` : ''}</a>`;
 const legend = '<div class="qs-legend"><span><i></i>Free</span><span><i class="food"></i>Waiting for food</span><span><i class="pay"></i>Awaiting payment</span></div>';
 const area = (name, tiles) => `<section><h2 class="fs-6 mb-2">${name}</h2><div class="qs-tgrid">${tiles}</div></section>`;
 const grid = (call, sel) => `
@@ -82,7 +82,7 @@ const tables = [
   sp('Tables · Live grid', 'Tables', 'Tables', { note: 'Grouped by dining area. Status is carried by a text line as well as colour: time waiting for food, or the amount to pay.' }, `
     <div class="d-flex justify-content-between align-items-center"><div class="fw-medium">9 of 15 tables open</div>${upd()}</div>${legend}${grid(false)}`),
   sp('Tables · Waiter call', 'Tables', 'Tables', { note: 'A customer tapped Call waiter on T7. The alert stays pinned until a staff member taps Done.' }, `
-    <div class="alert alert-warning d-flex align-items-center gap-2 mb-0" role="alert">${i('bell-fill')}<div class="flex-grow-1"><div class="fw-semibold">T7 is calling a waiter</div><div class="small">1 min ago · Outdoor</div></div>${btn('Done', 'outline-secondary', { sm: 1 })}</div>
+    <div class="alert alert-warning d-flex align-items-center gap-2 mb-0" role="alert"><span class="qs-ai">${i('bell-fill')}</span><div class="flex-grow-1"><div class="fw-semibold">T7 is calling a waiter</div><div class="small">1 min ago · Outdoor</div></div>${btn('Done', 'outline-secondary', { sm: 1 })}</div>
     ${legend}${grid(true)}`),
   ct('Tables · Counter tablet', 'Tables', { note: 'Same grid at 1024 px with the selected table\'s order beside it, so the cashier does not leave the page to take payment.' }, `
     <div><div class="d-flex justify-content-between align-items-center"><div class="fw-medium">9 of 15 tables open</div>${upd()}</div>${legend}${grid(false, true)}</div>
@@ -115,7 +115,7 @@ const orders = [
 ];
 
 /* ---------- Kitchen view ---------- */
-const ticket = (tbl, no, time, age, lines, late) => `<article class="qs-ticket${late ? ' late' : ''}"><header><b>${tbl}</b><span>#${no}</span><span class="age">${age}</span></header><ul>${lines}</ul>${btn('Served', 'primary', { i: 'check-lg' })}</article>`;
+const ticket = (tbl, no, time, age, lines, late) => `<article class="qs-ticketk${late ? ' late' : ''}"><header><b>${tbl}</b><span>#${no}</span><span class="age">${age}</span></header><ul>${lines}</ul>${btn('Served', 'primary', { i: 'check-lg' })}</article>`;
 const kl = (q, name, note) => `<li><b>${q} ×</b>${name}${note ? `<em>${note}</em>` : ''}</li>`;
 const kitchen = [
   tb('Kitchen · Confirmed orders', { count: '4 orders waiting', note: 'Only confirmed orders, oldest first from the left. Read from a metre away: 24 px dish lines, 40 px table numbers, one button per ticket. A ticket turns amber after 10 minutes.' }, `
@@ -123,6 +123,11 @@ const kitchen = [
     ${ticket('T11', 1040, '7:21 pm', '8 min', kl(3, 'Roti Canai (2 pcs)') + kl(3, 'Milo Ais'))}
     ${ticket('T3', 1042, '7:23 pm', '6 min', kl(2, 'Nasi Lemak Ayam', 'less spicy') + kl(1, 'Mee Goreng Mamak') + kl(3, 'Teh Tarik', '1 kurang manis'))}
     ${ticket('T7', 1044, '7:26 pm', '3 min', kl(1, 'Nasi Goreng Kampung') + kl(1, 'Teh Tarik'))}`),
+  tb('Kitchen · Served with undo', { count: '3 orders waiting', note: 'Tapping Served removes the ticket at once and shows Undo for 8 seconds, because a wet hand on a wall tablet will mis-tap. The kitchen never needs a confirmation dialog.' }, `
+    ${ticket('T11', 1040, '7:21 pm', '8 min', kl(3, 'Roti Canai (2 pcs)') + kl(3, 'Milo Ais'))}
+    ${ticket('T3', 1042, '7:23 pm', '6 min', kl(2, 'Nasi Lemak Ayam', 'less spicy') + kl(1, 'Mee Goreng Mamak') + kl(3, 'Teh Tarik', '1 kurang manis'))}
+    ${ticket('T7', 1044, '7:26 pm', '3 min', kl(1, 'Nasi Goreng Kampung') + kl(1, 'Teh Tarik'))}
+    <div class="qs-toast" role="status">${i('check-circle-fill')} T5 marked served ${btn('Undo', 'band')}</div>`),
   tb('Kitchen · None waiting', { count: '0 orders waiting', note: 'The device signs in with a staff account and stays on this page; there is no navigation to tap by mistake.' }, `
     <div class="qs-kempty">No orders waiting<div>Confirmed orders appear here within 5 seconds.</div></div>`),
 ];
@@ -151,11 +156,11 @@ const cash = [
 const tx = (voided) => `
   <div class="d-flex justify-content-between align-items-center"><a href="#" class="small">${i('chevron-left')} Transactions</a>${upd()}</div>
   <div class="card"><div class="card-body d-flex flex-column gap-2 p-3">
-    <div class="d-flex justify-content-between align-items-center"><h2 class="fs-5">R-20261117-0038</h2>${voided ? badge('Voided', 'danger') : badge('Paid', 'brand')}</div>
+    <div class="d-flex justify-content-between align-items-center"><h2 class="fs-5">R-20261117-0038</h2>${voided ? badge('Voided', 'neutral') : badge('Paid', 'brand')}</div>
     <div class="small text-body-secondary">17 Nov 2026, 7:02 pm · Table T6 · Cash · Aina</div>
     <div class="d-flex flex-column gap-1 small">${kv('3 × Nasi Lemak Ayam', 'RM28.50')}${kv('2 × Mee Goreng Mamak', 'RM16.00')}<hr class="my-1">${kv('Subtotal', 'RM44.50')}${kv('Service charge (10%)', 'RM4.45')}${kv('SST (6%)', 'RM2.94')}</div>
     ${kv('Total', `<span class="${voided ? 'text-decoration-line-through text-secondary' : ''}">RM51.89</span>`, 'fs-5 fw-semibold')}</div></div>
-  ${voided ? `<div class="alert alert-danger mb-0"><div class="fw-semibold">Voided on 17 Nov 2026, 8:12 pm</div><div class="small">${kv('Requested by', 'Aina (Cashier)')}${kv('Approved by', 'Mei Ling (Owner)')}${kv('Reason', 'Charged to the wrong table')}</div></div><div class="small text-body-secondary">Voided transactions stay in history and reports. Nothing is deleted.</div>` : btn('Void this transaction', 'outline-danger', { block: 1 })}`;
+  ${voided ? `<div class="alert alert-secondary mb-0"><span class="qs-ai">${i('slash-circle')}</span><div class="flex-grow-1"><div class="fw-semibold">Voided on 17 Nov 2026, 8:12 pm</div><div class="small">${kv('Requested by', 'Aina (Cashier)')}${kv('Approved by', 'Mei Ling (Owner)')}${kv('Reason', 'Charged to the wrong table')}</div></div></div><div class="small text-body-secondary">Voided transactions stay in history and reports. Nothing is deleted.</div>` : btn('Void this transaction', 'outline-danger', { block: 1 })}`;
 const voidForm = (failed) => mod('Void R-20261117-0038', `
   ${failed ? alert('danger', 'Owner ID or password is incorrect', 'The transaction was not voided. Try again.') : ''}
   ${field('Reason for the void', 'Charged to the wrong table')}
@@ -169,7 +174,7 @@ const voids = [
 ];
 
 /* ---------- Members ---------- */
-const member = (name, phone, since) => `<a href="#"><span class="flex-grow-1"><span class="d-block fw-medium">${name}</span><span class="d-block small text-body-secondary">${phone} · member since ${since}</span></span>${i('chevron-right')}</a>`;
+const member = (name, phone, since) => `<a href="#">${tile('person-badge-fill', 'tea')}<span class="flex-grow-1"><span class="d-block fw-semibold">${name}</span><span class="d-block small text-body-secondary">${phone} · member since ${since}</span></span>${i('chevron-right')}</a>`;
 const regForm = (dup) => mod('Register member', `
   ${field('Name', 'Kavitha Raj')}
   ${field('Phone number', '012-345 6789', dup ? { type: 'tel', err: 'This phone number is already registered to Siti Aminah.' } : { type: 'tel', help: 'Used to find the member at payment.' })}

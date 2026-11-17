@@ -14,6 +14,8 @@ export const iconBtn = (icon, label, kind = 'outline-secondary') =>
   `<button type="button" class="btn btn-${kind} qs-icon-btn" aria-label="${label}">${i(icon)}</button>`;
 
 // tones: neutral, brand, solid, wait, wait-solid, danger, danger-solid, outline
+export const tile = (icon, tone = '', size = '') => `<span class="qs-tile${tone ? ' ' + tone : ''}${size ? ' ' + size : ''}">${i(icon)}</span>`;
+
 export const badge = (label, tone = 'neutral') => `<span class="badge qs-b-${tone}">${label}</span>`;
 
 export const field = (label, value, o = {}) => {
@@ -46,16 +48,16 @@ export const kv = (a, b, cls = '') => `<div class="d-flex justify-content-betwee
 // tones: danger, warning, primary, secondary
 export const alert = (tone, title, text, icon) => {
   const ic = icon || { danger: 'exclamation-triangle-fill', warning: 'clock', primary: 'check-circle-fill', secondary: 'info-circle' }[tone];
-  return `<div class="alert alert-${tone} d-flex gap-2 mb-0" role="${tone === 'danger' ? 'alert' : 'status'}">${i(ic, 'flex-shrink-0')}<div>${title ? `<div class="fw-semibold">${title}</div>` : ''}${text ? `<div class="small">${text}</div>` : ''}</div></div>`;
+  return `<div class="alert alert-${tone} d-flex gap-2 mb-0" role="${tone === 'danger' ? 'alert' : 'status'}"><span class="qs-ai">${i(ic)}</span><div>${title ? `<div class="fw-semibold">${title}</div>` : ''}${text ? `<div class="small">${text}</div>` : ''}</div></div>`;
 };
 
-export const upd = (t = 'Updated just now') => `<div class="qs-upd small text-secondary">${i('arrow-repeat')} ${t}</div>`;
+export const upd = (t = 'Updated just now') => `<div class="qs-upd">${i('arrow-repeat')} ${t}</div>`;
 
 export const step = (q) =>
   `<div class="qs-step" role="group" aria-label="Quantity"><button type="button" class="btn btn-link" aria-label="Decrease">${i('dash-lg')}</button><span>${q}</span><button type="button" class="btn btn-link" aria-label="Increase">${i('plus-lg')}</button></div>`;
 
 export const emp = (icon, title, text) =>
-  `<div class="text-center py-5 px-3">${i(icon, 'qs-emp-icon')}<div class="fw-semibold mt-2">${title}</div><div class="small text-secondary">${text}</div></div>`;
+  `<div class="qs-emp">${tile(icon, 'gray', 'lg')}<div class="fw-semibold fs-6">${title}</div><div class="small text-secondary">${text}</div></div>`;
 
 // Placeholder QR (random modules with finder patterns). Replace with a real QR library in the build.
 export const qr = (size = 160, seed = 7) => {
@@ -105,23 +107,24 @@ const frame = (kind, name, o, inner) => ({
 export const url = (u) => `<div class="qs-url"><span>${i('lock')} ${u}</span></div>`;
 
 // Customer phone header: restaurant, table, and the Call waiter button that sits on every table page.
-export const chd = (sub = 'Table T3', call = true) =>
-  `<header class="qs-chd"><div class="flex-grow-1"><div class="fw-semibold">Restoran Sri Melur</div>${sub ? `<div class="small text-secondary">${sub}</div>` : ''}</div>${call ? btn('Call waiter', 'outline-primary', { i: 'bell' }) : ''}</header>`;
+export const chd = (sub = 'Table T3', call = true, extra = '') =>
+  `<header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div>${sub ? `<div class="qs-chd-t">${sub}</div>` : ''}${extra ? `<div class="qs-chd-s">${extra}</div>` : ''}</div>${call ? btn('Call waiter', 'band', { i: 'bell' }) : ''}</header>`;
 
 // Customer phone screen (no navigation bar, entered by QR)
 export const ph = (name, o, body) =>
   frame('ph', name, o, `${url(o.url || 'quickserve.my/t/T3')}${o.head === undefined ? chd() : o.head}<main class="qs-body">${body}</main>${o.bar ? `<div class="qs-bar">${o.bar}</div>` : ''}`);
 
-const TABS = [['Home', 'house-door'], ['Tables', 'table'], ['Orders', 'journal-text'], ['Queue', 'people'], ['Pay', 'cash']];
+const TABS = [['Home', 'house-door'], ['Tables', 'grid-3x3-gap'], ['Orders', 'clipboard2-check'], ['Queue', 'people'], ['Pay', 'wallet2']];
+const FILL = { 'wallet2': 'wallet-fill' };
 
 // Staff phone screen: app bar, body, optional action bar, bottom tab bar
 export const sp = (name, title, tab, o, body) =>
   frame('ph', name, { ...o, bg: 'qs-staff' },
     `<header class="qs-appbar"><button type="button" class="btn qs-appbar-btn" aria-label="Menu">${i('list')}</button><h1>${title}</h1>${o.low ? `<a href="#" class="qs-low">${i('exclamation-triangle-fill')} ${o.low} low</a>` : ''}</header>` +
     `<main class="qs-body">${body}</main>${o.bar ? `<div class="qs-bar">${o.bar}</div>` : ''}` +
-    `<nav class="qs-tabbar" aria-label="Front of house">${TABS.map(([l, ic]) => `<a href="#"${l === tab ? ' class="active" aria-current="page"' : ''}>${i(ic)}<span>${l}</span></a>`).join('')}</nav>`);
+    `<nav class="qs-tabbar" aria-label="Front of house">${TABS.map(([l, ic]) => `<a href="#"${l === tab ? ' class="active" aria-current="page"' : ''}><span class="tic">${i(l === tab ? FILL[ic] || ic + '-fill' : ic)}</span><span>${l}</span></a>`).join('')}</nav>`);
 
-const NAV = [['Front of house'], ['Home', 'house-door'], ['Tables', 'table'], ['Orders', 'journal-text'], ['Queue', 'people'], ['Payments', 'cash'], ['Members', 'person-badge'], ['Kitchen view', 'clock'],
+const NAV = [['Front of house'], ['Home', 'house-door'], ['Tables', 'grid-3x3-gap'], ['Orders', 'clipboard2-check'], ['Queue', 'people'], ['Payments', 'wallet2'], ['Members', 'person-badge'], ['Kitchen view', 'clock'],
   ['Back office'], ['Menu', 'list'], ['Inventory', 'box-seam'], ['Tables & QR', 'qr-code'], ['Vouchers', 'ticket-perforated'], ['Transactions', 'credit-card'], ['Reports', 'graph-up'], ['Staff', 'person'], ['Settings', 'sliders']];
 
 // Owner PC screen: sidebar split into Front of house / Back office, page header, body
