@@ -105,8 +105,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .dev-ph .btn-sm { min-height: 44px; }
 .dev .btn-primary { --bs-btn-bg: #1F5E4B; --bs-btn-border-color: #1F5E4B; --bs-btn-hover-bg: #174839; --bs-btn-hover-border-color: #174839; --bs-btn-active-bg: #0F2E25; --bs-btn-active-border-color: #0F2E25; --bs-btn-disabled-bg: #9DB6AC; --bs-btn-disabled-border-color: #9DB6AC; --bs-btn-disabled-opacity: 1; --bs-btn-focus-shadow-rgb: 31,94,75; box-shadow: 0 2px 6px rgba(31,94,75,.25); }
 .dev .btn-primary:disabled { box-shadow: none; }
-.dev .btn-outline-primary { --bs-btn-color: #1F5E4B; --bs-btn-border-color: #A9C9BD; --bs-btn-bg: #fff; --bs-btn-hover-color: #174839; --bs-btn-hover-bg: #EEF6F1; --bs-btn-hover-border-color: #1F5E4B; --bs-btn-active-color: #174839; --bs-btn-active-bg: #D9EBE1; --bs-btn-active-border-color: #1F5E4B; border-width: 1.5px; }
-.dev .btn-outline-secondary { --bs-btn-color: #17231E; --bs-btn-border-color: #CBD7D1; --bs-btn-bg: #fff; --bs-btn-hover-color: #17231E; --bs-btn-hover-bg: #F2F5F3; --bs-btn-hover-border-color: #CBD7D1; --bs-btn-active-color: #17231E; --bs-btn-active-bg: #DCE4E0; --bs-btn-active-border-color: #CBD7D1; border-width: 1.5px; }
+.dev .btn-outline-primary, .dev .btn-outline-secondary { --bs-btn-color: #17231E; --bs-btn-bg: #E9EEEB; --bs-btn-border-color: #E9EEEB; --bs-btn-hover-color: #17231E; --bs-btn-hover-bg: #DCE4E0; --bs-btn-hover-border-color: #DCE4E0; --bs-btn-active-color: #17231E; --bs-btn-active-bg: #CBD7D1; --bs-btn-active-border-color: #CBD7D1; --bs-btn-disabled-color: #75837D; --bs-btn-disabled-bg: #F2F5F3; --bs-btn-disabled-border-color: #F2F5F3; --bs-btn-disabled-opacity: 1; --bs-btn-focus-shadow-rgb: 31,94,75; border-width: 1.5px; }
 .dev .btn-outline-danger { --bs-btn-bg: #fff; --bs-btn-color: #B02A37; --bs-btn-border-color: #E8A3AA; --bs-btn-hover-bg: #F8D7DA; --bs-btn-hover-color: #842029; --bs-btn-hover-border-color: #DC3545; border-width: 1.5px; }
 .dev .btn-danger { --bs-btn-bg: #C82333; --bs-btn-border-color: #C82333; --bs-btn-hover-bg: #A71D2A; --bs-btn-hover-border-color: #A71D2A; }
 .dev .btn-link { --bs-btn-color: #1F5E4B; --bs-btn-hover-color: #174839; text-decoration: none; }
@@ -189,7 +188,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-modal .btn-close { margin-left: auto; }
 .qs-sheet .qs-modal { border-radius: var(--rm) var(--rm) 0 0; width: 100% !important; }
 .qs-sheet .qs-modal::before { content: ""; display: block; width: 40px; height: 4px; border-radius: 2px; background: var(--line2); margin: 8px auto 0; }
-.qs-modal .modal-footer { background: var(--mist); border-radius: 0 0 var(--rm) var(--rm); }
+.qs-modal .modal-footer { background: #fff; border-radius: 0 0 var(--rm) var(--rm); }
 .qs-sheet .qs-modal .modal-footer { border-radius: 0; }
 .qs-opt { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: var(--rm); background: #fff; box-shadow: var(--sh); cursor: pointer; }
 .qs-opt.on { background: var(--p50); box-shadow: 0 0 0 2px var(--p600); }
@@ -377,6 +376,8 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-qrow.me { background: #FFF6D6; }
 .qs-qrow.me .qn { background: var(--w500); color: #17231E; } .qs-qrow.me .px { color: #17231E; font-weight: 700; }
 @media (prefers-reduced-motion: no-preference) { .dev .btn, .qs-cat, .qs-opt { transition: background-color .12s, box-shadow .12s, color .12s; } }
+.qs-modal .qs-step { background: #E9EEEB; color: #17231E; }
+.qs-modal .qs-step .btn { --bs-btn-color: #17231E; --bs-btn-hover-color: #17231E; --bs-btn-active-color: #17231E; }
 </style>
 </head>
 <body>
@@ -401,6 +402,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
   <ul>
     <li><b>字体：</b>旧版用系统字体，每台电脑显示不同；中文 Windows 会变成微软雅黑，英文显得挤、突兀。现在统一用 Plus Jakarta Sans（印尼雅加达设计，也是 ui-ux-pro-max 对“友好型应用”的推荐）。只用一种字体、4 个粗细，金额数字等宽对齐。字体文件 27 KB，可以自己托管。</li>
     <li><b>颜色：</b>品牌绿扩成深浅 6 级，顾客页面顶部改成深绿色带；新增一个辅助色“拉茶焦糖色”，只用在食物相关的地方（分类、招牌菜、辣度、会员）。页面底色改成浅灰绿，卡片用白底加柔和阴影，取代原来满屏的灰色边框。</li>
+    <li><b>按钮：</b>每个画面只有主要操作用实心绿；次要按钮（取消、应用、加更多菜、分享、入库等）改成浅灰，破坏性操作保留红色，让人一眼看出该点哪个。</li>
     <li><b>图标：</b>统一成带底色的“图标方块”。菜单分类用食物图标（煎蛋=饭类、篮子=面类、饼=Roti、热饮、冰饮、蛋糕）。底部导航选中时换成实心图标。每个状态都是图标加文字，不只靠颜色。</li>
     <li><b>排队页：</b>参考 Sushi Mentai 的排队页重做：品牌头部、大号码卡、“正在叫号”、“当前队伍”列表、修改人数、保存号码、EN / BM / 中文切换。同时修了参考页的 5 个问题：<ul>
       <li>金底白字看不清：改成琥珀底深色字，对比度达标</li>
