@@ -15,8 +15,8 @@ const read = (p) => readFileSync(join(here, p), 'utf8');
 const bootstrap = read('vendor/bootstrap.min.css').replace(/\/\*# sourceMappingURL=.*?\*\//, '');
 const woff2 = readFileSync(join(here, 'vendor/bootstrap-icons.woff2')).toString('base64');
 const icons = read('vendor/bootstrap-icons.min.css').replace(/src:url\([^}]*\}/, `src:url("data:font/woff2;base64,${woff2}") format("woff2")}`);
-const jakarta = readFileSync(join(here, 'vendor/plus-jakarta-sans-latin-wght-normal.woff2')).toString('base64');
-const fontFace = `@font-face{font-family:'Plus Jakarta Sans';font-style:normal;font-display:swap;font-weight:200 800;src:url("data:font/woff2;base64,${jakarta}") format("woff2")}`;
+const inter = readFileSync(join(here, 'vendor/inter-latin-wght-normal.woff2')).toString('base64');
+const fontFace = `@font-face{font-family:'Inter';font-style:normal;font-display:swap;font-weight:100 900;src:url("data:font/woff2;base64,${inter}") format("woff2")}`;
 const theme = read('src/qs.css');
 
 const roles = [

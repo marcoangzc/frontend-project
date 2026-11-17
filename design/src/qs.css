@@ -1,19 +1,20 @@
-/* QuickServe v2 · "Pandan & teh tarik"
+/* QuickServe v3 · Apple style: iOS system blue, Apple Settings icon tiles, SF on Apple devices and Inter elsewhere.
+   (v2 was "Pandan & teh tarik")
    Layout: a design board; each screen is a row of device frames (360 phone, 1024 tablet, 1280 PC).
    The board chrome follows the viewer theme; the frames always show the light product UI.
    Colour: pandan green (brand) in a tonal scale, teh-tarik caramel only for food highlights
    (categories, best sellers, spicy, member perks), amber only for waiting, red only for errors and low stock.
    Type: Plus Jakarta Sans, one family, weights 500/600/700/800, tabular numbers. Radii: 10px controls, 16px cards. */
 :root {
-  --bd-bg: #eef1ef; --bd-surface: #ffffff; --bd-fg: #1b2420; --bd-muted: #55615b; --bd-line: #d3dad6; --bd-accent: #1f5e4b; --bd-chip: #dfe8e3;
-  --p50: #EEF6F1; --p75: #E3F0E8; --p100: #D9EBE1; --p200: #A9C9BD; --p300: #9DB6AC; --p600: #1F5E4B; --p700: #174839; --p900: #0F2E25; --p600-rgb: 31,94,75;
+  --bd-bg: #eef1ef; --bd-surface: #ffffff; --bd-fg: #1b2420; --bd-muted: #55615b; --bd-line: #d3dad6; --bd-accent: #0062e6; --bd-chip: #dfe8e3;
+  --p50: #EAF3FF; --p75: #E3EEFF; --p100: #D6E7FF; --p200: #A8CCFF; --p300: #9BBDEB; --p600: #0062E6; --p700: #0051C2; --p900: #002E6E; --p600-rgb: 0,98,230;
   --t50: #FBF0E4; --t100: #F4DCC2; --t600: #A65E1E; --t700: #7F4511;
-  --ink: #1D2125; --slate: #50575E; --line: #DEE2E6; --line2: #CED4DA; --mist: #F1F3F5;
+  --ink: #1C1C1E; --slate: #6E6E73; --line: #E5E5EA; --line2: #C7C7CC; --mist: #F2F2F7;
   --w50: #FFF3CD; --w500: #FFC107; --w800: #664D03;
   --r50: #F8D7DA; --r600: #DC3545; --r800: #842029;
-  --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
   --rs: 10px; --rm: 16px;
-  --sh: 0 1px 2px rgba(15,46,37,.06), 0 2px 10px rgba(15,46,37,.07);
+  --sh: 0 1px 2px rgba(0,0,0,.05), 0 2px 10px rgba(0,0,0,.06);
   --bs-primary: var(--p600); --bs-primary-rgb: var(--p600-rgb); --bs-link-color: var(--p600); --bs-link-color-rgb: var(--p600-rgb); --bs-link-hover-color: var(--p700); --bs-link-hover-color-rgb: 23,72,57;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bd-bg: #121614; --bd-surface: #1b211e; --bd-fg: #e7ece9; --bd-muted: #a3aea8; --bd-line: #303834; --bd-accent: #7fc4ab; --bd-chip: #26302b; color-scheme: dark } }
@@ -261,7 +262,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-qcard.called .qs-qno { background: var(--p600); color: #fff; }
 
 /* kitchen wall tablet: read from a metre away */
-.dev-tb { background: #E7ECE9; }
+.dev-tb { background: #E5E5EA; }
 .qs-kbar { display: flex; align-items: center; gap: 24px; padding: 14px 24px; background: var(--p900); color: #fff; font-size: 1.25rem; font-weight: 600; }
 .qs-kbar h1 { font-size: 1.75rem; font-weight: 800; } .qs-kbar .qs-upd { color: #B9CCC3; font-size: 1rem; } .qs-kclock { font-size: 1.75rem; font-weight: 800; }
 .qs-kbody { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 16px; align-items: start; }
@@ -274,7 +275,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-ticketk li em { display: block; font-style: normal; font-size: 1.125rem; font-weight: 700; background: var(--w50); color: var(--w800); border-radius: 8px; padding: 2px 8px; margin-top: 4px; }
 .qs-ticketk .btn { margin: 0 16px 16px; min-height: 64px; font-size: 1.5rem; font-weight: 800; }
 .qs-kempty { grid-column: 1 / -1; align-self: center; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 140px 0; font-size: 2rem; font-weight: 800; color: #343A40; }
-.qs-kempty div { font-size: 1.25rem; font-weight: 500; color: var(--slate); }
+.qs-kempty div { font-size: 1.25rem; font-weight: 500; color: #48484A; }
 
 /* owner PC */
 .qs-side { width: 240px; flex: 0 0 240px; background: #fff; color: var(--ink); box-shadow: 1px 0 0 var(--line); padding: 18px 12px; display: flex; flex-direction: column; gap: 2px; }
@@ -370,3 +371,12 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-modal .qs-step .btn { --bs-btn-color: #1D2125; --bs-btn-hover-color: #1D2125; --bs-btn-active-color: #1D2125; }
 
 .qs-qcard2.waiting .pill { background: var(--mist); color: var(--p700); }
+
+/* Apple Settings style icon tiles: solid system colour, white glyph. Decorative: always next to a text label. */
+.qs-tile.c-blue { background: #007AFF; color: #fff; } .qs-tile.c-teal { background: #30B0C7; color: #fff; }
+.qs-tile.c-green { background: #34C759; color: #fff; } .qs-tile.c-orange { background: #FF9500; color: #fff; }
+.qs-tile.c-brown { background: #A2845E; color: #fff; } .qs-tile.c-mint { background: #00C7BE; color: #fff; }
+.qs-tile.c-red { background: #FF3B30; color: #fff; }
+.qs-tile.wait { background: #FFCC00; color: #1C1C1E; } .qs-tile.red { background: #FF3B30; color: #fff; } .qs-tile.gray { background: #8E8E93; color: #fff; }
+.qs-cat .qs-tile { box-shadow: none; }
+.alert .qs-tile.gray, .qs-emp .qs-tile.gray { background: #E5E5EA; color: #6E6E73; }

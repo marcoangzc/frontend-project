@@ -14,7 +14,14 @@ export const iconBtn = (icon, label, kind = 'outline-secondary') =>
   `<button type="button" class="btn btn-${kind} qs-icon-btn" aria-label="${label}">${i(icon)}</button>`;
 
 // tones: neutral, brand, solid, wait, wait-solid, danger, danger-solid, outline
-export const tile = (icon, tone = '', size = '') => `<span class="qs-tile${tone ? ' ' + tone : ''}${size ? ' ' + size : ''}">${i(icon)}</span>`;
+// Apple Settings style: each meaning has its own system colour. Explicit tones (wait, red, gray, solid, onband) win.
+const ICOL = { 'clipboard2-check': 'c-blue', 'journal-text': 'c-blue', 'grid-3x3-gap': 'c-teal', 'table': 'c-teal', 'people': 'c-orange', 'megaphone': 'c-orange', 'box-seam': 'c-brown', 'wallet2': 'c-green',
+  'receipt': 'c-blue', 'box-arrow-in-down': 'c-green', 'person-badge-fill': 'c-teal', 'star-fill': 'c-blue', 'egg-fried': 'c-orange', 'basket2-fill': 'c-teal',
+  'cookie': 'c-brown', 'cup-hot-fill': 'c-brown', 'cup-straw': 'c-blue', 'cake2-fill': 'c-mint', 'volume-up': 'c-blue', 'phone': 'c-blue', 'bell': 'c-orange', 'info-circle': 'c-blue' };
+export const tile = (icon, tone = '', size = '') => {
+  const t = (!tone || tone === 'tea') && ICOL[icon] ? ICOL[icon] : tone;
+  return `<span class="qs-tile${t ? ' ' + t : ''}${size ? ' ' + size : ''}">${i(icon)}</span>`;
+};
 
 export const badge = (label, tone = 'neutral') => `<span class="badge qs-b-${tone}">${label}</span>`;
 
