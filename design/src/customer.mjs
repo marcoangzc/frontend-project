@@ -1,0 +1,182 @@
+import { uid, i, btn, badge, field, check, kv, alert, upd, step, qr, chd, ph, section } from './lib.mjs';
+
+const qh = chd('Walk-in queue', false);
+const plain = chd('', false);
+const center = (html, cls = '') => `<div class="text-center d-flex flex-column align-items-center gap-2 ${cls}">${html}</div>`;
+
+/* ---------- Join queue ---------- */
+const joinForm = (err) => ph(`Join queue · ${err ? 'Party size invalid' : 'Form'}`, {
+  url: 'quickserve.my/q', head: qh,
+  bar: btn('Get my queue number', 'primary', { lg: 1, block: 1 }),
+  note: err ? 'Party size must be 1 to 12. The message sits under the field and the button stays enabled, so the customer can fix it and resubmit.' : 'Opened by the queue QR at the door. No login, one task on the screen.',
+}, `
+  <div><h1 class="h-page">Join the queue</h1><p class="mb-0 text-body-secondary">We will call your number on this page when a table is ready.</p></div>
+  <div class="alert alert-warning d-flex gap-2 mb-0">${i('people')}<div class="fw-medium">6 groups waiting · about 20 min</div></div>
+  ${field('Your name', 'Nurul')}
+  ${err ? field('Party size', '0', { type: 'number', err: 'Enter a party size from 1 to 12.' }) : field('Party size', '4', { type: 'number', help: '1 to 12 people. For bigger groups, please see our staff.' })}`);
+
+/* ---------- My ticket ---------- */
+const turl = 'quickserve.my/q/A023';
+const ticket = [
+  ph('My ticket · Waiting', { url: turl, head: qh, bar: btn('Leave the queue', 'outline-secondary', { block: 1 }), note: 'Groups ahead and wait time refresh by polling (within 5 s). Amber is used only for waiting.' }, `
+    ${center(`<div class="small text-secondary">Your queue number</div><div class="qs-big text-primary">A023</div><div class="text-body-secondary">Nurul · party of 4</div>`, 'gap-0')}
+    <div class="qs-waitbox"><div><div class="qs-mid">5</div><div class="small">groups ahead</div></div><div><div class="qs-mid">~15 min</div><div class="small">estimated wait</div></div></div>
+    ${kv('<span class="text-body-secondary">Now calling</span>', 'A018')}
+    ${alert('secondary', 'Keep this page open', 'We alert you here with a sound and vibration. There is no SMS, so do not close this tab.', 'bell')}
+    <div class="text-center">${upd()}</div>`),
+  ph('My ticket · Called', { url: turl, head: '', bg: 'qs-called', bar: '', note: 'When staff tap Call, the whole page turns brand green, flashes, plays a sound and vibrates.' }, `
+    ${center(`${i('bell-fill', 'fs-1')}<div class="qs-big">A023</div><h1 class="h-page">Your table is ready</h1><div>Please come to the counter now.</div>`, 'pt-4')}
+    <div class="card text-center"><div class="card-body"><div class="small text-secondary">Show this number to our staff</div><div class="fw-medium">Held until 7:42 pm (5 minutes)</div></div></div>
+    <div class="mt-auto">${btn('Stop sound', 'outline-secondary', { block: 1 })}</div>`),
+  ph('My ticket · No-show', { url: turl, head: qh, bar: btn('Get a new queue number', 'primary', { lg: 1, block: 1 }), note: 'Staff marked No-show 5 minutes after calling.' }, `
+    ${center(`${i('x-circle', 'fs-1 text-secondary')}<div class="qs-mid text-secondary text-decoration-line-through">A023</div><h1 class="fs-4">This ticket has expired</h1><div class="text-body-secondary">We called A023 at 7:37 pm and released the table after 5 minutes.</div>`, 'pt-4')}
+    ${alert('secondary', null, 'Still here? Speak to our staff at the counter or take a new number.')}`),
+];
+
+/* ---------- Customer menu ---------- */
+const dish = (name, desc, price, o = {}) => `
+  <div class="d-flex align-items-center gap-3 py-3 border-bottom">
+    <div class="flex-grow-1 min-w-0"><div class="fw-medium${o.out ? ' text-secondary' : ''}">${name}</div>${o.best ? `<div class="small fw-medium text-primary">${i('star-fill')} Best seller</div>` : ''}<div class="small text-secondary">${desc}</div><div class="small fw-semibold${o.out ? ' text-secondary' : ''}">${price}</div></div>
+    ${o.out ? badge('Sold out today') : o.q ? step(o.q) : btn('Add', 'outline-primary', { i: 'plus-lg' })}
+  </div>`;
+const cat = (l, on) => `<button type="button" class="btn ${on ? 'btn-primary' : 'btn-outline-secondary'}">${l}</button>`;
+const menu = [
+  ph('Menu · Browsing', { bar: btn('View cart · 6 items · RM35.40', 'primary', { lg: 1, block: 1, i: 'cart3' }), note: 'A text-only dish list keeps the page light on slow data. Sold-out dishes stay visible but cannot be added.' }, `
+    <div class="qs-chips">${cat('Popular', 1)}${cat('Rice')}${cat('Noodles')}${cat('Roti')}${cat('Drinks')}${cat('Desserts')}</div>
+    <section><h2 class="h-sec">Popular</h2>
+      ${dish('Nasi Lemak Ayam', 'Coconut rice, fried chicken, sambal, egg', 'RM9.50', { best: 1, q: 2 })}
+      ${dish('Mee Goreng Mamak', 'Fried yellow noodles, tofu, potato, egg', 'RM8.00', { best: 1, q: 1 })}
+      ${dish('Nasi Goreng Kampung', 'Village fried rice with anchovies', 'RM8.50', { out: 1 })}
+      ${dish('Roti Canai (2 pcs)', 'Served with dhal and fish curry', 'RM3.00')}</section>
+    <section><h2 class="h-sec">Drinks</h2>
+      ${dish('Teh Tarik', 'Hot pulled milk tea', 'RM2.80', { best: 1, q: 3 })}
+      ${dish('Milo Ais', 'Iced chocolate malt drink', 'RM3.50')}</section>`),
+  ph('Menu · QR expired', { head: plain, note: 'Shown instead of the menu when the table token was replaced after payment.' }, `
+    ${center(`${i('qr-code', 'fs-1 text-secondary')}<h1 class="fs-4">This QR code has expired</h1><div class="text-body-secondary">The bill for this table has been paid, so this link no longer works. Please ask our staff for help.</div>`, 'py-5')}`),
+];
+
+/* ---------- Cart and order status ---------- */
+const steps = (n) => `<div class="qs-steps">
+  <div class="done"><div class="dot">${i('check-lg')}</div>Sent</div>
+  <div class="${n >= 1 ? 'done' : 'now'}"><div class="dot">${i(n >= 1 ? 'check-lg' : 'clock')}</div>Confirmed</div>
+  <div class="${n >= 2 ? 'done' : n === 1 ? 'now' : ''}"><div class="dot">${n >= 2 ? i('check-lg') : n === 1 ? i('clock') : ''}</div>Served</div></div>`;
+const summary = `<div class="card"><div class="card-body d-flex flex-column gap-2 small">
+  <div class="d-flex justify-content-between align-items-center"><h2 class="fs-6">Order #1042</h2><span class="text-secondary">7:21 pm</span></div>
+  ${kv('2 × Nasi Lemak Ayam', 'RM19.00')}<div class="text-secondary">Note: less spicy</div>${kv('1 × Mee Goreng Mamak', 'RM8.00')}${kv('3 × Teh Tarik', 'RM8.40')}
+  <hr class="my-1">${kv('Total incl. service charge and SST', 'RM41.28', 'fw-semibold')}${kv('<span class="text-secondary">Paying by</span>', 'Card or e-wallet')}</div></div>`;
+const cartItem = (name, price, q, note) => `<div class="d-flex flex-column gap-2 pb-3 border-bottom">
+  <div class="d-flex justify-content-between fw-medium"><span>${name}</span><span>${price}</span></div>
+  <div class="d-flex justify-content-between align-items-center">${step(q)}${btn('Remove', 'link')}</div>
+  ${field(null, note || 'Add a note for the kitchen', { ph: !note, aria: `Note for ${name}` })}</div>`;
+const opt = (on, title, desc, icon, g) => `<label class="qs-opt${on ? ' on' : ''}"><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="${g}"${on ? ' checked' : ''}><span class="flex-grow-1"><span class="d-block fw-medium">${title}</span><span class="d-block small text-body-secondary">${desc}</span></span>${i(icon)}</label>`;
+const totals = (rows, total) => `<div class="d-flex flex-column gap-1 small">${rows.map((r) => kv(r[0], r[1], r[2] || '')).join('')}<hr class="my-1">${kv('Total', total, 'fs-5 fw-semibold')}</div>`;
+const status = (name, n, al, bar, note) => ph(`Order status · ${name}`, { bar, note }, `<h1 class="fs-4">Order status</h1>${steps(n)}${al}${summary}<div class="text-center">${upd()}</div>`);
+const cart = [
+  ph('Cart · Review order', { bar: btn('Send order · RM41.28', 'primary', { lg: 1, block: 1 }), note: 'Quantity is limited to 1 to 20 per dish. The payment method is chosen here, before the order is sent.' }, `
+    <h1 class="fs-4">Your order</h1>
+    ${cartItem('Nasi Lemak Ayam', 'RM19.00', 2, 'Less spicy')}${cartItem('Mee Goreng Mamak', 'RM8.00', 1)}${cartItem('Teh Tarik', 'RM8.40', 3, '1 kurang manis')}
+    ${totals([['Subtotal', 'RM35.40'], ['Service charge (10%)', 'RM3.54'], ['SST (6%)', 'RM2.34']], 'RM41.28')}
+    <fieldset class="d-flex flex-column gap-2"><legend class="fs-6 fw-semibold mb-0">How will you pay?</legend>
+      ${opt(1, 'Card or e-wallet', 'Pay on this page once staff confirm your order.', 'credit-card', 'how')}
+      ${opt(0, 'Cash at the counter', 'Quote table T3 to the cashier.', 'cash', 'how')}</fieldset>`),
+  status('Waiting for confirmation', 0, alert('warning', 'Order sent, waiting for staff confirmation', 'Our staff will check your order shortly. The kitchen starts cooking after that.'), btn('Add more dishes', 'outline-primary', { block: 1 }), 'Every QR order waits here until staff confirm it. Status changes arrive by polling.'),
+  status('Confirmed', 1, alert('primary', 'Confirmed by Aina at 7:23 pm', 'The kitchen is preparing your food.'), btn('Pay now · RM41.28', 'primary', { lg: 1, block: 1 }) + btn('Add more dishes', 'outline-primary', { block: 1 }), 'Pay now appears because the customer chose card or e-wallet.'),
+  status('Served', 2, alert('primary', 'All dishes served', 'Enjoy your meal. Pay here whenever you are ready.'), btn('Pay now · RM41.28', 'primary', { lg: 1, block: 1 }), ''),
+];
+
+/* ---------- Payment (customer side) ---------- */
+const items = `<div class="d-flex flex-column gap-1 small">${kv('2 × Nasi Lemak Ayam', 'RM19.00')}${kv('1 × Mee Goreng Mamak', 'RM8.00')}${kv('3 × Teh Tarik', 'RM8.40')}</div>`;
+const methods = (sel) => { const g = uid(); return `<fieldset class="d-flex flex-column gap-2"><legend class="fs-6 fw-semibold mb-0">Pay with</legend>
+  ${opt(sel === 0, 'Card', 'Visa or Mastercard', 'credit-card', g)}${opt(sel === 1, 'E-wallet', 'Touch \'n Go, GrabPay, Boost', 'wallet2', g)}${opt(sel === 2, 'Cash at the counter', 'Quote table T3 to the cashier.', 'cash', g)}</fieldset>`; };
+const sandbox = '<div class="small text-secondary text-center">Sandbox payment. No real money is charged.</div>';
+const withVoucher = [['Subtotal', 'RM35.40'], ['Voucher RAYA5', '−RM5.00', 'text-primary fw-medium'], ['Service charge (10%)', 'RM3.04'], ['SST (6%)', 'RM2.01']];
+const payment = [
+  ph('Payment · Bill', { bar: btn('Pay RM41.28', 'primary', { lg: 1, block: 1, i: 'lock' }) + sandbox, note: 'Service charge and SST are separate lines at the owner\'s rates. Voucher and member phone are optional.' }, `
+    <h1 class="fs-4">Your bill</h1>${items}
+    ${totals([['Subtotal', 'RM35.40'], ['Service charge (10%)', 'RM3.54'], ['SST (6%)', 'RM2.34']], 'RM41.28')}
+    <div class="d-flex gap-2 align-items-end">${field('Voucher code', 'Enter code', { ph: 1, c: 'flex-grow-1' })}${btn('Apply', 'outline-primary')}</div>
+    ${field('Member phone (optional)', '012-345 6789', { ph: 1, type: 'tel' })}
+    ${methods(0)}`),
+  ph('Payment · Voucher applied', { bar: btn('Pay RM35.45', 'primary', { lg: 1, block: 1, i: 'lock' }) + sandbox, note: 'The voucher comes off the subtotal first, then service charge and SST are worked out on the new amount.' }, `
+    <h1 class="fs-4">Your bill</h1>${items}
+    ${totals(withVoucher, 'RM35.45')}
+    <div class="alert alert-primary d-flex align-items-center gap-2 mb-0">${i('ticket-perforated')}<div class="flex-grow-1"><div class="fw-semibold">RAYA5 applied</div><div class="small">RM5.00 off bills above RM20</div></div>${btn('Remove', 'link', { c: 'p-0' })}</div>
+    <div class="qs-opt">${i('person-badge')}<span class="flex-grow-1"><span class="d-block fw-medium">Siti Aminah</span><span class="d-block small text-body-secondary">Member · 012-345 6789</span></span>${btn('Change', 'link', { c: 'p-0' })}</div>
+    ${methods(0)}`),
+  ph('Payment · Card sandbox', { url: 'sandbox.paygate.my/checkout', head: `<header class="qs-chd"><div class="flex-grow-1"><div class="fw-semibold">PayGate</div><div class="small text-secondary">Paying Restoran Sri Melur</div></div>${badge('Test mode', 'outline')}</header>`, bar: btn('Pay RM35.45', 'primary', { lg: 1, block: 1 }) + btn('Cancel and go back', 'link', { block: 1 }), note: 'The gateway\'s own sandbox page. Shown so the hand-off and return are designed, not to restyle the gateway.' }, `
+    <div><div class="small text-secondary">Amount</div><div class="qs-mid">RM35.45</div><div class="small text-secondary">Table T3 · Order #1042</div></div>
+    ${field('Card number', '4242 4242 4242 4242')}
+    <div class="d-flex gap-3">${field('Expiry', '12 / 28', { c: 'flex-grow-1' })}${field('CVC', '123', { c: 'flex-grow-1' })}</div>
+    ${field('Name on card', 'Nurul Izzah')}`),
+  ph('Payment · Failed', { bar: btn('Try again · RM35.45', 'primary', { lg: 1, block: 1 }) + sandbox, note: 'The error says what happened, that no money was taken, and what to do next. The bill and voucher are kept.' }, `
+    <h1 class="fs-4">Your bill</h1>
+    ${alert('danger', 'Payment failed', 'Your bank declined the card ending 4242. You have not been charged. Try again or choose another way to pay.')}
+    ${totals(withVoucher, 'RM35.45')}
+    ${methods(0)}`),
+  ph('Payment · Cash at counter', { bar: btn('Pay by card or e-wallet instead', 'outline-primary', { block: 1 }), note: 'Shown when the customer chose cash. The page waits (polling) and opens the e-receipt once the cashier records the payment.' }, `
+    ${center(`<div class="text-body-secondary">Tell the cashier your table number</div><div class="qs-big text-primary">T3</div><div class="fs-5 fw-semibold">RM35.45 to pay</div>`, 'pt-3 gap-0')}
+    ${alert('warning', 'Waiting for payment at the counter', 'Your e-receipt opens here as soon as the cashier takes your cash.')}
+    ${items}
+    <div class="text-center">${upd()}</div>`),
+];
+
+/* ---------- E-receipt ---------- */
+const rurl = 'quickserve.my/r/8F3K2';
+const receipt = [
+  ph('E-receipt · Paid', { url: rurl, head: plain, bar: btn('Split this bill', 'primary', { lg: 1, block: 1, i: 'people' }) + btn('Share receipt link', 'outline-primary', { block: 1, i: 'share' }), note: 'Opens right after payment and later from its link. The table QR token is replaced at this moment, so the old table QR now shows the expired page.' }, `
+    <div class="d-flex align-items-center gap-2 text-primary">${i('check-circle-fill', 'fs-3')}<h1 class="fs-4">Paid · RM35.45</h1></div>
+    <div class="small text-body-secondary">Receipt R-20261117-0042<br>17 Nov 2026, 7:58 pm · Table T3 · Card ending 4242</div>
+    ${items}
+    ${totals(withVoucher, 'RM35.45')}
+    <div class="d-flex align-items-center gap-3 border rounded p-3">${qr(96, 11)}<div class="small"><div class="fw-medium">Keep this receipt</div><div class="text-body-secondary">Scan or save the link to open it again.</div><div class="text-break">${rurl}</div></div></div>`),
+  ph('E-receipt · Split started', { url: 'quickserve.my/s/K7P2', head: plain, bar: btn('Open the split', 'primary', { lg: 1, block: 1 }), note: 'The payer has paid the full bill and now shares one QR or link with the table. It stays valid for 24 hours.' }, `
+    <div><h1 class="fs-4">Share with your table</h1><p class="mb-0 text-body-secondary">Everyone scans this on their own phone and ticks what they ate.</p></div>
+    <div class="d-flex justify-content-center py-2">${qr(200, 23)}</div>
+    <div class="d-flex gap-2 align-items-end">${field('Split link', 'quickserve.my/s/K7P2', { c: 'flex-grow-1' })}${btn('Copy', 'outline-primary')}</div>
+    ${alert('secondary', null, 'Valid for 24 hours, until 18 Nov 2026, 7:58 pm.', 'clock')}`),
+];
+
+/* ---------- Split bill ---------- */
+const surl = 'quickserve.my/s/K7P2';
+const shd = (who) => `<header class="qs-chd"><div class="flex-grow-1"><div class="fw-semibold">Split the bill</div><div class="small text-secondary">Table T3 · RM35.45 paid by Nurul</div></div>${who ? badge(who, 'brand') : ''}</header>`;
+const portion = (on, name, who, price, o = {}) => `<label class="qs-opt${on ? ' on' : ''}${o.un ? ' border-warning' : ''}"><input class="form-check-input mt-0 flex-shrink-0" type="checkbox"${on ? ' checked' : ''}><span class="flex-grow-1"><span class="d-block fw-medium">${name}</span><span class="d-block small ${o.un ? 'fw-medium' : 'text-body-secondary'}"${o.un ? ' style="color:var(--qs-amber-text)"' : ''}>${who}</span></span><span class="small fw-semibold text-nowrap">${price}</span></label>`;
+const split = [
+  ph('Split bill · Join with name', { url: surl, head: shd(), bar: btn('Join the split', 'primary', { lg: 1, block: 1 }), note: 'Opened by the split QR or link. Names must be unique within the split; a taken name shows "Nurul is already in this split. Add an initial, for example Nurul A."' }, `
+    <div><h1 class="h-page">Who are you?</h1><p class="mb-0 text-body-secondary">Enter a name your friends will recognise. No account is needed.</p></div>
+    ${field('Your name', 'Wei Jie', { help: 'Already here: Nurul, Kavitha' })}`),
+  ph('Split bill · Claiming (live)', { url: surl, head: shd('Wei Jie'), bar: kv('Your share so far', 'RM16.32', 'fs-5 fw-semibold') + '<div class="small text-body-secondary">Includes your part of the voucher, service charge and SST.</div>', note: 'Every phone shows everyone\'s ticks within 5 s. A dish with quantity 2 is listed as (1) and (2). A portion ticked by several people is divided equally.' }, `
+    <div class="d-flex justify-content-between align-items-center"><h1 class="fs-5">Tick what you ate</h1>${upd()}</div>
+    ${portion(0, 'Nasi Lemak Ayam (1)', 'Nurul', 'RM9.50')}
+    ${portion(1, 'Nasi Lemak Ayam (2)', 'You', 'RM9.50')}
+    ${portion(1, 'Mee Goreng Mamak', 'Kavitha and you · RM4.00 each', 'RM8.00')}
+    ${portion(0, 'Teh Tarik (1)', 'Nurul', 'RM2.80')}
+    ${portion(1, 'Teh Tarik (2)', 'You', 'RM2.80')}
+    ${portion(0, 'Teh Tarik (3)', 'Not claimed yet', 'RM2.80', { un: 1 })}`),
+  ph('Split bill · Unclaimed blocks completion', { url: surl, head: shd('Nurul · payer'), bar: btn('Complete split', 'primary', { lg: 1, block: 1, dis: 1 }) + '<div class="small text-center" style="color:var(--qs-amber-text)">1 portion still needs a name: Teh Tarik (3)</div>', note: 'Payer view. Only the payer can add a diner without a phone, remove someone or edit any claim. Complete split stays disabled until every portion has a claimant.' }, `
+    ${alert('warning', '1 portion is not claimed', 'Every portion needs a name before the split can be completed.', 'exclamation-circle-fill')}
+    <div><h2 class="fs-6 mb-2">Diners</h2><div class="d-flex flex-wrap gap-2">${['Nurul (you)', 'Wei Jie', 'Kavitha'].map((d, j) => `<span class="badge qs-b-outline d-inline-flex align-items-center gap-2 py-2">${d}${j ? i('x-lg') : ''}</span>`).join('')}</div></div>
+    ${btn('Add a diner without a phone', 'outline-primary', { i: 'person-plus', block: 1 })}
+    <h2 class="fs-6">Portions</h2>
+    ${portion(1, 'Nasi Lemak Ayam (1)', 'You', 'RM9.50')}
+    ${portion(0, 'Nasi Lemak Ayam (2)', 'Wei Jie', 'RM9.50')}
+    ${portion(0, 'Mee Goreng Mamak', 'Kavitha', 'RM8.00')}
+    ${portion(1, 'Teh Tarik (1)', 'You', 'RM2.80')}
+    ${portion(0, 'Teh Tarik (2)', 'Wei Jie', 'RM2.80')}
+    <div class="d-flex gap-2 align-items-stretch"><div class="flex-grow-1">${portion(0, 'Teh Tarik (3)', 'Not claimed yet', 'RM2.80', { un: 1 })}</div>${btn('Assign', 'outline-primary')}</div>`),
+  ph('Split bill · My share and receipt', { url: 'quickserve.my/s/K7P2/wei-jie', head: shd('Wei Jie'), bar: btn('Share my receipt', 'outline-primary', { block: 1, i: 'share' }), note: 'Shares add up exactly to the bill: 12.32 + 12.32 + 10.81 = 35.45. Any rounding cent goes to the last share (Kavitha).' }, `
+    <div class="d-flex align-items-center gap-2 text-primary">${i('check-circle-fill', 'fs-3')}<h1 class="fs-4">Split completed</h1></div>
+    <div><div class="small text-secondary">Your share · pay Nurul</div><div class="qs-mid">RM12.32</div></div>
+    <div class="d-flex flex-column gap-1 small">${kv('Nasi Lemak Ayam (2)', 'RM9.50')}${kv('Teh Tarik (2)', 'RM2.80')}${kv('Voucher RAYA5 (your part)', '−RM1.74', 'text-primary fw-medium')}${kv('Service charge (10%)', 'RM1.06')}${kv('SST (6%)', 'RM0.70')}<hr class="my-1">${kv('Your share', 'RM12.32', 'fs-5 fw-semibold')}</div>
+    <div class="card"><div class="card-body d-flex flex-column gap-1 small"><h2 class="fs-6 mb-1">Everyone</h2>${kv('Nurul (paid the bill)', 'RM12.32')}${kv('Wei Jie (you)', 'RM12.32', 'fw-semibold')}${kv('Kavitha', 'RM10.81')}<hr class="my-1">${kv('Bill total', 'RM35.45', 'fw-semibold')}</div></div>
+    <div class="d-flex align-items-center gap-3 border rounded p-3">${qr(96, 31)}<div class="small"><div class="fw-medium">Your e-receipt</div><div class="text-break text-body-secondary">quickserve.my/s/K7P2/wei-jie</div></div></div>`),
+];
+
+export default [
+  section('join-queue', 'Join queue', 'Customer, phone · Table module (Clement)', [joinForm(false), joinForm(true)]),
+  section('my-ticket', 'My ticket', 'Customer, phone · Table module (Clement)', ticket),
+  section('customer-menu', 'Customer menu', 'Customer, phone · Menu module (Zi Chen)', menu),
+  section('cart-status', 'Cart and order status', 'Customer, phone · Order module (Clement)', cart),
+  section('payment', 'Payment', 'Customer, phone · Payment module (Zheng Yang)', payment),
+  section('e-receipt', 'E-receipt', 'Customer, phone · Payment module (Zheng Yang)', receipt),
+  section('split-bill', 'Split bill', 'Each diner, own phone · Payment module (Zheng Yang)', split),
+];
