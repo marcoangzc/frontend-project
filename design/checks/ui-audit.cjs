@@ -1,0 +1,40 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1600,height:1000}});
+await p.goto('file:///home/user/frontend-project/design/index.html');await p.evaluate(()=>document.fonts.ready);
+await p.evaluate(()=>document.getElementById('board').classList.remove('fit'));
+const r=await p.evaluate(()=>{
+ const rgb=s=>{const m=s.match(/[\d.]+/g);return m?m.map(Number):null};
+ const lum=([r,g,b])=>{const f=c=>{c/=255;return c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4)};return .2126*f(r)+.7152*f(g)+.0722*f(b)};
+ const blend=(fg,bg)=>{const a=fg[3]==null?1:fg[3];return [0,1,2].map(i=>fg[i]*a+bg[i]*(1-a))};
+ const bgOf=el=>{const stack=[];for(let e=el;e;e=e.parentElement){const c=rgb(getComputedStyle(e).backgroundColor);if(c&&(c[3]==null||c[3]>0)){stack.push(c);if(c[3]==null||c[3]>=1)break}}let col=[255,255,255];for(let i=stack.length-1;i>=0;i--)col=blend(stack[i],col);return col};
+ const hsl=([r,g,b])=>{r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2;let h=0,s=0;if(mx!==mn){const d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);h=mx===r?(g-b)/d+(g<b?6:0):mx===g?(b-r)/d+2:(r-g)/d+4;h*=60}return [h,s,l]};
+ const out={frames:0,small:[],tiny:[],contrast:[],emoji:[],grad:[],purple:[],overflow:[],fonts:{},red:new Set(),amber:new Set()};
+ const name=el=>el.closest('figure').querySelector('figcaption').textContent;
+ document.querySelectorAll('.dev').forEach(dev=>{out.frames++;const ph=dev.classList.contains('dev-ph');
+  dev.querySelectorAll('*').forEach(el=>{const cs=getComputedStyle(el);if(cs.display==='none'||cs.visibility==='hidden'||el.closest('svg'))return;
+   const own=[...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim());
+   if(/gradient/.test(cs.backgroundImage))out.grad.push(name(el));
+   for(const prop of ['color','backgroundColor','borderTopColor']){const c=rgb(cs[prop]);if(!c||(c[3]!=null&&c[3]===0))continue;const [h,s,l]=hsl(c);
+     if(h>=235&&h<=300&&s>.3&&l>.15&&l<.9)out.purple.push(name(el)+' '+prop);
+     if((h>=345||h<=8)&&s>.5&&l>.3&&l<.75&&!(prop==='borderTopColor'&&cs.borderTopWidth==='0px'))out.red.add(name(el));
+     if(h>=40&&h<=50&&s>.9&&l>.45&&l<.6)out.amber.add(name(el));}
+   if(own){const fs=parseFloat(cs.fontSize);const fam=cs.fontFamily.split(',')[0].replace(/["']/g,'');if(!el.closest('.bi'))out.fonts[fam]=(out.fonts[fam]||0)+1;
+     const txt=el.textContent.trim().slice(0,40);
+     if(ph&&fs<14&&!el.closest('.qs-url'))out.small.push(name(el)+' | '+fs+'px | '+txt);
+     if(!ph&&fs<12)out.tiny.push(name(el)+' | '+fs+'px | '+txt);
+     if(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u.test(el.textContent))out.emoji.push(name(el)+' '+txt);
+     if(el.closest('.qs-overlay')&&!el.closest('.qs-modal'))return;
+     const inOverlayBg=dev.querySelector('.qs-overlay')&&!el.closest('.qs-modal');if(inOverlayBg)return;
+     const fg=rgb(cs.color);const bg=bgOf(el);const L1=lum(blend(fg,bg)),L2=lum(bg);const ratio=(Math.max(L1,L2)+.05)/(Math.min(L1,L2)+.05);
+     const large=fs>=24||(fs>=18.66&&+cs.fontWeight>=700);const dis=el.closest(':disabled,.qs-void,.out');
+     if(!dis&&ratio<(large?3:4.5))out.contrast.push(name(el)+' | '+ratio.toFixed(2)+' | '+fs+'px | '+txt);}
+   if(ph&&el.scrollWidth>el.clientWidth+1&&cs.overflowX!=='auto'&&cs.overflowX!=='scroll'&&!el.closest('.qs-chips')&&el.clientWidth>0)out.overflow.push(name(el)+' | '+el.className);
+  });
+  if(ph)dev.querySelectorAll('button,a.btn,input:not([type=checkbox]):not([type=radio]),select,label.qs-opt,.qs-tabbar a,.qs-cat,.qs-cartbar').forEach(el=>{const r=el.getBoundingClientRect();if(r.height&&r.height<44&&!el.classList.contains('btn-close'))out.tiny.push('TARGET '+name(el)+' | '+Math.round(r.height)+'px | '+(el.textContent.trim()||el.getAttribute('aria-label')||el.className).slice(0,30))});
+ });
+ out.red=[...out.red];out.amber=[...out.amber];return out});
+const uniq=a=>[...new Set(a)];
+console.log('frames',r.frames,'fonts',JSON.stringify(r.fonts));
+for(const k of ['small','tiny','contrast','emoji','grad','purple','overflow'])console.log(k,r[k].length,JSON.stringify(uniq(r[k]).slice(0,25),null,0));
+console.log('RED in',r.red.length,JSON.stringify(r.red));console.log('AMBER in',r.amber.length,JSON.stringify(r.amber));
+await b.close()})();

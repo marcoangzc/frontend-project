@@ -232,9 +232,10 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-wait2 span { font-size: .875rem; font-weight: 600; }
 .qs-steps { display: flex; align-items: flex-start; background: #fff; border-radius: var(--rm); box-shadow: var(--sh); padding: 14px 4px 12px; }
 .qs-steps > div { flex: 1; text-align: center; font-size: .875rem; font-weight: 700; color: #50575E; position: relative; }
-.qs-steps > div::before { content: ""; position: absolute; top: 15px; left: -50%; width: 100%; height: 3px; background: var(--line); }
+/* the connector runs from the previous dot's right edge to this dot's left edge, with a 4px gap each side */
+.qs-steps > div::before { content: ""; position: absolute; z-index: 0; top: 15px; left: calc(-50% + 20px); width: calc(100% - 40px); height: 3px; border-radius: 2px; background: var(--line); }
 .qs-steps > div:first-child::before { display: none; }
-.qs-steps .dot { position: relative; width: 32px; height: 32px; border-radius: 10px; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; background: #fff; box-shadow: inset 0 0 0 1.5px var(--line2); }
+.qs-steps .dot { position: relative; z-index: 1; width: 32px; height: 32px; border-radius: 10px; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; background: #fff; box-shadow: inset 0 0 0 1.5px var(--line2); }
 .qs-steps .done { color: var(--ink); } .qs-steps .done::before { background: var(--p600); }
 .qs-steps .done .dot { background: var(--p600); box-shadow: none; color: #fff; }
 .qs-steps .now { color: var(--ink); } .qs-steps .now .dot { background: var(--w500); box-shadow: none; color: #1D2125; }
@@ -417,6 +418,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
     <div><b>0</b>处文字对比度不达标 (WCAG AA)</div>
     <div><b>0</b>个渐变、紫色或 emoji</div>
     <div><b>100%</b>文字使用同一字体</div>
+    <div><b>0</b>处元素重叠、被裁切或按钮文字折行</div>
   </div>
 
   <h3>1. 这一版改了什么</h3>
@@ -440,7 +442,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
   <h3>4. 验收方法和工具</h3>
   <ul>
     <li>从 GitHub 下载了两个前端 skill：<b>ui-ux-pro-max</b>（nextlevelbuilder），以及 Anthropic 官方的 <b>frontend-design</b>（和这里已安装的版本完全相同）。ui-ux-pro-max 的脚本被安全检查拦下，没有运行，改为直接读它的数据表：餐饮类推荐、配色、字体搭配，以及交付前检查清单。</li>
-    <li>自动检测用 Playwright 在浏览器里跑全部 72 个状态：逐个元素检查字号、点击区域高度、文字和背景的对比度、颜色用途、渐变、emoji、溢出和实际渲染的字体。</li>
+    <li>自动检测用 Playwright 在浏览器里跑全部 72 个状态：逐个元素检查字号、点击区域高度、文字和背景的对比度、颜色用途、渐变、emoji、溢出和实际渲染的字体。另外还做了版面检测：①在每段文字和每个图标上取 5 个点，看有没有被别的元素（包括装饰线条）盖住；②检查内容有没有被容器裁掉或超出画面；③检查按钮、标签、标签页的文字有没有折成两行；④检查文字有没有被旁边的元素挤得太窄。这一项发现并修复了订单进度条“线条压住圆点”的问题。</li>
     <li>没有在真实手机上测试；二维码仍是占位图，不能扫描。</li>
   </ul>
 </details>
