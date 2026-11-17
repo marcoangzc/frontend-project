@@ -108,7 +108,7 @@ export const url = (u) => `<div class="qs-url"><span>${i('lock')} ${u}</span></d
 
 // Customer phone header: restaurant, table, and the Call waiter button that sits on every table page.
 export const chd = (sub = 'Table T3', call = true, extra = '') =>
-  `<header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div>${sub ? `<div class="qs-chd-t">${sub}</div>` : ''}${extra ? `<div class="qs-chd-s">${extra}</div>` : ''}</div>${call ? btn('Call waiter', 'band', { i: 'bell' }) : ''}</header>`;
+  `<header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div>${sub ? `<div class="qs-chd-t">${sub}</div>` : ''}${extra ? `<div class="qs-chd-s">${extra}</div>` : ''}</div>${call ? btn('Call waiter', 'outline-secondary', { i: 'bell' }) : ''}</header>`;
 
 // Customer phone screen (no navigation bar, entered by QR)
 export const ph = (name, o, body) =>

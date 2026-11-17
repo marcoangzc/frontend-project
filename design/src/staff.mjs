@@ -58,7 +58,7 @@ const qrow = (no, name, size, wait, o = {}) => `<div class="qs-qcard${o.called ?
   <div class="d-flex gap-2">${o.called ? btn('No-show', 'outline-secondary', { c: 'flex-fill', dis: o.early }) + btn('Seated', 'primary', { c: 'flex-fill', i: 'check-lg' }) : btn('Call ' + no, 'outline-primary', { c: 'flex-fill', i: 'megaphone' })}</div>
   ${o.early ? '<div class="small text-body-secondary">No-show can be marked 5 minutes after calling (in 3 min).</div>' : ''}</div>`;
 const queue = [
-  sp('Queue · Several waiting', 'Queue', 'Queue', { note: 'Oldest ticket first. Call makes the customer\'s ticket page flash, sound and vibrate. Then staff mark Seated, or No-show after 5 minutes.' }, `
+  sp('Queue · Several waiting', 'Queue', 'Queue', { note: 'Oldest ticket first. Call turns the customer\'s ticket page bright teal (no sound). Then staff mark Seated, or No-show after 5 minutes.' }, `
     <div class="d-flex justify-content-between align-items-center"><div class="fw-medium">5 groups · longest wait 18 min</div>${upd()}</div>
     ${qrow('A019', 'Hafiz', 2, 'Called 2 min ago', { called: 1, early: 1 })}
     ${qrow('A020', 'Farid', 2, 'Waiting 18 min')}

@@ -27,7 +27,7 @@
   --bd-bg: #eef1ef; --bd-surface: #ffffff; --bd-fg: #1b2420; --bd-muted: #55615b; --bd-line: #d3dad6; --bd-accent: #1f5e4b; --bd-chip: #dfe8e3;
   --p50: #EEF6F1; --p100: #D9EBE1; --p200: #A9C9BD; --p600: #1F5E4B; --p700: #174839; --p900: #0F2E25;
   --t50: #FBF0E4; --t100: #F4DCC2; --t600: #A65E1E; --t700: #7F4511;
-  --ink: #17231E; --slate: #52605A; --line: #DCE4E0; --line2: #CBD7D1; --mist: #F2F5F3;
+  --ink: #1D2125; --slate: #50575E; --line: #DEE2E6; --line2: #CED4DA; --mist: #F1F3F5;
   --w50: #FFF3CD; --w500: #FFC107; --w800: #664D03;
   --r50: #F8D7DA; --r600: #DC3545; --r800: #842029;
   --font: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
@@ -78,13 +78,13 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .report td { padding: 9px 10px; border-bottom: 1px solid var(--bd-line); vertical-align: top; color: var(--bd-fg); }
 .report tr:last-child td { border-bottom: 0; }
 .rs { display: inline-block; min-width: 64px; text-align: center; padding: 2px 8px; border-radius: 8px; font-weight: 700; font-size: .8125rem; }
-.rs.pass { background: #d9ebe1; color: #174839; } .rs.fixed { background: #d9e6f5; color: #1d4a7a; } .rs.dev { background: #f4dcc2; color: #6b3a0e; } .rs.open { background: #f8d7da; color: #842029; }
+.rs.pass { background: #d9ebe1; color: #174839; } .rs.fixed { background: #d9e6f5; color: #1d4a7a; } .rs.dv { background: #f4dcc2; color: #6b3a0e; } .rs.open { background: #f8d7da; color: #842029; }
 .report .kpi { display: flex; flex-wrap: wrap; gap: 12px 28px; margin: 4px 0 8px; }
 .report .kpi div { font-size: .875rem; color: var(--bd-muted); } .report .kpi b { display: block; font-size: 1.5rem; color: var(--bd-fg); font-variant-numeric: tabular-nums; }
 
 /* ---------- device frames (always light: they show the product) ---------- */
 .dev { position: relative; display: flex; flex-direction: column; background: var(--mist); color: var(--ink); color-scheme: light; font-family: var(--font); font-size: 1rem; line-height: 1.5; box-shadow: 0 0 0 1px rgba(0,0,0,.12); overflow: hidden; font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
-  --bs-body-color: #17231E; --bs-secondary-color: #52605A; --bs-border-color: #DCE4E0; --bs-body-font-family: var(--font); }
+  --bs-body-color: #1D2125; --bs-secondary-color: #50575E; --bs-border-color: #DEE2E6; --bs-body-font-family: var(--font); }
 .dev-ph { width: 360px; min-height: 720px; }
 .dev-pc { width: 1280px; min-height: 800px; flex-direction: row; }
 .dev-tb, .dev-ct { width: 1024px; min-height: 768px; }
@@ -105,7 +105,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .dev-ph .btn-sm { min-height: 44px; }
 .dev .btn-primary { --bs-btn-bg: #1F5E4B; --bs-btn-border-color: #1F5E4B; --bs-btn-hover-bg: #174839; --bs-btn-hover-border-color: #174839; --bs-btn-active-bg: #0F2E25; --bs-btn-active-border-color: #0F2E25; --bs-btn-disabled-bg: #9DB6AC; --bs-btn-disabled-border-color: #9DB6AC; --bs-btn-disabled-opacity: 1; --bs-btn-focus-shadow-rgb: 31,94,75; box-shadow: 0 2px 6px rgba(31,94,75,.25); }
 .dev .btn-primary:disabled { box-shadow: none; }
-.dev .btn-outline-primary, .dev .btn-outline-secondary { --bs-btn-color: #17231E; --bs-btn-bg: #E9EEEB; --bs-btn-border-color: #E9EEEB; --bs-btn-hover-color: #17231E; --bs-btn-hover-bg: #DCE4E0; --bs-btn-hover-border-color: #DCE4E0; --bs-btn-active-color: #17231E; --bs-btn-active-bg: #CBD7D1; --bs-btn-active-border-color: #CBD7D1; --bs-btn-disabled-color: #75837D; --bs-btn-disabled-bg: #F2F5F3; --bs-btn-disabled-border-color: #F2F5F3; --bs-btn-disabled-opacity: 1; --bs-btn-focus-shadow-rgb: 31,94,75; border-width: 1.5px; }
+.dev .btn-outline-primary, .dev .btn-outline-secondary { --bs-btn-color: #1D2125; --bs-btn-bg: #E9ECEF; --bs-btn-border-color: #E9ECEF; --bs-btn-hover-color: #1D2125; --bs-btn-hover-bg: #DEE2E6; --bs-btn-hover-border-color: #DEE2E6; --bs-btn-active-color: #1D2125; --bs-btn-active-bg: #CED4DA; --bs-btn-active-border-color: #CED4DA; --bs-btn-disabled-color: #6C757D; --bs-btn-disabled-bg: #F1F3F5; --bs-btn-disabled-border-color: #F1F3F5; --bs-btn-disabled-opacity: 1; --bs-btn-focus-shadow-rgb: 31,94,75; border-width: 1.5px; }
 .dev .btn-outline-danger { --bs-btn-bg: #fff; --bs-btn-color: #B02A37; --bs-btn-border-color: #E8A3AA; --bs-btn-hover-bg: #F8D7DA; --bs-btn-hover-color: #842029; --bs-btn-hover-border-color: #DC3545; border-width: 1.5px; }
 .dev .btn-danger { --bs-btn-bg: #C82333; --bs-btn-border-color: #C82333; --bs-btn-hover-bg: #A71D2A; --bs-btn-hover-border-color: #A71D2A; }
 .dev .btn-link { --bs-btn-color: #1F5E4B; --bs-btn-hover-color: #174839; text-decoration: none; }
@@ -116,13 +116,13 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .dev .input-group > :not(:first-child) { border-top-left-radius: 0; border-bottom-left-radius: 0; }
 .dev .input-group > :not(:last-child):not(.invalid-feedback) { border-top-right-radius: 0; border-bottom-right-radius: 0; }
 .dev .input-group-text { background: var(--mist); color: var(--slate); font-weight: 600; }
-.dev .form-control::placeholder { color: #75837D; }
+.dev .form-control::placeholder { color: #6C757D; }
 .dev .form-control:disabled { background: var(--mist); }
 .dev .form-label { font-size: .875rem; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
 .dev .form-text { font-size: .875rem; color: var(--slate); }
 .dev .invalid-feedback { font-size: .875rem; font-weight: 600; color: #B02A37; }
 .dev .form-control.is-invalid, .dev .form-select.is-invalid { border-color: var(--r600); border-width: 2px; }
-.dev .form-check-input { width: 1.25em; height: 1.25em; margin-top: .125em; border-color: #9AAAA2; }
+.dev .form-check-input { width: 1.25em; height: 1.25em; margin-top: .125em; border-color: #9AA2AA; }
 .dev .form-check { padding-left: 1.9em; } .dev .form-check .form-check-input { margin-left: -1.9em; }
 .dev .form-switch { padding-left: 0; } .dev .form-switch .form-check-input { width: 2.5em; margin-left: 0; float: none; }
 .dev .form-check-input:checked { background-color: var(--p600); border-color: var(--p600); }
@@ -135,17 +135,17 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .dev .alert .qs-ai { width: 32px; height: 32px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; font-size: 1rem; }
 .dev .alert > div { padding-top: 4px; }
 .dev .alert-primary { --bs-alert-color: #174839; --bs-alert-bg: #E3F0E8; } .dev .alert-primary .qs-ai { background: var(--p600); color: #fff; }
-.dev .alert-secondary { --bs-alert-color: #17231E; --bs-alert-bg: #fff; box-shadow: var(--sh); } .dev .alert-secondary .qs-ai { background: var(--p50); color: var(--p600); }
-.dev .alert-warning { --bs-alert-color: #664D03; --bs-alert-bg: #FFF3CD; } .dev .alert-warning .qs-ai { background: var(--w500); color: #17231E; }
+.dev .alert-secondary { --bs-alert-color: #1D2125; --bs-alert-bg: #fff; box-shadow: var(--sh); } .dev .alert-secondary .qs-ai { background: var(--p50); color: var(--p600); }
+.dev .alert-warning { --bs-alert-color: #664D03; --bs-alert-bg: #FFF3CD; } .dev .alert-warning .qs-ai { background: var(--w500); color: #1D2125; }
 .dev .alert-danger { --bs-alert-color: #842029; --bs-alert-bg: #FBE3E5; } .dev .alert-danger .qs-ai { background: var(--r600); color: #fff; }
 .dev .badge { font-size: .8125rem; font-weight: 700; padding: .3em .6em; border-radius: 8px; letter-spacing: 0; }
 .dev-ph .badge { font-size: .875rem; }
-.qs-b-neutral { background: #E7EDEA; color: #33413B; }
+.qs-b-neutral { background: #E9ECEF; color: #343A40; }
 .qs-b-brand { background: var(--p100); color: var(--p700); }
 .qs-b-solid { background: var(--p600); color: #fff; }
 .qs-b-tea { background: var(--t50); color: var(--t700); }
 .qs-b-wait { background: var(--w50); color: var(--w800); }
-.qs-b-wait-solid { background: var(--w500); color: #17231E; }
+.qs-b-wait-solid { background: var(--w500); color: #1D2125; }
 .qs-b-danger { background: var(--r50); color: var(--r800); }
 .qs-b-danger-solid { background: var(--r600); color: #fff; }
 .qs-b-outline { background: #fff; color: var(--slate); box-shadow: inset 0 0 0 1px var(--line2); }
@@ -158,17 +158,17 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-tile.tea { background: var(--t50); color: var(--t600); }
 .qs-tile.wait { background: var(--w50); color: var(--w800); }
 .qs-tile.red { background: var(--r50); color: #B02A37; }
-.qs-tile.gray { background: #E7EDEA; color: var(--slate); }
+.qs-tile.gray { background: #E9ECEF; color: var(--slate); }
 .qs-tile.solid { background: var(--p600); color: #fff; }
 .qs-tile.onband { background: rgba(255,255,255,.14); color: #fff; }
 
 /* customer phone */
-.qs-url { background: #E4EAE7; padding: 8px 12px; }
+.qs-url { background: #E6E9EC; padding: 8px 12px; }
 .qs-url span { display: block; background: #fff; border-radius: 8px; padding: 6px 10px; font-size: .875rem; color: var(--slate); }
-.qs-chd { display: flex; align-items: center; gap: 12px; padding: 14px 16px 16px; background: var(--p700); color: #fff; }
-.qs-chd-k { font-size: .875rem; color: #CFE3D9; font-weight: 600; }
+.qs-chd { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: #fff; color: var(--ink); box-shadow: 0 1px 0 var(--line); }
+.qs-chd-k { font-size: .875rem; color: var(--slate); font-weight: 600; }
 .qs-chd-t { font-size: 1.375rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; }
-.qs-chd-s { font-size: .875rem; color: #CFE3D9; }
+.qs-chd-s { font-size: .875rem; color: var(--slate); }
 .qs-chd.qs-gw { background: #fff; color: var(--ink); border-bottom: 1px solid var(--line); }
 .qs-chd.qs-gw .qs-chd-k, .qs-chd.qs-gw .qs-chd-s { color: var(--slate); }
 .qs-body { flex: 1; display: flex; flex-direction: column; gap: 16px; padding: 16px; }
@@ -183,7 +183,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-qr { display: block; border-radius: 8px; }
 .qs-overlay { position: absolute; inset: 0; background: rgba(15,30,25,.55); display: flex; align-items: center; justify-content: center; padding: 16px; }
 .qs-overlay.qs-sheet { align-items: flex-end; padding: 0; }
-.qs-modal { --bs-modal-bg: #fff; --bs-modal-color: #17231E; --bs-modal-padding: 1rem; --bs-modal-border-width: 0; --bs-modal-header-padding: 1rem; --bs-modal-header-border-color: #DCE4E0; --bs-modal-header-border-width: 1px; --bs-modal-title-line-height: 1.4; --bs-modal-footer-gap: .5rem; --bs-modal-footer-border-color: #DCE4E0; --bs-modal-footer-border-width: 1px; background: #fff; color: var(--ink); max-width: 100%; border: 0; border-radius: var(--rm); box-shadow: 0 12px 40px rgba(15,30,25,.3); }
+.qs-modal { --bs-modal-bg: #fff; --bs-modal-color: #1D2125; --bs-modal-padding: 1rem; --bs-modal-border-width: 0; --bs-modal-header-padding: 1rem; --bs-modal-header-border-color: #DEE2E6; --bs-modal-header-border-width: 1px; --bs-modal-title-line-height: 1.4; --bs-modal-footer-gap: .5rem; --bs-modal-footer-border-color: #DEE2E6; --bs-modal-footer-border-width: 1px; background: #fff; color: var(--ink); max-width: 100%; border: 0; border-radius: var(--rm); box-shadow: 0 12px 40px rgba(15,30,25,.3); }
 .qs-modal .modal-title { font-weight: 800; }
 .qs-modal .btn-close { margin-left: auto; }
 .qs-sheet .qs-modal { border-radius: var(--rm) var(--rm) 0 0; width: 100% !important; }
@@ -201,7 +201,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-cat { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 6px; width: 72px; padding: 10px 4px 8px; border: 0; border-radius: var(--rm); background: #fff; box-shadow: var(--sh); font-size: .875rem; font-weight: 700; color: var(--ink); }
 .qs-cat.on { background: var(--p600); color: #fff; box-shadow: 0 4px 12px rgba(31,94,75,.3); }
 .qs-cat.on .qs-tile { background: rgba(255,255,255,.16); color: #fff; }
-.qs-search { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px; background: #fff; border-radius: var(--rs); color: #6A7872; font-size: 1rem; }
+.qs-search { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 14px; background: #fff; border-radius: var(--rs); color: #6C757D; font-size: 1rem; }
 .qs-dishes { background: #fff; border-radius: var(--rm); box-shadow: var(--sh); }
 .qs-dish { display: flex; gap: 12px; align-items: flex-start; padding: 14px 12px; }
 .qs-dish + .qs-dish { border-top: 1px solid var(--line); }
@@ -209,8 +209,8 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-dish .ds { font-size: .875rem; color: var(--slate); line-height: 1.35; margin-top: 2px; }
 .qs-dish .mt { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
 .qs-dish .pr { font-weight: 800; }
-.qs-dish.out .nm, .qs-dish.out .pr { color: #75837D; }
-.qs-dish.out .qs-tile { background: #E7EDEA; color: #8E9C96; }
+.qs-dish.out .nm, .qs-dish.out .pr { color: #6C757D; }
+.qs-dish.out .qs-tile { background: #E9ECEF; color: #9AA2AA; }
 .qs-add { width: 44px; height: 44px; border: 0; border-radius: var(--rs); background: var(--p50); color: var(--p600); font-size: 1.25rem; display: inline-flex; align-items: center; justify-content: center; }
 .qs-spice { color: var(--t600); font-size: .875rem; font-weight: 700; display: inline-flex; align-items: center; gap: 2px; }
 .qs-cartbar { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 0 16px 0 8px; border-radius: var(--rm); background: var(--p600); color: #fff; font-weight: 700; box-shadow: 0 6px 16px rgba(31,94,75,.35); }
@@ -230,20 +230,20 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-wait2 b { display: block; font-size: 1.75rem; font-weight: 800; line-height: 1.15; letter-spacing: -.02em; }
 .qs-wait2 span { font-size: .875rem; font-weight: 600; }
 .qs-steps { display: flex; align-items: flex-start; background: #fff; border-radius: var(--rm); box-shadow: var(--sh); padding: 14px 4px 12px; }
-.qs-steps > div { flex: 1; text-align: center; font-size: .875rem; font-weight: 700; color: #52605A; position: relative; }
+.qs-steps > div { flex: 1; text-align: center; font-size: .875rem; font-weight: 700; color: #50575E; position: relative; }
 .qs-steps > div::before { content: ""; position: absolute; top: 15px; left: -50%; width: 100%; height: 3px; background: var(--line); }
 .qs-steps > div:first-child::before { display: none; }
 .qs-steps .dot { position: relative; width: 32px; height: 32px; border-radius: 10px; margin: 0 auto 6px; display: flex; align-items: center; justify-content: center; background: #fff; box-shadow: inset 0 0 0 1.5px var(--line2); }
 .qs-steps .done { color: var(--ink); } .qs-steps .done::before { background: var(--p600); }
 .qs-steps .done .dot { background: var(--p600); box-shadow: none; color: #fff; }
-.qs-steps .now { color: var(--ink); } .qs-steps .now .dot { background: var(--w500); box-shadow: none; color: #17231E; }
+.qs-steps .now { color: var(--ink); } .qs-steps .now .dot { background: var(--w500); box-shadow: none; color: #1D2125; }
 
 /* staff phone and counter tablet */
-.qs-appbar { display: flex; align-items: center; gap: 8px; min-height: 56px; padding: 6px 12px 6px 4px; background: var(--p700); color: #fff; }
+.qs-appbar { display: flex; align-items: center; gap: 8px; min-height: 56px; padding: 6px 12px 6px 4px; background: #fff; color: var(--ink); box-shadow: 0 1px 0 var(--line); }
 .qs-appbar h1 { flex: 1; font-size: 1.25rem; font-weight: 800; }
-.qs-appbar-btn { color: #fff; width: 44px; padding: 0; font-size: 1.375rem; border: 0; }
-.qs-appbar-btn:hover { color: #fff; }
-.qs-low { display: inline-flex; align-items: center; gap: 6px; background: #fff; color: var(--r800); border-radius: 8px; padding: 6px 10px; font-size: .875rem; font-weight: 700; text-decoration: none; }
+.qs-appbar-btn { color: var(--ink); width: 44px; padding: 0; font-size: 1.375rem; border: 0; }
+.qs-appbar-btn:hover { color: var(--ink); }
+.qs-low { display: inline-flex; align-items: center; gap: 6px; background: var(--r50); color: var(--r800); border-radius: 8px; padding: 6px 10px; font-size: .875rem; font-weight: 700; text-decoration: none; }
 .qs-low .bi { color: var(--r600); }
 .qs-tabbar { display: flex; background: #fff; box-shadow: 0 -1px 0 var(--line); padding: 6px 4px 8px; }
 .qs-tabbar a { flex: 1; min-height: 56px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; color: var(--slate); text-decoration: none; font-size: .875rem; font-weight: 600; }
@@ -255,7 +255,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-list > * { display: flex; align-items: center; gap: 12px; padding: 12px 14px; min-height: 64px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; }
 .qs-list > *:last-child { border-bottom: 0; }
 .qs-list .num { font-size: 1.375rem; font-weight: 800; }
-.qs-list .bi-chevron-right { color: #9AAAA2; }
+.qs-list .bi-chevron-right { color: #9AA2AA; }
 .qs-tgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .dev-ct .qs-tgrid { grid-template-columns: repeat(4, 1fr); gap: 12px; }
 .qs-t { position: relative; min-height: 88px; border-radius: var(--rm); background: #fff; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; text-decoration: none; color: var(--ink); box-shadow: var(--sh); }
@@ -267,7 +267,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-t.pay { background: var(--p600); color: #fff; box-shadow: 0 4px 10px rgba(31,94,75,.25); }
 .qs-t.call { box-shadow: 0 0 0 3px var(--w500), 0 4px 12px rgba(255,193,7,.4); }
 .qs-t.sel { box-shadow: 0 0 0 3px var(--p600); }
-.qs-t .bell { position: absolute; top: -8px; right: -8px; width: 30px; height: 30px; border-radius: 10px; background: var(--w500); color: #17231E; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px var(--mist); }
+.qs-t .bell { position: absolute; top: -8px; right: -8px; width: 30px; height: 30px; border-radius: 10px; background: var(--w500); color: #1D2125; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 3px var(--mist); }
 .qs-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .875rem; font-weight: 600; color: var(--slate); }
 .qs-legend i { display: inline-block; width: 14px; height: 14px; border-radius: 4px; box-shadow: inset 0 0 0 1.5px var(--line2); vertical-align: -2px; margin-right: 6px; }
 .qs-legend .food { background: var(--w50); box-shadow: inset 0 0 0 1.5px #F5D77A; } .qs-legend .pay { background: var(--p600); box-shadow: none; }
@@ -285,57 +285,57 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-kbar h1 { font-size: 1.75rem; font-weight: 800; } .qs-kbar .qs-upd { color: #B9CCC3; font-size: 1rem; } .qs-kclock { font-size: 1.75rem; font-weight: 800; }
 .qs-kbody { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 16px; align-items: start; }
 .qs-ticketk { background: #fff; border-radius: var(--rm); overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 8px rgba(15,46,37,.12); }
-.qs-ticketk header { display: flex; align-items: baseline; gap: 12px; padding: 12px 16px; background: #17231E; color: #fff; }
+.qs-ticketk header { display: flex; align-items: baseline; gap: 12px; padding: 12px 16px; background: #1D2125; color: #fff; }
 .qs-ticketk header b { font-size: 2.5rem; line-height: 1; font-weight: 800; } .qs-ticketk header span { font-size: 1.125rem; color: #C9D3CE; } .qs-ticketk header .age { margin-left: auto; font-size: 1.375rem; font-weight: 800; color: #fff; }
-.qs-ticketk.late header { background: var(--w500); color: #17231E; } .qs-ticketk.late header span, .qs-ticketk.late header .age { color: #17231E; }
+.qs-ticketk.late header { background: var(--w500); color: #1D2125; } .qs-ticketk.late header span, .qs-ticketk.late header .age { color: #1D2125; }
 .qs-ticketk ul { list-style: none; margin: 0; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; flex: 1; }
 .qs-ticketk li { font-size: 1.5rem; font-weight: 600; line-height: 1.25; } .qs-ticketk li b { font-weight: 800; margin-right: 8px; }
 .qs-ticketk li em { display: block; font-style: normal; font-size: 1.125rem; font-weight: 700; background: var(--w50); color: var(--w800); border-radius: 8px; padding: 2px 8px; margin-top: 4px; }
 .qs-ticketk .btn { margin: 0 16px 16px; min-height: 64px; font-size: 1.5rem; font-weight: 800; }
-.qs-kempty { grid-column: 1 / -1; align-self: center; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 140px 0; font-size: 2rem; font-weight: 800; color: #33413B; }
+.qs-kempty { grid-column: 1 / -1; align-self: center; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 140px 0; font-size: 2rem; font-weight: 800; color: #343A40; }
 .qs-kempty div { font-size: 1.25rem; font-weight: 500; color: var(--slate); }
 
 /* owner PC */
-.qs-side { width: 240px; flex: 0 0 240px; background: var(--p900); color: #fff; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px; }
+.qs-side { width: 240px; flex: 0 0 240px; background: #fff; color: var(--ink); box-shadow: 1px 0 0 var(--line); padding: 18px 12px; display: flex; flex-direction: column; gap: 2px; }
 .qs-brand { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 1.0625rem; padding: 2px 8px 14px; }
 .qs-logo { width: 32px; height: 32px; border-radius: var(--rs); background: var(--p600); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 800; }
-.qs-side .qs-logo { background: #fff; color: var(--p900); }
-.qs-side-label { font-size: .8125rem; font-weight: 700; color: #9DB6AC; padding: 14px 10px 6px; }
-.qs-side-link { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--rs); color: #D6E3DD; text-decoration: none; font-size: .875rem; font-weight: 600; }
+.qs-side .qs-logo { background: var(--p600); color: #fff; }
+.qs-side-label { font-size: .8125rem; font-weight: 700; color: var(--slate); padding: 14px 10px 6px; }
+.qs-side-link { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--rs); color: #343A40; text-decoration: none; font-size: .875rem; font-weight: 600; }
 .qs-side-link .bi { font-size: 1rem; width: 18px; text-align: center; }
-.qs-side-link:hover { background: rgba(255,255,255,.08); color: #fff; }
-.qs-side-link.active { background: #fff; color: var(--p700); font-weight: 800; }
-.qs-side-user { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px 10px 4px; border-top: 1px solid rgba(255,255,255,.14); font-size: .875rem; }
-.qs-side-user .text-secondary { color: #9DB6AC !important; }
+.qs-side-link:hover { background: var(--mist); color: var(--ink); }
+.qs-side-link.active { background: var(--p50); color: var(--p700); font-weight: 800; }
+.qs-side-user { margin-top: auto; display: flex; align-items: center; gap: 10px; padding: 12px 10px 4px; border-top: 1px solid var(--line); font-size: .875rem; }
+
 .qs-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
 .qs-pagehead { display: flex; align-items: center; gap: 16px; min-height: 76px; padding: 18px 28px 6px; }
 .qs-pagehead h1 { font-size: 1.75rem; font-weight: 800; letter-spacing: -.02em; }
 .qs-pcbody { padding: 12px 28px 28px; display: flex; flex-direction: column; gap: 16px; }
 .qs-toolbar { display: flex; align-items: center; gap: 12px; }
-.qs-table { font-size: .875rem; --bs-table-bg: #fff; --bs-table-color: #17231E; --bs-table-border-color: #E4EAE7; }
-.qs-table thead th { font-size: .8125rem; font-weight: 700; color: var(--slate); background: #F7F9F8; white-space: nowrap; }
+.qs-table { font-size: .875rem; --bs-table-bg: #fff; --bs-table-color: #1D2125; --bs-table-border-color: #E6E9EC; }
+.qs-table thead th { font-size: .8125rem; font-weight: 700; color: var(--slate); background: #F8F9FA; white-space: nowrap; }
 .qs-table td, .qs-table th { padding: .75rem 1rem; }
 .qs-table tr:last-child td { border-bottom: 0; }
 .qs-table .btn { min-height: 36px; }
-.qs-table tr.table-danger { --bs-table-bg: #FDF0F1; --bs-table-color: #17231E; }
-.qs-void td { color: #75837D !important; } .qs-void .amt { text-decoration: line-through; }
+.qs-table tr.table-danger { --bs-table-bg: #FDF0F1; --bs-table-color: #1D2125; }
+.qs-void td { color: #6C757D !important; } .qs-void .amt { text-decoration: line-through; }
 .qs-barcell { display: flex; align-items: center; gap: 10px; font-weight: 600; } .qs-barcell i { display: block; height: 10px; border-radius: 3px; background: var(--p600); }
 .qs-meter { display: flex; align-items: center; gap: 12px; }
-.qs-meter .trk { position: relative; width: 150px; height: 8px; border-radius: 4px; background: #E4EAE7; flex: 0 0 auto; }
+.qs-meter .trk { position: relative; width: 150px; height: 8px; border-radius: 4px; background: #E6E9EC; flex: 0 0 auto; }
 .qs-meter .trk i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--p600); }
-.qs-meter .trk em { position: absolute; top: -4px; bottom: -4px; left: 50%; width: 2px; border-radius: 1px; background: #17231E; }
+.qs-meter .trk em { position: absolute; top: -4px; bottom: -4px; left: 50%; width: 2px; border-radius: 1px; background: #1D2125; }
 .qs-meter.low .trk i { background: var(--r600); }
 .qs-stat { display: flex; gap: 12px; align-items: center; background: #fff; border-radius: var(--rm); box-shadow: var(--sh); padding: 14px 16px; flex: 1; }
 .qs-stat b { display: block; font-size: 1.375rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; }
 .qs-stat span { font-size: .875rem; color: var(--slate); }
-.dev .nav-underline { --bs-nav-underline-link-active-color: #1F5E4B; --bs-nav-link-color: #52605A; --bs-nav-link-hover-color: #174839; --bs-nav-underline-gap: 1.25rem; --bs-nav-link-font-weight: 600; border-bottom: 1px solid var(--line); }
+.dev .nav-underline { --bs-nav-underline-link-active-color: #1F5E4B; --bs-nav-link-color: #50575E; --bs-nav-link-hover-color: #174839; --bs-nav-underline-gap: 1.25rem; --bs-nav-link-font-weight: 600; border-bottom: 1px solid var(--line); }
 .dev .nav-underline .nav-link { min-height: 44px; display: flex; align-items: center; }
 .dev .nav-underline .nav-link.active { font-weight: 800; border-bottom-width: 3px; }
 .qs-tabs { flex: 1; }
 .qs-sheetprint { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .qs-sheetprint > div { border: 1.5px dashed var(--line2); border-radius: var(--rs); padding: 12px; text-align: center; }
 .qs-sheetprint svg { margin: 0 auto 6px; }
-.qs-toast { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; align-items: center; gap: 20px; padding: 10px 10px 10px 22px; border-radius: var(--rm); background: #17231E; color: #fff; font-size: 1.25rem; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,.3); white-space: nowrap; }
+.qs-toast { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; align-items: center; gap: 20px; padding: 10px 10px 10px 22px; border-radius: var(--rm); background: #1D2125; color: #fff; font-size: 1.25rem; font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,.3); white-space: nowrap; }
 .qs-toast .btn { min-height: 56px; font-size: 1.25rem; padding: 0 22px; }
 /* live queue page */
 .qs-qhead { background: #fff; text-align: center; padding: 10px 16px 16px; display: flex; flex-direction: column; align-items: center; gap: 2px; box-shadow: 0 1px 0 var(--line); }
@@ -347,9 +347,9 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-qsub { display: flex; align-items: center; gap: 6px; font-size: .875rem; font-weight: 600; color: var(--slate); }
 .qs-qsub .live { width: 8px; height: 8px; border-radius: 50%; background: #24935F; box-shadow: 0 0 0 3px #D3EEDF; }
 .qs-qcard2 { border-radius: var(--rm); padding: 18px 16px 16px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; box-shadow: 0 6px 18px rgba(15,46,37,.12); }
-.qs-qcard2.waiting { background: var(--w500); color: #17231E; }
-.qs-qcard2.called { background: var(--p600); color: #fff; }
-.qs-qcard2.gone { background: #E7EDEA; color: #33413B; box-shadow: none; }
+.qs-qcard2.waiting { background: #fff; color: var(--ink); box-shadow: var(--sh); }
+.qs-qcard2.called { background: transparent; color: #04312B; box-shadow: none; padding-top: 28px; }
+.qs-qcard2.gone { background: #fff; color: var(--slate); box-shadow: var(--sh); }
 .qs-qcard2 .lbl { font-size: .9375rem; font-weight: 700; }
 .qs-qcard2 .no { font-size: 5rem; line-height: 1; font-weight: 800; letter-spacing: -.04em; margin: 2px 0 4px; }
 .qs-qcard2 .meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; font-weight: 700; }
@@ -363,7 +363,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-qcard2 .stats b { display: block; font-size: 1.5rem; font-weight: 800; line-height: 1.15; letter-spacing: -.02em; }
 .qs-qcard2 .stats span { font-size: .875rem; font-weight: 600; }
 .qs-qcard2 .btn { margin-top: 8px; }
-.dev .btn-white { --bs-btn-bg: #fff; --bs-btn-color: #17231E; --bs-btn-border-color: #fff; --bs-btn-hover-bg: #F2F5F3; --bs-btn-hover-color: #17231E; --bs-btn-hover-border-color: #F2F5F3; --bs-btn-active-bg: #DCE4E0; --bs-btn-active-border-color: #DCE4E0; padding: 0 20px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.dev .btn-white { --bs-btn-bg: #fff; --bs-btn-color: #1D2125; --bs-btn-border-color: #fff; --bs-btn-hover-bg: #F1F3F5; --bs-btn-hover-color: #1D2125; --bs-btn-hover-border-color: #F1F3F5; --bs-btn-active-bg: #DEE2E6; --bs-btn-active-border-color: #DEE2E6; padding: 0 20px; box-shadow: 0 2px 8px rgba(0,0,0,.12); }
 .qs-qsec { background: #fff; border-radius: var(--rm); box-shadow: var(--sh); overflow: hidden; }
 .qs-qsec h2 { display: flex; align-items: center; gap: 8px; font-size: 1.0625rem; font-weight: 800; padding: 14px 16px; border-bottom: 1px solid var(--line); }
 .qs-callrow { display: flex; align-items: center; gap: 12px; padding: 12px 16px; }
@@ -374,23 +374,34 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-qrow.called .qn { background: var(--p100); color: var(--p700); }
 .qs-qrow .px { font-weight: 600; color: var(--slate); }
 .qs-qrow.me { background: #FFF6D6; }
-.qs-qrow.me .qn { background: var(--w500); color: #17231E; } .qs-qrow.me .px { color: #17231E; font-weight: 700; }
+.qs-qrow.me .qn { background: var(--w500); color: #1D2125; } .qs-qrow.me .px { color: #1D2125; font-weight: 700; }
+.dev.qs-teal { background: #2DD4BF; color: #04312B; }
+.qs-teal .qs-url { background: #24BCA9; } .qs-teal .qs-url span { background: #5FE0CC; color: #04312B; }
+.qs-teal .qs-qhead { background: transparent; box-shadow: none; }
+.qs-teal .qs-qsub, .qs-teal .qs-qname { color: #04312B; }
+.qs-teal .qs-qsub .live { background: #04312B; box-shadow: 0 0 0 3px rgba(255,255,255,.5); }
+.qs-teal .qs-lang { background: rgba(255,255,255,.35); } .qs-teal .qs-lang button { color: #04312B; }
+.qs-teal .qs-qlogo { background: #04312B; }
+.qs-teal .qs-qcard2 .no { font-size: 6rem; }
+.qs-heldcard { background: #fff; color: var(--ink); border-radius: var(--rm); padding: 14px 16px; text-align: center; box-shadow: 0 6px 18px rgba(4,49,43,.15); }
 @media (prefers-reduced-motion: no-preference) { .dev .btn, .qs-cat, .qs-opt { transition: background-color .12s, box-shadow .12s, color .12s; } }
-.qs-modal .qs-step { background: #E9EEEB; color: #17231E; }
-.qs-modal .qs-step .btn { --bs-btn-color: #17231E; --bs-btn-hover-color: #17231E; --bs-btn-active-color: #17231E; }
+.qs-modal .qs-step { background: #E9ECEF; color: #1D2125; }
+.qs-modal .qs-step .btn { --bs-btn-color: #1D2125; --bs-btn-hover-color: #1D2125; --bs-btn-active-color: #1D2125; }
+
+.qs-qcard2.waiting .pill { background: var(--mist); color: var(--p700); }
 </style>
 </head>
 <body>
 <div class="board fit" id="board">
   <header class="board-head">
     <h1>QuickServe UI screens</h1>
-    <p>23 screens and 73 states for the browser-based POS, drawn in Bootstrap 5 with Bootstrap Icons so each one can be built as shown. The grey note under a frame says what triggers that state.</p>
+    <p>23 screens and 72 states for the browser-based POS, drawn in Bootstrap 5 with Bootstrap Icons so each one can be built as shown. The grey note under a frame says what triggers that state.</p>
     
 <details class="report" open>
   <summary>验收报告 v2 <span>2026 年 11 月 17 日 · UI 对照简报 + UX 体验走查 + 自动检测</span></summary>
 
   <div class="kpi">
-    <div><b>73</b>个状态，全部检测</div>
+    <div><b>72</b>个状态，全部检测</div>
     <div><b>0</b>处手机文字小于 14px</div>
     <div><b>0</b>个手机按钮低于 44px</div>
     <div><b>0</b>处文字对比度不达标 (WCAG AA)</div>
@@ -404,27 +415,22 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
     <li><b>颜色：</b>品牌绿扩成深浅 6 级，顾客页面顶部改成深绿色带；新增一个辅助色“拉茶焦糖色”，只用在食物相关的地方（分类、招牌菜、辣度、会员）。页面底色改成浅灰绿，卡片用白底加柔和阴影，取代原来满屏的灰色边框。</li>
     <li><b>按钮：</b>每个画面只有主要操作用实心绿；次要按钮（取消、应用、加更多菜、分享、入库等）改成浅灰，破坏性操作保留红色，让人一眼看出该点哪个。</li>
     <li><b>图标：</b>统一成带底色的“图标方块”。菜单分类用食物图标（煎蛋=饭类、篮子=面类、饼=Roti、热饮、冰饮、蛋糕）。底部导航选中时换成实心图标。每个状态都是图标加文字，不只靠颜色。</li>
-    <li><b>排队页：</b>参考 Sushi Mentai 的排队页重做：品牌头部、大号码卡、“正在叫号”、“当前队伍”列表、修改人数、保存号码、EN / BM / 中文切换。同时修了参考页的 5 个问题：<ul>
-      <li>金底白字看不清：改成琥珀底深色字，对比度达标</li>
-      <li>浮动语言按钮挡住列表：移到头部</li>
-      <li>同一号码既显示“叫号”又显示“等待”：状态统一</li>
-      <li>列表里找不到自己：高亮自己那一行并标“You”</li>
-      <li>没有等待时间：加上前面几组和预计等待</li>
-    </ul>号码卡的颜色就是状态：等待时琥珀色，叫号时绿色，过号后灰色。</li>
+    <li><b>排队页（按你的要求精简）：</b>只保留号码、人数（可修改）和“现在有几组在排队”。去掉了保存号码、前面几组、预计等待、提示音和排队列表。等待时整页是浅灰，叫到号时整页变成亮青色，在一群浅灰页面里最显眼。</li>
+    <li><b>整体风格改成浅灰：</b>顶部栏、收银员标题栏、老板侧边栏都从深绿改成白色和浅灰，中性色从偏绿的灰改成纯灰。绿色只留给主要按钮和选中状态。厨房平板仍然是深色顶栏，因为要在一米外看清。</li>
     <li><b>版面：</b>菜单改成分类块和白色菜品卡；排队号码做成票据造型，并用一排小图标显示前面还有几组；桌子格子加了状态图标；库存改成水位条，中间的竖线是最低库存。</li>
   </ul>
 
   <h3>2. UI 验收：对照你的设计简报</h3>
-  <div class="rtab"><table><thead><tr><th>简报要求</th><th>结果</th><th>说明</th></tr></thead><tbody><tr><td>只用 Bootstrap 5 和 Bootstrap Icons</td><td><span class="rs pass">通过</span></td><td>所有图标都是 bi-* 图标；唯一的 SVG 是二维码占位图</td></tr><tr><td>一个品牌色加中性色</td><td><span class="rs dev">偏离</span></td><td>按你“颜色太单调”的意见，新增了拉茶焦糖色，只用于食物亮点。如果接受，请把简报这条改成“品牌绿 + 一个食物辅助色”</td></tr><tr><td>红色只用于错误和低库存</td><td><span class="rs dev">偏离</span></td><td>错误和低库存都用红色。“已作废”记录已从红色改成灰色。但拒单、离开排队、批准作废这三个破坏性按钮仍是红色：这是常见做法，能防误操作，建议简报允许这一例外</td></tr><tr><td>琥珀色只用于等待状态</td><td><span class="rs pass">通过</span></td><td>12 个状态用到琥珀色，全部是等待：待确认、排队中、等上菜、等收款、未认领</td></tr><tr><td>系统字体</td><td><span class="rs dev">偏离</span></td><td>按你“字体突兀”的意见改成 Plus Jakarta Sans，理由见第 1 节</td></tr><tr><td>两种圆角（小=输入框和按钮，中=卡片）</td><td><span class="rs fixed">已修复</span></td><td>统一为 10px 和 16px。底部弹窗和大图标原来用的 20px 已改掉</td></tr><tr><td>真实内容（马来西亚菜、RM、T1–T15、A023、Aina、Kumar）</td><td><span class="rs pass">通过</span></td><td>没有 lorem ipsum、John Doe 或 Product 1</td></tr><tr><td>手机 360px 宽、文字 ≥ 14px、按钮 ≥ 44px</td><td><span class="rs fixed">已修复</span></td><td>自动检测为 0 处违规。修复了首页和桌子页 4 个只有 36px 高的小按钮</td></tr><tr><td>避免清单（渐变、毛玻璃、紫色、emoji、Welcome back、假 KPI 箭头、千篇一律的卡片、只有正常流程）</td><td><span class="rs pass">通过</span></td><td>自动检测：0 渐变、0 紫色、0 emoji。老板首页的数字都是真实计数，没有涨跌箭头</td></tr><tr><td>屏幕表里的每个屏幕和状态</td><td><span class="rs pass">通过</span></td><td>简报列出的 20 个屏幕全部画了，另外补了 4 个 UX 缺失的状态（见第 3 节）</td></tr><tr><td>业务规则（扫码单需确认、旧二维码失效、下单时选付款方式、服务费和 SST 分开列、分账金额精确相加、作废需老板账号且保留记录、使用中的不能删、排队页需保持打开、显示“刚刚更新”、不做范围外功能）</td><td><span class="rs pass">通过</span></td><td>10 条规则在画面里都有体现</td></tr><tr><td>先给 2 个布局方向，选定后再细化</td><td><span class="rs open">待处理</span></td><td>这次只做了一个方向。如果某些屏幕想看另一种布局，告诉我屏幕名称</td></tr></tbody></table></div>
+  <div class="rtab"><table><thead><tr><th>简报要求</th><th>结果</th><th>说明</th></tr></thead><tbody><tr><td>只用 Bootstrap 5 和 Bootstrap Icons</td><td><span class="rs pass">通过</span></td><td>所有图标都是 bi-* 图标；唯一的 SVG 是二维码占位图</td></tr><tr><td>一个品牌色加中性色</td><td><span class="rs dv">偏离</span></td><td>按你“颜色太单调”的意见，新增了拉茶焦糖色，只用于食物亮点。如果接受，请把简报这条改成“品牌绿 + 一个食物辅助色”</td></tr><tr><td>红色只用于错误和低库存</td><td><span class="rs dv">偏离</span></td><td>错误和低库存都用红色。“已作废”记录已从红色改成灰色。但拒单、离开排队、批准作废这三个破坏性按钮仍是红色：这是常见做法，能防误操作，建议简报允许这一例外</td></tr><tr><td>琥珀色只用于等待状态</td><td><span class="rs pass">通过</span></td><td>用到琥珀色的地方全部是等待：待确认、等上菜、等收款、未认领。顾客排队页按你的要求改成浅灰，不再用琥珀色</td></tr><tr><td>叫号时页面闪动、播放声音并震动（简报关键流程 1 第 4 步）</td><td><span class="rs dv">偏离</span></td><td>按你的要求取消了声音，改成整页变亮青色，安卓手机同时震动。新增的亮青色只用于“叫到号”这一刻</td></tr><tr><td>系统字体</td><td><span class="rs dv">偏离</span></td><td>按你“字体突兀”的意见改成 Plus Jakarta Sans，理由见第 1 节</td></tr><tr><td>两种圆角（小=输入框和按钮，中=卡片）</td><td><span class="rs fixed">已修复</span></td><td>统一为 10px 和 16px。底部弹窗和大图标原来用的 20px 已改掉</td></tr><tr><td>真实内容（马来西亚菜、RM、T1–T15、A023、Aina、Kumar）</td><td><span class="rs pass">通过</span></td><td>没有 lorem ipsum、John Doe 或 Product 1</td></tr><tr><td>手机 360px 宽、文字 ≥ 14px、按钮 ≥ 44px</td><td><span class="rs fixed">已修复</span></td><td>自动检测为 0 处违规。修复了首页和桌子页 4 个只有 36px 高的小按钮</td></tr><tr><td>避免清单（渐变、毛玻璃、紫色、emoji、Welcome back、假 KPI 箭头、千篇一律的卡片、只有正常流程）</td><td><span class="rs pass">通过</span></td><td>自动检测：0 渐变、0 紫色、0 emoji。老板首页的数字都是真实计数，没有涨跌箭头</td></tr><tr><td>屏幕表里的每个屏幕和状态</td><td><span class="rs pass">通过</span></td><td>简报列出的 20 个屏幕全部画了，另外补了 4 个 UX 缺失的状态（见第 3 节）</td></tr><tr><td>业务规则（扫码单需确认、旧二维码失效、下单时选付款方式、服务费和 SST 分开列、分账金额精确相加、作废需老板账号且保留记录、使用中的不能删、排队页需保持打开、显示“刚刚更新”、不做范围外功能）</td><td><span class="rs pass">通过</span></td><td>10 条规则在画面里都有体现</td></tr><tr><td>先给 2 个布局方向，选定后再细化</td><td><span class="rs open">待处理</span></td><td>这次只做了一个方向。如果某些屏幕想看另一种布局，告诉我屏幕名称</td></tr></tbody></table></div>
 
   <h3>3. UX 验收：按简报的 6 个关键流程走查</h3>
   <p>做法：以第一次使用的顾客、收银员、厨房和老板的身份，按简报里的流程一步步走，检查每一步是否知道下一步做什么、出错能否恢复、误操作能否撤回。</p>
-  <div class="rtab"><table><thead><tr><th>流程</th><th>做得好的地方</th><th>发现的问题</th><th>结果</th></tr></thead><tbody><tr><td>1. 排队</td><td>号码大、等待时间和前面组数清楚，“请保持页面打开”有说明，叫号时整页变色</td><td>浏览器在用户点一下之前不允许播放声音，叫号时可能没有声音。现在加入后会先弹“开启提醒”。另外“离开排队”原来没有确认，已加上</td><td><span class="rs fixed">已修复</span></td></tr><tr><td>2. 扫码点餐</td><td>分类块好找，下单时就选付款方式，三步进度条，每页都有“呼叫服务员”</td><td>店员拒单后，顾客原来看不到结果。已新增“订单未被接受”状态，显示店员选的原因</td><td><span class="rs fixed">已修复</span></td></tr><tr><td>2. 扫码点餐</td><td></td><td>店员因库存不足改单后，顾客端没有“订单已被修改，新总额 RMxx”的提示</td><td><span class="rs open">待处理</span></td></tr><tr><td>2. 店员确认</td><td>待确认数量显示在标签上；库存不足时“确认”按钮变灰，主操作改为“修改”</td><td>新订单到达时店员手机没有声音或震动，只能等页面轮询刷新。建议加提示音和顶部提示条</td><td><span class="rs open">待处理</span></td></tr><tr><td>3. 付款</td><td>付款失败写清楚“没有扣款”，账单和优惠码都保留；现金页有找零计算</td><td>过期优惠码的提示只画在收银端，顾客自己输入时的错误状态没有画</td><td><span class="rs open">待处理</span></td></tr><tr><td>4. 分账</td><td>实时显示别人勾了什么，没认领的菜会阻止完成并说明原因，余数分给最后一人</td><td>名字重复的错误只写在备注里，没有画成画面</td><td><span class="rs open">待处理</span></td></tr><tr><td>5. 库存</td><td>水位条一眼看出哪些快用完；删除被食谱使用的食材会被阻止并说明原因</td><td>“标记菜品不可用”是一键批量操作，看不到会影响哪些菜。建议先弹窗列出菜品让人勾选</td><td><span class="rs open">待处理</span></td></tr><tr><td>6. 作废</td><td>需要老板账号和密码，原因、操作人、时间都保留，记录不删除</td><td></td><td><span class="rs pass">通过</span></td></tr><tr><td>厨房</td><td>字大、旧单在左、超过 10 分钟变琥珀色、每张单只有一个按钮</td><td>误点“已上菜”无法撤回。已新增 8 秒“撤销”提示</td><td><span class="rs fixed">已修复</span></td></tr><tr><td>菜单排版</td><td></td><td>数量加减按钮把菜名挤成 3–4 行。已把按钮移到价格那一行</td><td><span class="rs fixed">已修复</span></td></tr><tr><td>其他建议</td><td></td><td>加入排队：人数改成 1–12 的加减按钮，可以从源头避免输错。购物车：每道菜的备注框收起成“添加备注”链接。手机版桌子格子：点开后的详情还没画（平板版有）</td><td><span class="rs open">待处理</span></td></tr></tbody></table></div>
+  <div class="rtab"><table><thead><tr><th>流程</th><th>做得好的地方</th><th>发现的问题</th><th>结果</th></tr></thead><tbody><tr><td>1. 排队</td><td>页面只剩号码、人数和排队组数，一眼看完；叫号时整页变亮青色，很难错过；离开排队前会先确认</td><td>没有声音以后，手机放进口袋就不会注意到叫号，而 iPhone 的浏览器也不能震动。建议店员叫号时同时口头喊号，并保留 5 分钟的留桌时间</td><td><span class="rs open">待处理</span></td></tr><tr><td>2. 扫码点餐</td><td>分类块好找，下单时就选付款方式，三步进度条，每页都有“呼叫服务员”</td><td>店员拒单后，顾客原来看不到结果。已新增“订单未被接受”状态，显示店员选的原因</td><td><span class="rs fixed">已修复</span></td></tr><tr><td>2. 扫码点餐</td><td></td><td>店员因库存不足改单后，顾客端没有“订单已被修改，新总额 RMxx”的提示</td><td><span class="rs open">待处理</span></td></tr><tr><td>2. 店员确认</td><td>待确认数量显示在标签上；库存不足时“确认”按钮变灰，主操作改为“修改”</td><td>新订单到达时店员手机没有声音或震动，只能等页面轮询刷新。建议加提示音和顶部提示条</td><td><span class="rs open">待处理</span></td></tr><tr><td>3. 付款</td><td>付款失败写清楚“没有扣款”，账单和优惠码都保留；现金页有找零计算</td><td>过期优惠码的提示只画在收银端，顾客自己输入时的错误状态没有画</td><td><span class="rs open">待处理</span></td></tr><tr><td>4. 分账</td><td>实时显示别人勾了什么，没认领的菜会阻止完成并说明原因，余数分给最后一人</td><td>名字重复的错误只写在备注里，没有画成画面</td><td><span class="rs open">待处理</span></td></tr><tr><td>5. 库存</td><td>水位条一眼看出哪些快用完；删除被食谱使用的食材会被阻止并说明原因</td><td>“标记菜品不可用”是一键批量操作，看不到会影响哪些菜。建议先弹窗列出菜品让人勾选</td><td><span class="rs open">待处理</span></td></tr><tr><td>6. 作废</td><td>需要老板账号和密码，原因、操作人、时间都保留，记录不删除</td><td></td><td><span class="rs pass">通过</span></td></tr><tr><td>厨房</td><td>字大、旧单在左、超过 10 分钟变琥珀色、每张单只有一个按钮</td><td>误点“已上菜”无法撤回。已新增 8 秒“撤销”提示</td><td><span class="rs fixed">已修复</span></td></tr><tr><td>菜单排版</td><td></td><td>数量加减按钮把菜名挤成 3–4 行。已把按钮移到价格那一行</td><td><span class="rs fixed">已修复</span></td></tr><tr><td>其他建议</td><td></td><td>加入排队：人数改成 1–12 的加减按钮，可以从源头避免输错。购物车：每道菜的备注框收起成“添加备注”链接。手机版桌子格子：点开后的详情还没画（平板版有）</td><td><span class="rs open">待处理</span></td></tr></tbody></table></div>
 
   <h3>4. 验收方法和工具</h3>
   <ul>
     <li>从 GitHub 下载了两个前端 skill：<b>ui-ux-pro-max</b>（nextlevelbuilder），以及 Anthropic 官方的 <b>frontend-design</b>（和这里已安装的版本完全相同）。ui-ux-pro-max 的脚本被安全检查拦下，没有运行，改为直接读它的数据表：餐饮类推荐、配色、字体搭配，以及交付前检查清单。</li>
-    <li>自动检测用 Playwright 在浏览器里跑全部 73 个状态：逐个元素检查字号、点击区域高度、文字和背景的对比度、颜色用途、渐变、emoji、溢出和实际渲染的字体。</li>
+    <li>自动检测用 Playwright 在浏览器里跑全部 72 个状态：逐个元素检查字号、点击区域高度、文字和背景的对比度、颜色用途、渐变、emoji、溢出和实际渲染的字体。</li>
     <li>没有在真实手机上测试；二维码仍是占位图，不能扫描。</li>
   </ul>
 </details>
@@ -444,12 +450,12 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
       <div class="states" tabindex="0" role="group" aria-label="Join queue states">
         <figure class="state state-ph"><figcaption>Join queue · Form</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Walk-in queue</div></div></header><main class="qs-body">
   <div><h1 class="h-page">Join the queue</h1><p class="mb-0 text-body-secondary">We will call your number on this page when a table is ready.</p></div>
-  <div class="alert alert-warning d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-people" aria-hidden="true"></i></span><div><div class="fw-semibold">6 groups waiting</div><div class="small">About 20 minutes until a table is free.</div></div></div>
+  <div class="alert alert-secondary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-people" aria-hidden="true"></i></span><div><div class="fw-semibold">6 groups in the queue</div><div class="small">We will call your number on this page.</div></div></div>
   <div class=""><label class="form-label" for="f15">Your name</label><input class="form-control" id="f15" type="text" value="Nurul"></div>
   <div class=""><label class="form-label" for="f16">Party size</label><input class="form-control" id="f16" type="number" value="4"><div class="form-text">1 to 12 people. For bigger groups, please see our staff.</div></div></main><div class="qs-bar"><button type="button" class="btn btn-primary btn-lg w-100">Get my queue number</button></div></div><p class="note">Opened by the queue QR at the door. No login, one task on the screen.</p></figure>
         <figure class="state state-ph"><figcaption>Join queue · Party size invalid</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Walk-in queue</div></div></header><main class="qs-body">
   <div><h1 class="h-page">Join the queue</h1><p class="mb-0 text-body-secondary">We will call your number on this page when a table is ready.</p></div>
-  <div class="alert alert-warning d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-people" aria-hidden="true"></i></span><div><div class="fw-semibold">6 groups waiting</div><div class="small">About 20 minutes until a table is free.</div></div></div>
+  <div class="alert alert-secondary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-people" aria-hidden="true"></i></span><div><div class="fw-semibold">6 groups in the queue</div><div class="small">We will call your number on this page.</div></div></div>
   <div class=""><label class="form-label" for="f17">Your name</label><input class="form-control" id="f17" type="text" value="Nurul"></div>
   <div class=""><label class="form-label" for="f18">Party size</label><input class="form-control is-invalid" id="f18" type="number" value="0"><div class="invalid-feedback d-block">Enter a party size from 1 to 12.</div></div></main><div class="qs-bar"><button type="button" class="btn btn-primary btn-lg w-100">Get my queue number</button></div></div><p class="note">Party size must be 1 to 12. The message sits under the field and the button stays enabled, so the customer can fix it and resubmit.</p></figure>
       </div>
@@ -464,57 +470,36 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
   <div class="no">A023</div>
   <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>Waiting</span><button type="button" class="pill">Edit pax</button></div>
   <div class="time">Joined 17 Nov 2026, 7:31 pm</div>
-  <div class="stats"><div><b>4</b><span>groups ahead</span></div><div><b>~12 min</b><span>estimated wait</span></div></div>
-  <button type="button" class="btn btn-white"><i class="bi bi-download me-2" aria-hidden="true"></i>Save ticket</button>
 </section>
-    
-    <section class="qs-qsec"><h2>Now calling</h2><div class="qs-callrow"><span class="qs-cchip">A019</span><span class="small text-secondary">Called 2 min ago. Your turn is coming.</span></div></section>
-    <section class="qs-qsec"><h2>Current queue <span class="badge qs-b-wait-solid">6</span></h2>
-      <div class="qs-qrow called"><span class="qn">A019</span><span class="px">2 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-solid">Called</span></span></div><div class="qs-qrow"><span class="qn">A020</span><span class="px">2 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-neutral">Waiting</span></span></div><div class="qs-qrow"><span class="qn">A021</span><span class="px">5 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-neutral">Waiting</span></span></div><div class="qs-qrow"><span class="qn">A022</span><span class="px">3 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-neutral">Waiting</span></span></div><div class="qs-qrow me"><span class="qn">A023</span><span class="px">4 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-wait-solid">You</span><span class="badge qs-b-neutral">Waiting</span></span></div><div class="qs-qrow"><span class="qn">A024</span><span class="px">2 pax</span><span class="ms-auto d-flex gap-2"><span class="badge qs-b-neutral">Waiting</span></span></div></section>
-    <div class="alert alert-secondary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-bell" aria-hidden="true"></i></span><div><div class="fw-semibold">Keep this page open</div><div class="small">We ring and vibrate here when it is your turn. There is no SMS. Save ticket keeps a picture of your number; it does not alert you.</div></div></div>
-    <div class="text-center"><div class="qs-upd"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Updated just now</div></div></main><div class="qs-bar"><button type="button" class="btn btn-outline-secondary w-100">Leave the queue</button></div></div><p class="note">The card colour is the status: amber while waiting, green when called, grey after a no-show. Your own row is marked in the list. Only ticket numbers and party sizes are shown, never names. Everything refreshes by polling within 5 s.</p></figure>
-        <figure class="state state-ph"><figcaption>My ticket · Turn on alerts</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body"><section class="qs-qcard2 waiting" aria-label="Your queue ticket">
-  <div class="lbl">Your queue number</div>
-  <div class="no">A023</div>
-  <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>Waiting</span></div>
-  <div class="time">Joined 17 Nov 2026, 7:31 pm</div>
-  <div class="stats"><div><b>4</b><span>groups ahead</span></div><div><b>~12 min</b><span>estimated wait</span></div></div>
-  
-</section></main><div class="qs-overlay qs-sheet"><div class="modal-content qs-modal" style="width:480px" role="dialog" aria-label="Get alerted when it's your turn"><div class="modal-header"><h2 class="modal-title fs-5">Get alerted when it's your turn</h2><button type="button" class="btn-close" aria-label="Close"></button></div><div class="modal-body d-flex flex-column gap-3"><div class="d-flex flex-column align-items-center text-center gap-2"><span class="qs-tile xl"><i class="bi bi-volume-up" aria-hidden="true"></i></span><div>We'll ring, vibrate and flash this page when your table is ready. Keep it open and your volume up.</div></div></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary">Not now</button><button type="button" class="btn btn-primary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Turn on alerts</button></div></div></div></div><p class="note">Shown once, right after joining. Browsers only play sound after a tap, so this tap unlocks the alarm sound and asks to keep the screen awake. Without it the Called alert would be silent.</p></figure>
+    <div class="qs-list"><div><span class="qs-tile gray"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span class="flex-grow-1 fw-semibold">Groups in the queue</span><span class="num">6</span></div></div>
+    <div class="alert alert-secondary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-phone" aria-hidden="true"></i></span><div><div class="fw-semibold">Keep this page open</div><div class="small">This page turns teal when your table is ready. There is no SMS or sound, so glance at it now and then.</div></div></div>
+    <div class="text-center"><div class="qs-upd"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Updated just now</div></div></main><div class="qs-bar"><button type="button" class="btn btn-outline-secondary w-100">Leave the queue</button></div></div><p class="note">Only what the customer needs: their number, party size and how many groups are queuing. No other tickets are listed. The count refreshes by polling within 5 s.</p></figure>
         <figure class="state state-ph"><figcaption>My ticket · Edit pax</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body"><section class="qs-qcard2 waiting" aria-label="Your queue ticket">
   <div class="lbl">Your queue number</div>
   <div class="no">A023</div>
   <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>Waiting</span></div>
   <div class="time">Joined 17 Nov 2026, 7:31 pm</div>
-  <div class="stats"><div><b>4</b><span>groups ahead</span></div><div><b>~12 min</b><span>estimated wait</span></div></div>
-  
-</section></main><div class="qs-overlay qs-sheet"><div class="modal-content qs-modal" style="width:480px" role="dialog" aria-label="How many people?"><div class="modal-header"><h2 class="modal-title fs-5">How many people?</h2><button type="button" class="btn-close" aria-label="Close"></button></div><div class="modal-body d-flex flex-column gap-3"><div class="d-flex align-items-center justify-content-between"><span class="fw-semibold">Party size</span><div class="qs-step" role="group" aria-label="Quantity"><button type="button" class="btn btn-link" aria-label="Decrease"><i class="bi bi-dash-lg" aria-hidden="true"></i></button><span>5</span><button type="button" class="btn btn-link" aria-label="Increase"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></div></div><div class="small text-secondary">1 to 12 people. Your place in the queue stays the same.</div></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary">Cancel</button><button type="button" class="btn btn-primary">Save</button></div></div></div></div><p class="note">Party size can change while waiting. A bigger group may need a bigger table, so the wait estimate is recalculated after saving.</p></figure>
+</section></main><div class="qs-overlay qs-sheet"><div class="modal-content qs-modal" style="width:480px" role="dialog" aria-label="How many people?"><div class="modal-header"><h2 class="modal-title fs-5">How many people?</h2><button type="button" class="btn-close" aria-label="Close"></button></div><div class="modal-body d-flex flex-column gap-3"><div class="d-flex align-items-center justify-content-between"><span class="fw-semibold">Party size</span><div class="qs-step" role="group" aria-label="Quantity"><button type="button" class="btn btn-link" aria-label="Decrease"><i class="bi bi-dash-lg" aria-hidden="true"></i></button><span>5</span><button type="button" class="btn btn-link" aria-label="Increase"><i class="bi bi-plus-lg" aria-hidden="true"></i></button></div></div><div class="small text-secondary">1 to 12 people. Your place in the queue stays the same.</div></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary">Cancel</button><button type="button" class="btn btn-primary">Save</button></div></div></div></div><p class="note">Party size can change while waiting. The place in the queue stays the same.</p></figure>
         <figure class="state state-ph"><figcaption>My ticket · Leave the queue?</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body"><section class="qs-qcard2 waiting" aria-label="Your queue ticket">
   <div class="lbl">Your queue number</div>
   <div class="no">A023</div>
   <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>Waiting</span></div>
   <div class="time">Joined 17 Nov 2026, 7:31 pm</div>
-  <div class="stats"><div><b>4</b><span>groups ahead</span></div><div><b>~12 min</b><span>estimated wait</span></div></div>
-  
 </section></main><div class="qs-overlay qs-sheet"><div class="modal-content qs-modal" style="width:480px" role="dialog" aria-label="Leave the queue?"><div class="modal-header"><h2 class="modal-title fs-5">Leave the queue?</h2><button type="button" class="btn-close" aria-label="Close"></button></div><div class="modal-body d-flex flex-column gap-3"><div>A023 will be cancelled. To come back you will need a new number at the back of the queue.</div></div><div class="modal-footer"><button type="button" class="btn btn-outline-secondary">Stay in queue</button><button type="button" class="btn btn-danger">Leave queue</button></div></div></div></div><p class="note">Leaving cannot be undone, so it asks once. Staying is the default button.</p></figure>
-        <figure class="state state-ph"><figcaption>My ticket · Called</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body">
+        <figure class="state state-ph"><figcaption>My ticket · Called</figcaption><div class="dev dev-ph qs-teal"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body">
     <section class="qs-qcard2 called" aria-label="Your queue ticket">
   <div class="lbl">Your table is ready</div>
   <div class="no">A023</div>
   <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>Called 7:37 pm</span></div>
   <div class="time">Please come to the counter now</div>
-  
-  <div class="stats one"><div><b>7:42 pm</b><span>table held until (5 minutes)</span></div></div>
 </section>
-    <div class="alert alert-primary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-person-check" aria-hidden="true"></i></span><div><div class="fw-semibold">Show this number to our staff</div><div class="small">They will take you to your table.</div></div></div></main><div class="qs-bar"><button type="button" class="btn btn-outline-secondary w-100"><i class="bi bi-volume-mute me-2" aria-hidden="true"></i>Stop sound</button></div></div><p class="note">When staff tap Call, the card turns green, the page flashes, plays a sound and vibrates.</p></figure>
+    <div class="qs-heldcard"><div class="fw-bold">Show this number to our staff</div><div class="small">Your table is held until 7:42 pm (5 minutes).</div></div></main></div><p class="note">When staff tap Call, the whole page turns bright teal and the phone vibrates (Android only; iPhone browsers cannot vibrate). No sound.</p></figure>
         <figure class="state state-ph"><figcaption>My ticket · No-show</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/q/A023</span></div><header class="qs-qhead"><div class="qs-lang" role="group" aria-label="Language"><button type="button" class="on" aria-pressed="true">EN</button><button type="button">BM</button><button type="button">中文</button></div><div class="qs-qlogo"><i class="bi bi-shop" aria-hidden="true"></i></div><div class="qs-qname">Restoran Sri Melur</div><div class="qs-qsub"><span class="live"></span>Live queue</div></header><main class="qs-body">
     <section class="qs-qcard2 gone" aria-label="Your queue ticket">
   <div class="lbl">This ticket has expired</div>
   <div class="no text-decoration-line-through">A023</div>
   <div class="meta"><span><i class="bi bi-people-fill" aria-hidden="true"></i> 4 pax</span><span class="dot"></span><span>No-show</span></div>
   <div class="time">Called 7:37 pm, released 7:42 pm</div>
-  
-  
 </section>
     <div class="alert alert-secondary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-info-circle" aria-hidden="true"></i></span><div><div class="small">Still here? Speak to our staff at the counter or take a new number.</div></div></div></main><div class="qs-bar"><button type="button" class="btn btn-primary btn-lg w-100">Get a new queue number</button></div></div><p class="note">Staff marked No-show 5 minutes after calling.</p></figure>
       </div>
@@ -523,7 +508,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
       <h3>Customer menu</h3>
       <div class="meta">Customer, phone · Menu module (Zi Chen)</div>
       <div class="states" tabindex="0" role="group" aria-label="Customer menu states">
-        <figure class="state state-ph"><figcaption>Menu · Browsing</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-band"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
+        <figure class="state state-ph"><figcaption>Menu · Browsing</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-outline-secondary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
     <div class="qs-search"><i class="bi bi-search" aria-hidden="true"></i> Search nasi lemak, teh tarik…</div>
     <div class="qs-chips"><button type="button" class="qs-cat on" aria-pressed="true"><span class="qs-tile tea sm"><i class="bi bi-star-fill" aria-hidden="true"></i></span>Popular</button><button type="button" class="qs-cat"><span class="qs-tile tea sm"><i class="bi bi-egg-fried" aria-hidden="true"></i></span>Rice</button><button type="button" class="qs-cat"><span class="qs-tile tea sm"><i class="bi bi-basket2-fill" aria-hidden="true"></i></span>Noodles</button><button type="button" class="qs-cat"><span class="qs-tile tea sm"><i class="bi bi-cookie" aria-hidden="true"></i></span>Roti</button><button type="button" class="qs-cat"><span class="qs-tile tea sm"><i class="bi bi-cup-hot-fill" aria-hidden="true"></i></span>Drinks</button><button type="button" class="qs-cat"><span class="qs-tile tea sm"><i class="bi bi-cake2-fill" aria-hidden="true"></i></span>Desserts</button></div>
     <section class="d-flex flex-column gap-2"><h2 class="h-sec">Popular</h2><div class="qs-dishes">
@@ -578,7 +563,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
       <h3>Cart and order status</h3>
       <div class="meta">Customer, phone · Order module (Clement)</div>
       <div class="states" tabindex="0" role="group" aria-label="Cart and order status states">
-        <figure class="state state-ph"><figcaption>Cart · Review order</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-band"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
+        <figure class="state state-ph"><figcaption>Cart · Review order</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-outline-secondary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
     <h1 class="fs-4">Your order</h1>
     <div class="d-flex flex-column gap-2 pb-3 border-bottom">
   <div class="d-flex justify-content-between fw-medium"><span>Nasi Lemak Ayam</span><span>RM19.00</span></div>
@@ -594,25 +579,25 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
     <fieldset class="d-flex flex-column gap-2"><legend class="fs-6 fw-semibold mb-0">How will you pay?</legend>
       <label class="qs-opt on"><span class="qs-tile solid"><i class="bi bi-credit-card" aria-hidden="true"></i></span><span class="flex-grow-1"><span class="d-block fw-semibold">Card or e-wallet</span><span class="d-block small text-body-secondary">Pay on this page once staff confirm your order.</span></span><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="how" checked></label>
       <label class="qs-opt"><span class="qs-tile gray"><i class="bi bi-cash" aria-hidden="true"></i></span><span class="flex-grow-1"><span class="d-block fw-semibold">Cash at the counter</span><span class="d-block small text-body-secondary">Quote table T3 to the cashier.</span></span><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="how"></label></fieldset></main><div class="qs-bar"><button type="button" class="btn btn-primary btn-lg w-100">Send order · RM41.28</button></div></div><p class="note">Quantity is limited to 1 to 20 per dish. The payment method is chosen here, before the order is sent.</p></figure>
-        <figure class="state state-ph"><figcaption>Order status · Waiting for confirmation</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-band"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body"><h1 class="fs-4">Order status</h1><div class="qs-steps">
+        <figure class="state state-ph"><figcaption>Order status · Waiting for confirmation</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-outline-secondary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body"><h1 class="fs-4">Order status</h1><div class="qs-steps">
   <div class="done"><div class="dot"><i class="bi bi-check-lg" aria-hidden="true"></i></div>Sent</div>
   <div class="now"><div class="dot"><i class="bi bi-clock" aria-hidden="true"></i></div>Confirmed</div>
   <div class=""><div class="dot"></div>Served</div></div><div class="alert alert-warning d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-clock" aria-hidden="true"></i></span><div><div class="fw-semibold">Order sent, waiting for staff confirmation</div><div class="small">Our staff will check your order shortly. The kitchen starts cooking after that.</div></div></div><div class="card"><div class="card-body d-flex flex-column gap-2 small">
   <div class="d-flex justify-content-between align-items-center"><h2 class="fs-6">Order #1042</h2><span class="text-secondary">7:21 pm</span></div>
   <div class="d-flex justify-content-between gap-3"><span>2 × Nasi Lemak Ayam</span><span class="text-nowrap">RM19.00</span></div><div class="text-secondary">Note: less spicy</div><div class="d-flex justify-content-between gap-3"><span>1 × Mee Goreng Mamak</span><span class="text-nowrap">RM8.00</span></div><div class="d-flex justify-content-between gap-3"><span>3 × Teh Tarik</span><span class="text-nowrap">RM8.40</span></div>
   <hr class="my-1"><div class="d-flex justify-content-between gap-3 fw-semibold"><span>Total incl. service charge and SST</span><span class="text-nowrap">RM41.28</span></div><div class="d-flex justify-content-between gap-3"><span><span class="text-secondary">Paying by</span></span><span class="text-nowrap">Card or e-wallet</span></div></div></div><div class="text-center"><div class="qs-upd"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Updated just now</div></div></main><div class="qs-bar"><button type="button" class="btn btn-outline-primary w-100">Add more dishes</button></div></div><p class="note">Every QR order waits here until staff confirm it. Status changes arrive by polling.</p></figure>
-        <figure class="state state-ph"><figcaption>Order status · Confirmed</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-band"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body"><h1 class="fs-4">Order status</h1><div class="qs-steps">
+        <figure class="state state-ph"><figcaption>Order status · Confirmed</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-outline-secondary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body"><h1 class="fs-4">Order status</h1><div class="qs-steps">
   <div class="done"><div class="dot"><i class="bi bi-check-lg" aria-hidden="true"></i></div>Sent</div>
   <div class="done"><div class="dot"><i class="bi bi-check-lg" aria-hidden="true"></i></div>Confirmed</div>
   <div class="now"><div class="dot"><i class="bi bi-clock" aria-hidden="true"></i></div>Served</div></div><div class="alert alert-primary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-check-circle-fill" aria-hidden="true"></i></span><div><div class="fw-semibold">Confirmed by Aina at 7:23 pm</div><div class="small">The kitchen is preparing your food.</div></div></div><div class="card"><div class="card-body d-flex flex-column gap-2 small">
   <div class="d-flex justify-content-between align-items-center"><h2 class="fs-6">Order #1042</h2><span class="text-secondary">7:21 pm</span></div>
   <div class="d-flex justify-content-between gap-3"><span>2 × Nasi Lemak Ayam</span><span class="text-nowrap">RM19.00</span></div><div class="text-secondary">Note: less spicy</div><div class="d-flex justify-content-between gap-3"><span>1 × Mee Goreng Mamak</span><span class="text-nowrap">RM8.00</span></div><div class="d-flex justify-content-between gap-3"><span>3 × Teh Tarik</span><span class="text-nowrap">RM8.40</span></div>
   <hr class="my-1"><div class="d-flex justify-content-between gap-3 fw-semibold"><span>Total incl. service charge and SST</span><span class="text-nowrap">RM41.28</span></div><div class="d-flex justify-content-between gap-3"><span><span class="text-secondary">Paying by</span></span><span class="text-nowrap">Card or e-wallet</span></div></div></div><div class="text-center"><div class="qs-upd"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Updated just now</div></div></main><div class="qs-bar"><button type="button" class="btn btn-primary btn-lg w-100">Pay now · RM41.28</button><button type="button" class="btn btn-outline-primary w-100">Add more dishes</button></div></div><p class="note">Pay now appears because the customer chose card or e-wallet.</p></figure>
-        <figure class="state state-ph"><figcaption>Order status · Rejected by staff</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-band"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
+        <figure class="state state-ph"><figcaption>Order status · Rejected by staff</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-outline-secondary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
     <h1 class="fs-4">Order status</h1>
     <div class="alert alert-danger d-flex gap-2 mb-0" role="alert"><span class="qs-ai"><i class="bi bi-x-circle" aria-hidden="true"></i></span><div><div class="fw-semibold">Your order was not accepted</div><div class="small">Staff reason: duplicate order. We already have the same order from table T3 (#1041), which is being prepared.</div></div></div>
     <div class="card"><div class="card-body d-flex flex-column gap-2 small text-secondary"><div class="d-flex justify-content-between align-items-center"><h2 class="fs-6 text-body">Order #1042</h2><span class="badge qs-b-neutral">Not accepted</span></div><div class="d-flex justify-content-between gap-3"><span>2 × Nasi Lemak Ayam</span><span class="text-nowrap">RM19.00</span></div><div class="d-flex justify-content-between gap-3"><span>1 × Mee Goreng Mamak</span><span class="text-nowrap">RM8.00</span></div><div class="d-flex justify-content-between gap-3"><span>3 × Teh Tarik</span><span class="text-nowrap">RM8.40</span></div></div></div></main><div class="qs-bar"><button type="button" class="btn btn-primary btn-lg w-100"><i class="bi bi-bell me-2" aria-hidden="true"></i>Ask a waiter</button><button type="button" class="btn btn-outline-primary w-100">Back to menu</button></div></div><p class="note">The reason staff picked when rejecting is shown word for word. Nothing was charged and no stock was deducted.</p></figure>
-        <figure class="state state-ph"><figcaption>Order status · Served</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-band"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body"><h1 class="fs-4">Order status</h1><div class="qs-steps">
+        <figure class="state state-ph"><figcaption>Order status · Served</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-outline-secondary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body"><h1 class="fs-4">Order status</h1><div class="qs-steps">
   <div class="done"><div class="dot"><i class="bi bi-check-lg" aria-hidden="true"></i></div>Sent</div>
   <div class="done"><div class="dot"><i class="bi bi-check-lg" aria-hidden="true"></i></div>Confirmed</div>
   <div class="done"><div class="dot"><i class="bi bi-check-lg" aria-hidden="true"></i></div>Served</div></div><div class="alert alert-primary d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-check-circle-fill" aria-hidden="true"></i></span><div><div class="fw-semibold">All dishes served</div><div class="small">Enjoy your meal. Pay here whenever you are ready.</div></div></div><div class="card"><div class="card-body d-flex flex-column gap-2 small">
@@ -625,14 +610,14 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
       <h3>Payment</h3>
       <div class="meta">Customer, phone · Payment module (Zheng Yang)</div>
       <div class="states" tabindex="0" role="group" aria-label="Payment states">
-        <figure class="state state-ph"><figcaption>Payment · Bill</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-band"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
+        <figure class="state state-ph"><figcaption>Payment · Bill</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-outline-secondary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
     <h1 class="fs-4">Your bill</h1><div class="d-flex flex-column gap-1 small"><div class="d-flex justify-content-between gap-3"><span>2 × Nasi Lemak Ayam</span><span class="text-nowrap">RM19.00</span></div><div class="d-flex justify-content-between gap-3"><span>1 × Mee Goreng Mamak</span><span class="text-nowrap">RM8.00</span></div><div class="d-flex justify-content-between gap-3"><span>3 × Teh Tarik</span><span class="text-nowrap">RM8.40</span></div></div>
     <div class="d-flex flex-column gap-1 small"><div class="d-flex justify-content-between gap-3"><span>Subtotal</span><span class="text-nowrap">RM35.40</span></div><div class="d-flex justify-content-between gap-3"><span>Service charge (10%)</span><span class="text-nowrap">RM3.54</span></div><div class="d-flex justify-content-between gap-3"><span>SST (6%)</span><span class="text-nowrap">RM2.34</span></div><hr class="my-1"><div class="d-flex justify-content-between gap-3 fs-5 fw-semibold"><span>Total</span><span class="text-nowrap">RM41.28</span></div></div>
     <div class="d-flex gap-2 align-items-end"><div class="flex-grow-1"><label class="form-label" for="f4">Voucher code</label><input class="form-control" id="f4" type="text" placeholder="Enter code"></div><button type="button" class="btn btn-outline-primary">Apply</button></div>
     <div class=""><label class="form-label" for="f5">Member phone (optional)</label><input class="form-control" id="f5" type="tel" placeholder="012-345 6789"></div>
     <fieldset class="d-flex flex-column gap-2"><legend class="fs-6 fw-semibold mb-0">Pay with</legend>
   <label class="qs-opt on"><span class="qs-tile solid"><i class="bi bi-credit-card" aria-hidden="true"></i></span><span class="flex-grow-1"><span class="d-block fw-semibold">Card</span><span class="d-block small text-body-secondary">Visa or Mastercard</span></span><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="f6" checked></label><label class="qs-opt"><span class="qs-tile gray"><i class="bi bi-wallet2" aria-hidden="true"></i></span><span class="flex-grow-1"><span class="d-block fw-semibold">E-wallet</span><span class="d-block small text-body-secondary">Touch 'n Go, GrabPay, Boost</span></span><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="f6"></label><label class="qs-opt"><span class="qs-tile gray"><i class="bi bi-cash" aria-hidden="true"></i></span><span class="flex-grow-1"><span class="d-block fw-semibold">Cash at the counter</span><span class="d-block small text-body-secondary">Quote table T3 to the cashier.</span></span><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="f6"></label></fieldset></main><div class="qs-bar"><button type="button" class="btn btn-primary btn-lg w-100"><i class="bi bi-lock me-2" aria-hidden="true"></i>Pay RM41.28</button><div class="small text-secondary text-center">Sandbox payment. No real money is charged.</div></div></div><p class="note">Service charge and SST are separate lines at the owner's rates. Voucher and member phone are optional.</p></figure>
-        <figure class="state state-ph"><figcaption>Payment · Voucher applied</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-band"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
+        <figure class="state state-ph"><figcaption>Payment · Voucher applied</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-outline-secondary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
     <h1 class="fs-4">Your bill</h1><div class="d-flex flex-column gap-1 small"><div class="d-flex justify-content-between gap-3"><span>2 × Nasi Lemak Ayam</span><span class="text-nowrap">RM19.00</span></div><div class="d-flex justify-content-between gap-3"><span>1 × Mee Goreng Mamak</span><span class="text-nowrap">RM8.00</span></div><div class="d-flex justify-content-between gap-3"><span>3 × Teh Tarik</span><span class="text-nowrap">RM8.40</span></div></div>
     <div class="d-flex flex-column gap-1 small"><div class="d-flex justify-content-between gap-3"><span>Subtotal</span><span class="text-nowrap">RM35.40</span></div><div class="d-flex justify-content-between gap-3 text-primary fw-medium"><span>Voucher RAYA5</span><span class="text-nowrap">−RM5.00</span></div><div class="d-flex justify-content-between gap-3"><span>Service charge (10%)</span><span class="text-nowrap">RM3.04</span></div><div class="d-flex justify-content-between gap-3"><span>SST (6%)</span><span class="text-nowrap">RM2.01</span></div><hr class="my-1"><div class="d-flex justify-content-between gap-3 fs-5 fw-semibold"><span>Total</span><span class="text-nowrap">RM35.45</span></div></div>
     <div class="alert alert-primary d-flex align-items-center gap-2 mb-0"><i class="bi bi-ticket-perforated" aria-hidden="true"></i><div class="flex-grow-1"><div class="fw-semibold">RAYA5 applied</div><div class="small">RM5.00 off bills above RM20</div></div><button type="button" class="btn btn-link p-0">Remove</button></div>
@@ -644,13 +629,13 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
     <div class=""><label class="form-label" for="f8">Card number</label><input class="form-control" id="f8" type="text" value="4242 4242 4242 4242"></div>
     <div class="d-flex gap-3"><div class="flex-grow-1"><label class="form-label" for="f9">Expiry</label><input class="form-control" id="f9" type="text" value="12 / 28"></div><div class="flex-grow-1"><label class="form-label" for="f10">CVC</label><input class="form-control" id="f10" type="text" value="123"></div></div>
     <div class=""><label class="form-label" for="f11">Name on card</label><input class="form-control" id="f11" type="text" value="Nurul Izzah"></div></main><div class="qs-bar"><button type="button" class="btn btn-primary btn-lg w-100">Pay RM35.45</button><button type="button" class="btn btn-link w-100">Cancel and go back</button></div></div><p class="note">The gateway's own sandbox page. Shown so the hand-off and return are designed, not to restyle the gateway.</p></figure>
-        <figure class="state state-ph"><figcaption>Payment · Failed</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-band"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
+        <figure class="state state-ph"><figcaption>Payment · Failed</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-outline-secondary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
     <h1 class="fs-4">Your bill</h1>
     <div class="alert alert-danger d-flex gap-2 mb-0" role="alert"><span class="qs-ai"><i class="bi bi-exclamation-triangle-fill" aria-hidden="true"></i></span><div><div class="fw-semibold">Payment failed</div><div class="small">Your bank declined the card ending 4242. You have not been charged. Try again or choose another way to pay.</div></div></div>
     <div class="d-flex flex-column gap-1 small"><div class="d-flex justify-content-between gap-3"><span>Subtotal</span><span class="text-nowrap">RM35.40</span></div><div class="d-flex justify-content-between gap-3 text-primary fw-medium"><span>Voucher RAYA5</span><span class="text-nowrap">−RM5.00</span></div><div class="d-flex justify-content-between gap-3"><span>Service charge (10%)</span><span class="text-nowrap">RM3.04</span></div><div class="d-flex justify-content-between gap-3"><span>SST (6%)</span><span class="text-nowrap">RM2.01</span></div><hr class="my-1"><div class="d-flex justify-content-between gap-3 fs-5 fw-semibold"><span>Total</span><span class="text-nowrap">RM35.45</span></div></div>
     <fieldset class="d-flex flex-column gap-2"><legend class="fs-6 fw-semibold mb-0">Pay with</legend>
   <label class="qs-opt on"><span class="qs-tile solid"><i class="bi bi-credit-card" aria-hidden="true"></i></span><span class="flex-grow-1"><span class="d-block fw-semibold">Card</span><span class="d-block small text-body-secondary">Visa or Mastercard</span></span><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="f12" checked></label><label class="qs-opt"><span class="qs-tile gray"><i class="bi bi-wallet2" aria-hidden="true"></i></span><span class="flex-grow-1"><span class="d-block fw-semibold">E-wallet</span><span class="d-block small text-body-secondary">Touch 'n Go, GrabPay, Boost</span></span><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="f12"></label><label class="qs-opt"><span class="qs-tile gray"><i class="bi bi-cash" aria-hidden="true"></i></span><span class="flex-grow-1"><span class="d-block fw-semibold">Cash at the counter</span><span class="d-block small text-body-secondary">Quote table T3 to the cashier.</span></span><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="f12"></label></fieldset></main><div class="qs-bar"><button type="button" class="btn btn-primary btn-lg w-100">Try again · RM35.45</button><div class="small text-secondary text-center">Sandbox payment. No real money is charged.</div></div></div><p class="note">The error says what happened, that no money was taken, and what to do next. The bill and voucher are kept.</p></figure>
-        <figure class="state state-ph"><figcaption>Payment · Cash at counter</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-band"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
+        <figure class="state state-ph"><figcaption>Payment · Cash at counter</figcaption><div class="dev dev-ph"><div class="qs-url"><span><i class="bi bi-lock" aria-hidden="true"></i> quickserve.my/t/T3</span></div><header class="qs-chd"><div class="flex-grow-1 min-w-0"><div class="qs-chd-k">Restoran Sri Melur</div><div class="qs-chd-t">Table T3</div></div><button type="button" class="btn btn-outline-secondary"><i class="bi bi-bell me-2" aria-hidden="true"></i>Call waiter</button></header><main class="qs-body">
     <div class="text-center d-flex flex-column align-items-center gap-2 pt-3 gap-0"><div class="text-body-secondary">Tell the cashier your table number</div><div class="qs-big text-primary">T3</div><div class="fs-5 fw-semibold">RM35.45 to pay</div></div>
     <div class="alert alert-warning d-flex gap-2 mb-0" role="status"><span class="qs-ai"><i class="bi bi-clock" aria-hidden="true"></i></span><div><div class="fw-semibold">Waiting for payment at the counter</div><div class="small">Your e-receipt opens here as soon as the cashier takes your cash.</div></div></div>
     <div class="d-flex flex-column gap-1 small"><div class="d-flex justify-content-between gap-3"><span>2 × Nasi Lemak Ayam</span><span class="text-nowrap">RM19.00</span></div><div class="d-flex justify-content-between gap-3"><span>1 × Mee Goreng Mamak</span><span class="text-nowrap">RM8.00</span></div><div class="d-flex justify-content-between gap-3"><span>3 × Teh Tarik</span><span class="text-nowrap">RM8.40</span></div></div>
@@ -805,7 +790,7 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
     <div class="qs-qcard">
   <div class="d-flex align-items-center gap-3"><div class="qs-qno">A023</div><div class="flex-grow-1 min-w-0"><div class="fw-bold">Nurul</div><div class="small text-body-secondary"><i class="bi bi-people-fill" aria-hidden="true"></i> 4 people, waiting 4 min</div></div><span class="badge qs-b-wait">Waiting</span></div>
   <div class="d-flex gap-2"><button type="button" class="btn btn-outline-primary flex-fill"><i class="bi bi-megaphone me-2" aria-hidden="true"></i>Call A023</button></div>
-  </div></main><nav class="qs-tabbar" aria-label="Front of house"><a href="#"><span class="tic"><i class="bi bi-house-door" aria-hidden="true"></i></span><span>Home</span></a><a href="#"><span class="tic"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></span><span>Tables</span></a><a href="#"><span class="tic"><i class="bi bi-clipboard2-check" aria-hidden="true"></i></span><span>Orders</span></a><a href="#" class="active" aria-current="page"><span class="tic"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span>Queue</span></a><a href="#"><span class="tic"><i class="bi bi-wallet2" aria-hidden="true"></i></span><span>Pay</span></a></nav></div><p class="note">Oldest ticket first. Call makes the customer's ticket page flash, sound and vibrate. Then staff mark Seated, or No-show after 5 minutes.</p></figure>
+  </div></main><nav class="qs-tabbar" aria-label="Front of house"><a href="#"><span class="tic"><i class="bi bi-house-door" aria-hidden="true"></i></span><span>Home</span></a><a href="#"><span class="tic"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></span><span>Tables</span></a><a href="#"><span class="tic"><i class="bi bi-clipboard2-check" aria-hidden="true"></i></span><span>Orders</span></a><a href="#" class="active" aria-current="page"><span class="tic"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span>Queue</span></a><a href="#"><span class="tic"><i class="bi bi-wallet2" aria-hidden="true"></i></span><span>Pay</span></a></nav></div><p class="note">Oldest ticket first. Call turns the customer's ticket page bright teal (no sound). Then staff mark Seated, or No-show after 5 minutes.</p></figure>
         <figure class="state state-ph"><figcaption>Queue · Empty</figcaption><div class="dev dev-ph qs-staff"><header class="qs-appbar"><button type="button" class="btn qs-appbar-btn" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></button><h1>Queue</h1></header><main class="qs-body">
     <div class="d-flex justify-content-between align-items-center"><div class="fw-medium">0 groups</div><div class="qs-upd"><i class="bi bi-arrow-repeat" aria-hidden="true"></i> Updated just now</div></div>
     <div class="card"><div class="qs-emp"><span class="qs-tile gray lg"><i class="bi bi-people" aria-hidden="true"></i></span><div class="fw-semibold fs-6">No one is waiting</div><div class="small text-secondary">New tickets appear here when customers scan the queue QR at the door.</div></div></div></main><nav class="qs-tabbar" aria-label="Front of house"><a href="#"><span class="tic"><i class="bi bi-house-door" aria-hidden="true"></i></span><span>Home</span></a><a href="#"><span class="tic"><i class="bi bi-grid-3x3-gap" aria-hidden="true"></i></span><span>Tables</span></a><a href="#"><span class="tic"><i class="bi bi-clipboard2-check" aria-hidden="true"></i></span><span>Orders</span></a><a href="#" class="active" aria-current="page"><span class="tic"><i class="bi bi-people-fill" aria-hidden="true"></i></span><span>Queue</span></a><a href="#"><span class="tic"><i class="bi bi-wallet2" aria-hidden="true"></i></span><span>Pay</span></a></nav></div></figure>

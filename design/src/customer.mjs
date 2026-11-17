@@ -11,7 +11,7 @@ const joinForm = (err) => ph(`Join queue · ${err ? 'Party size invalid' : 'Form
   note: err ? 'Party size must be 1 to 12. The message sits under the field and the button stays enabled, so the customer can fix it and resubmit.' : 'Opened by the queue QR at the door. No login, one task on the screen.',
 }, `
   <div><h1 class="h-page">Join the queue</h1><p class="mb-0 text-body-secondary">We will call your number on this page when a table is ready.</p></div>
-  ${alert('warning', '6 groups waiting', 'About 20 minutes until a table is free.', 'people')}
+  ${alert('secondary', '6 groups in the queue', 'We will call your number on this page.', 'people')}
   ${field('Your name', 'Nurul')}
   ${err ? field('Party size', '0', { type: 'number', err: 'Enter a party size from 1 to 12.' }) : field('Party size', '4', { type: 'number', help: '1 to 12 people. For bigger groups, please see our staff.' })}`);
 
@@ -24,30 +24,22 @@ const qcard = (state, o = {}) => `<section class="qs-qcard2 ${state}" aria-label
   <div class="no${state === 'gone' ? ' text-decoration-line-through' : ''}">A023</div>
   <div class="meta"><span>${i('people-fill')} 4 pax</span><span class="dot"></span><span>${o.status || 'Waiting'}</span>${o.edit ? '<button type="button" class="pill">Edit pax</button>' : ''}</div>
   <div class="time">${o.time || 'Joined 17 Nov 2026, 7:31 pm'}</div>
-  ${o.stats ? '<div class="stats"><div><b>4</b><span>groups ahead</span></div><div><b>~12 min</b><span>estimated wait</span></div></div>' : ''}
-  ${o.extra || ''}
 </section>`;
-const qrow = (no, pax, st, me) => `<div class="qs-qrow${st === 'Called' ? ' called' : ''}${me ? ' me' : ''}"><span class="qn">${no}</span><span class="px">${pax} pax</span><span class="ms-auto d-flex gap-2">${me ? badge('You', 'wait-solid') : ''}${st === 'Called' ? badge('Called', 'solid') : badge('Waiting', 'neutral')}</span></div>`;
-const queueList = `
-    <section class="qs-qsec"><h2>Now calling</h2><div class="qs-callrow"><span class="qs-cchip">A019</span><span class="small text-secondary">Called 2 min ago. Your turn is coming.</span></div></section>
-    <section class="qs-qsec"><h2>Current queue ${badge('6', 'wait-solid')}</h2>
-      ${qrow('A019', 2, 'Called')}${qrow('A020', 2)}${qrow('A021', 5)}${qrow('A022', 3)}${qrow('A023', 4, 'Waiting', true)}${qrow('A024', 2)}</section>`;
-const save = btn('Save ticket', 'white', { i: 'download' });
+const qcount = `<div class="qs-list"><div>${tile('people-fill', 'gray')}<span class="flex-grow-1 fw-semibold">Groups in the queue</span><span class="num">6</span></div></div>`;
+const keepOpen = alert('secondary', 'Keep this page open', 'This page turns teal when your table is ready. There is no SMS or sound, so glance at it now and then.', 'phone');
 const ticket = [
-  ph('My ticket · Waiting', { url: turl, head: qhead, bar: btn('Leave the queue', 'outline-secondary', { block: 1 }), note: 'The card colour is the status: amber while waiting, green when called, grey after a no-show. Your own row is marked in the list. Only ticket numbers and party sizes are shown, never names. Everything refreshes by polling within 5 s.' }, `
-    ${qcard('waiting', { edit: 1, stats: 1, extra: save })}
-    ${queueList}
-    ${alert('secondary', 'Keep this page open', 'We ring and vibrate here when it is your turn. There is no SMS. Save ticket keeps a picture of your number; it does not alert you.', 'bell')}
+  ph('My ticket · Waiting', { url: turl, head: qhead, bar: btn('Leave the queue', 'outline-secondary', { block: 1 }), note: 'Only what the customer needs: their number, party size and how many groups are queuing. No other tickets are listed. The count refreshes by polling within 5 s.' }, `
+    ${qcard('waiting', { edit: 1 })}
+    ${qcount}
+    ${keepOpen}
     <div class="text-center">${upd()}</div>`),
-  ph('My ticket · Turn on alerts', { url: turl, head: qhead, sheet: 1, note: 'Shown once, right after joining. Browsers only play sound after a tap, so this tap unlocks the alarm sound and asks to keep the screen awake. Without it the Called alert would be silent.',
-    modal: mod('Get alerted when it\'s your turn', `<div class="d-flex flex-column align-items-center text-center gap-2">${tile('volume-up', '', 'xl')}<div>We'll ring, vibrate and flash this page when your table is ready. Keep it open and your volume up.</div></div>`, btn('Not now', 'outline-secondary') + btn('Turn on alerts', 'primary', { i: 'bell' })) }, qcard('waiting', { stats: 1 })),
-  ph('My ticket · Edit pax', { url: turl, head: qhead, sheet: 1, note: 'Party size can change while waiting. A bigger group may need a bigger table, so the wait estimate is recalculated after saving.',
-    modal: mod('How many people?', `<div class="d-flex align-items-center justify-content-between"><span class="fw-semibold">Party size</span>${step(5)}</div><div class="small text-secondary">1 to 12 people. Your place in the queue stays the same.</div>`, btn('Cancel', 'outline-secondary') + btn('Save', 'primary')) }, qcard('waiting', { stats: 1 })),
+  ph('My ticket · Edit pax', { url: turl, head: qhead, sheet: 1, note: 'Party size can change while waiting. The place in the queue stays the same.',
+    modal: mod('How many people?', `<div class="d-flex align-items-center justify-content-between"><span class="fw-semibold">Party size</span>${step(5)}</div><div class="small text-secondary">1 to 12 people. Your place in the queue stays the same.</div>`, btn('Cancel', 'outline-secondary') + btn('Save', 'primary')) }, qcard('waiting')),
   ph('My ticket · Leave the queue?', { url: turl, head: qhead, sheet: 1, note: 'Leaving cannot be undone, so it asks once. Staying is the default button.',
-    modal: mod('Leave the queue?', `<div>A023 will be cancelled. To come back you will need a new number at the back of the queue.</div>`, btn('Stay in queue', 'outline-secondary') + btn('Leave queue', 'danger')) }, qcard('waiting', { stats: 1 })),
-  ph('My ticket · Called', { url: turl, head: qhead, bar: btn('Stop sound', 'outline-secondary', { block: 1, i: 'volume-mute' }), note: 'When staff tap Call, the card turns green, the page flashes, plays a sound and vibrates.' }, `
-    ${qcard('called', { lbl: 'Your table is ready', status: 'Called 7:37 pm', time: 'Please come to the counter now', extra: '<div class="stats one"><div><b>7:42 pm</b><span>table held until (5 minutes)</span></div></div>' })}
-    ${alert('primary', 'Show this number to our staff', 'They will take you to your table.', 'person-check')}`),
+    modal: mod('Leave the queue?', `<div>A023 will be cancelled. To come back you will need a new number at the back of the queue.</div>`, btn('Stay in queue', 'outline-secondary') + btn('Leave queue', 'danger')) }, qcard('waiting')),
+  ph('My ticket · Called', { url: turl, head: qhead, bg: 'qs-teal', note: 'When staff tap Call, the whole page turns bright teal and the phone vibrates (Android only; iPhone browsers cannot vibrate). No sound.' }, `
+    ${qcard('called', { lbl: 'Your table is ready', status: 'Called 7:37 pm', time: 'Please come to the counter now' })}
+    <div class="qs-heldcard"><div class="fw-bold">Show this number to our staff</div><div class="small">Your table is held until 7:42 pm (5 minutes).</div></div>`),
   ph('My ticket · No-show', { url: turl, head: qhead, bar: btn('Get a new queue number', 'primary', { lg: 1, block: 1 }), note: 'Staff marked No-show 5 minutes after calling.' }, `
     ${qcard('gone', { lbl: 'This ticket has expired', status: 'No-show', time: 'Called 7:37 pm, released 7:42 pm' })}
     ${alert('secondary', null, 'Still here? Speak to our staff at the counter or take a new number.')}`),
