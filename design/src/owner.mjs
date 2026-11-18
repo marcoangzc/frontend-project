@@ -1,4 +1,5 @@
-import { tile, i, btn, iconBtn, badge, field, toggle, kv, alert, emp, qr, tbl, mod, tabs, pc, section } from './lib.mjs';
+import { food } from './food.mjs';
+import { tile, i, btn, iconBtn, badge, field, check, toggle, kv, alert, emp, qr, tbl, mod, tabs, pc, section } from './lib.mjs';
 
 const acts = (name, extra = '') => `<div class="d-flex gap-2 justify-content-end">${extra}${iconBtn('pencil', 'Edit ' + name)}${iconBtn('trash', 'Remove ' + name)}</div>`;
 const searchBox = (ph, w = 280) => `<div style="width:${w}px">${field(null, ph, { ph: 1, pre: i('search'), aria: ph })}</div>`;
@@ -35,24 +36,54 @@ const tablesQr = [
 ];
 
 /* ---------- Menu management ---------- */
-const mrow = (name, catName, price, recipe, on, o = {}) => ({ c: [`<b>${name}</b>${o.best ? ' ' + badge('Best seller', 'brand') : ''}`, catName, price, `<span class="text-body-secondary">${recipe}</span>`, `<div class="d-flex align-items-center gap-2">${toggle('Available: ' + name, on)}<span>${on ? 'Available' : 'Unavailable'}</span></div>`, acts(name)] });
+const thumb = (img, name) => img ? `<span class="qs-ph sm">${food(img, 44)}</span>` : `<button type="button" class="qs-ph-add" aria-label="Add a photo of ${name}">${i('camera')}<span>Add photo</span></button>`;
+const mrow = (name, catName, price, recipe, on, o = {}) => ({ c: [thumb(o.img, name), `<b>${name}</b>${o.best ? ' ' + badge('Best seller', 'brand') : ''}`, catName, price, `<span class="text-body-secondary">${recipe}</span>`, `<div class="d-flex align-items-center gap-2">${toggle('Available: ' + name, on)}<span>${on ? 'Available' : 'Unavailable'}</span></div>`, acts(name)] });
 const menuRows = [
-  mrow('Nasi Lemak Ayam', 'Rice', 'RM9.50', '5 ingredients', true, { best: 1 }), mrow('Nasi Goreng Kampung', 'Rice', 'RM8.50', '6 ingredients', false),
-  mrow('Mee Goreng Mamak', 'Noodles', 'RM8.00', '7 ingredients', true, { best: 1 }), mrow('Roti Canai (2 pcs)', 'Roti', 'RM3.00', '3 ingredients', true),
-  mrow('Teh Tarik', 'Drinks', 'RM2.80', '3 ingredients', true, { best: 1 }), mrow('Milo Ais', 'Drinks', 'RM3.50', '3 ingredients', true), mrow('Cendol', 'Desserts', 'RM4.50', 'No recipe yet', true)];
-const menuPage = `<div class="qs-toolbar">${sel('All categories')}${searchBox('Search dishes')}${btn('Manage categories', 'link')}<div class="ms-auto small text-body-secondary">32 dishes · 1 unavailable</div></div>${tbl(['Dish', 'Category', { h: 'Price', ...R }, 'Recipe', 'Availability', { h: '', ...R }], menuRows)}`;
-const rline = (ing, qty, unit, err) => `<div class="d-flex gap-2 align-items-start"><div class="flex-grow-1">${field(null, ing, { sel: 1, aria: 'Ingredient' })}</div><div style="width:150px">${field(null, qty, { suf: unit, aria: 'Quantity of ' + ing, err })}</div>${iconBtn('trash', 'Remove ' + ing)}</div>`;
-const dishForm = (bad) => mod('Add dish', `
-  <div class="d-flex gap-3">${field('Dish name', bad ? '' : 'Nasi Goreng Ayam', { c: 'flex-fill', err: bad ? 'Enter a dish name.' : '', ph: bad })}${field('Category', 'Rice', { sel: 1, c: 'flex-fill' })}</div>
-  <div class="d-flex gap-3 align-items-start"><div style="width:200px">${field('Price', bad ? '0.00' : '9.00', { pre: 'RM', err: bad ? 'Enter a price above RM0.00.' : '' })}</div><div class="flex-fill">${field('Description (shown to customers)', 'Fried rice with chicken and egg')}</div></div>
-  <div><div class="fw-semibold">Recipe for one serving</div><div class="small text-body-secondary">Confirming an order deducts these amounts times the order quantity. Cancelling restores them.</div></div>
-  ${rline('Rice', '200', 'g')}${rline('Chicken', '80', 'g')}${rline('Egg', bad ? '0' : '1', 'pcs', bad ? 'Enter more than 0.' : '')}
-  <div>${btn('Add ingredient', 'outline-primary', { i: 'plus-lg', sm: 1 })}</div>`, btn('Cancel', 'outline-secondary') + btn('Save dish', 'primary'), 640);
+  mrow('Nasi Lemak Ayam', 'Rice', 'RM9.50', '5 ingredients', true, { best: 1, img: 'nasi-lemak' }), mrow('Nasi Goreng Kampung', 'Rice', 'RM8.50', '6 ingredients', false, { img: 'nasi-goreng' }),
+  mrow('Mee Goreng Mamak', 'Noodles', 'RM8.00', '7 ingredients', true, { best: 1, img: 'mee-goreng' }), mrow('Roti Canai (2 pcs)', 'Roti', 'RM3.00', '3 ingredients', true),
+  mrow('Teh Tarik', 'Drinks', 'RM2.80', '3 ingredients', true, { best: 1, img: 'teh-tarik' }), mrow('Milo Ais', 'Drinks', 'RM3.50', '3 ingredients', true, { img: 'milo-ais' }), mrow('Cendol', 'Desserts', 'RM4.50', 'No recipe yet', true)];
+const menuPage = `<div class="qs-toolbar">${sel('All categories')}${searchBox('Search dishes')}<button type="button" class="qs-chip">${i('camera')} No photo <span class="badge qs-b-neutral">2</span></button>${btn('Manage categories', 'link')}<div class="ms-auto small text-body-secondary">32 dishes, 1 unavailable</div></div>${tbl([{ h: 'Photo' }, 'Dish', 'Category', { h: 'Price', ...R }, 'Recipe', 'Availability', { h: '', ...R }], menuRows)}`;
 const mset = (name, o) => pc(`Menu · ${name}`, 'Menu', 'Menu', { act: btn('Add dish', 'primary', { i: 'plus-lg' }), ...o }, menuPage);
+
+// Add dish is a full page: photo and live preview on the left, details and recipe on the right.
+const rline = (ing, qty, unit, err) => `<div class="d-flex gap-2 align-items-start"><div class="flex-grow-1">${field(null, ing, { sel: 1, aria: 'Ingredient' })}</div><div style="width:150px">${field(null, qty, { suf: unit, aria: 'Quantity of ' + ing, err })}</div>${iconBtn('trash', 'Remove ' + ing)}</div>`;
+const drop = (err) => `<div class="qs-drop${err ? ' err' : ''}">${tile('camera', err ? 'red' : 'c-blue', 'lg')}<div class="fw-bold">Add a photo</div><div class="small text-body-secondary">Drag a photo here or choose one from this computer. On a tablet or phone you can take one with the camera.</div><div class="d-flex gap-2">${btn('Choose photo', 'outline-secondary', { i: 'image' })}${btn('Take photo', 'outline-secondary', { i: 'camera' })}</div><div class="small text-body-secondary">JPG, PNG or WebP. Big photos are shrunk for you. Square photos look best.</div></div>
+  ${err ? alert('danger', 'menu-price-list.pdf is not a photo', 'Choose a JPG, PNG or WebP image of the dish.') : ''}`;
+const photoCard = (state) => {
+  let inner;
+  if (state === 'empty' || state === 'error') inner = drop(state === 'error');
+  else if (state === 'uploading') inner = `<div class="qs-photo up">${food('nasi-goreng', 328)}</div><div><div class="d-flex justify-content-between small fw-semibold"><span>Uploading nasi-goreng-ayam.jpg</span><span>1.2 of 2.0 MB</span></div><div class="qs-prog mt-2" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="Upload progress"><i style="width:60%"></i></div></div>${btn('Cancel upload', 'outline-secondary', { block: 1 })}`;
+  else inner = `<div class="qs-photo">${food('nasi-goreng', 328)}</div><div class="d-flex gap-2">${btn('Replace photo', 'outline-secondary', { c: 'flex-fill', i: 'arrow-repeat' })}${btn('Remove', 'outline-secondary', { c: 'flex-fill', i: 'trash' })}</div><div class="small text-body-secondary">Shrunk from 4.1 MB to 180 KB. Customers see a 10 KB thumbnail in the list and this version when they open the dish.</div>`;
+  return `<div class="card"><div class="card-body d-flex flex-column gap-3"><div><h2 class="fs-6">Photo <span class="fw-normal text-body-secondary">(optional)</span></h2></div>${inner}</div></div>`;
+};
+const preview = (withPhoto, name = 'Nasi Goreng Ayam', price = 'RM9.00') => `<div class="card"><div class="card-body d-flex flex-column gap-2"><h2 class="fs-6">How customers will see it</h2>
+  <div class="qs-dishes" style="box-shadow:none;border:1px solid var(--line)"><div class="qs-dish">${withPhoto ? `<span class="qs-ph">${food('nasi-goreng', 72)}</span>` : tile('egg-fried', 'tea')}<div class="flex-grow-1 min-w-0"><div class="nm">${name || '<span class="text-body-secondary">Dish name</span>'}</div><div class="ds">Fried rice with chicken and egg</div><div class="mt justify-content-between"><span class="pr">${price}</span><span class="qs-add" aria-hidden="true">${i('plus-lg')}</span></div></div></div></div>
+  ${withPhoto ? '' : '<div class="small text-body-secondary">Without a photo the dish shows its category icon.</div>'}</div></div>`;
+const details = (st) => {
+  const bad = st === 'invalid', empty = st === 'empty';
+  return `<div class="card"><div class="card-body d-flex flex-column gap-3"><h2 class="fs-6">Details</h2>
+  <div class="d-flex gap-3 align-items-start">${field('Dish name', empty || bad ? 'For example Nasi Goreng Ayam' : 'Nasi Goreng Ayam', { c: 'flex-fill', ph: empty || bad, err: bad ? 'Enter a dish name.' : '' })}${field('Category', 'Rice', { sel: 1, c: 'flex-fill' })}</div>
+  <div class="d-flex gap-3 align-items-start"><div style="width:200px">${field('Price', bad ? '0.00' : empty ? '0.00' : '9.00', { pre: 'RM', ph: empty, err: bad ? 'Enter a price above RM0.00.' : '' })}</div><div class="flex-fill">${field('Description (shown to customers)', empty ? 'What is in it, in one line' : 'Fried rice with chicken and egg', { ph: empty })}</div></div>
+  <div class="d-flex flex-wrap gap-4">${check('Spicy (shows a fire icon)', false)}${check('Available as soon as it is saved', true)}</div>
+  <div class="small text-body-secondary">Best seller labels are added automatically to the 5 dishes that sold most in the last 30 days.</div></div></div>`;
+};
+const recipe = (st) => {
+  const bad = st === 'invalid', empty = st === 'empty';
+  return `<div class="card"><div class="card-body d-flex flex-column gap-3"><div><h2 class="fs-6">Recipe for one serving</h2><div class="small text-body-secondary">Confirming an order deducts these amounts times the quantity. Cancelling restores them. Extra used in the kitchen is recorded as waste.</div></div>
+  ${empty ? `<div class="qs-note">${i('info-circle')}<span>No ingredients yet. Without a recipe this dish will not change stock.</span></div>` : `${rline('Rice', '200', 'g')}${rline('Chicken', '80', 'g')}${rline('Egg', bad ? '0' : '1', 'pcs', bad ? 'Enter more than 0.' : '')}`}
+  <div>${btn('Add ingredient', 'outline-primary', { i: 'plus-lg', sm: 1 })}</div></div></div>`;
+};
+const addPage = (name, st, photo, note) => pc(`Menu · ${name}`, 'Menu', 'Add dish', { upd: false, sub: 'Menu › New dish', note, act: btn('Cancel', 'outline-secondary') + btn('Save dish', 'primary', { i: 'check-lg' }) }, `
+  ${st === 'invalid' ? alert('danger', '2 things to fix before saving', 'Dish name is empty, and the egg quantity is 0.') : ''}
+  <div class="qs-dishform"><div class="d-flex flex-column gap-3">${photoCard(photo)}${preview(photo === 'done' || photo === 'uploading', st === 'empty' || st === 'invalid' ? '' : 'Nasi Goreng Ayam', st === 'empty' ? 'RM0.00' : 'RM9.00')}</div>
+  <div class="d-flex flex-column gap-3">${details(st)}${recipe(st)}</div></div>`);
 const menu = [
-  mset('Dish list', { note: 'The availability switch is what staff use when stock runs low. Dishes are switched off, never deleted, while in use.' }),
-  mset('Add dish with recipe', { modal: dishForm(false), note: 'Dish details and its recipe are saved together, because stock deduction depends on the recipe.' }),
-  mset('Validation errors', { modal: dishForm(true), note: 'Each message sits under its field and says what to enter. Valid fields keep their values.' }),
+  mset('Dish list', { note: 'Each dish shows its photo. Dishes without one get an Add photo button and a "No photo" filter, so the owner can fill gaps. The availability switch is what staff use when stock runs low.' }),
+  addPage('Add dish', 'empty', 'empty', 'Opened from Add dish. One page in the order owners think: photo, name and price, then recipe. The preview on the left updates as they type. Only name, category and price are required.'),
+  addPage('Uploading photo', 'filled', 'uploading', 'The photo uploads while the owner keeps typing. Cancel stops it without losing the form.'),
+  addPage('Dish with photo', 'filled', 'done', 'The photo is shrunk in the browser before upload (4.1 MB to 180 KB), so it is quick on restaurant Wi-Fi and light for customers. The preview shows exactly how the dish will look on the menu.'),
+  addPage('Photo not accepted', 'filled', 'error', 'Only a wrong file type is refused. Large photos are never refused; they are shrunk instead. iPhone photos arrive as JPG automatically.'),
+  addPage('Validation errors', 'invalid', 'done', 'Save shows a short summary at the top and each message under its field. Everything already entered, including the photo, is kept.'),
   mset('Cannot remove', { modal: blocked('Mee Goreng Mamak cannot be removed', 'This dish is in an active order', 'Order #1042 on T3 includes it. Mark the dish unavailable now and remove it after the order is paid.'), note: 'Removal is blocked while a dish is in a pending, confirmed or unpaid order.' }),
 ];
 

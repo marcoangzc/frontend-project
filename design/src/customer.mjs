@@ -1,3 +1,4 @@
+import { food } from './food.mjs';
 import { uid, tile, mod, i, btn, badge, field, check, kv, alert, upd, step, qr, chd, ph, section } from './lib.mjs';
 
 const qh = chd('Walk-in queue', false);
@@ -59,24 +60,35 @@ const ticket = [
 const CAT = { rice: 'egg-fried', noodle: 'basket2-fill', roti: 'cookie', drink: 'cup-hot-fill', cold: 'cup-straw', dessert: 'cake2-fill' };
 const dish = (name, desc, price, c, o = {}) => `
   <div class="qs-dish${o.out ? ' out' : ''}">
-    ${tile(CAT[c], 'tea')}
+    ${o.img === 'loading' ? `<span class="qs-ph loading" aria-label="Photo loading">${i(CAT[c])}</span>` : o.img ? `<span class="qs-ph">${food(o.img, 72)}</span>` : tile(CAT[c], 'tea')}
     <div class="flex-grow-1 min-w-0"><div class="nm">${name}${o.hot ? ` <span class="qs-spice" aria-label="Spicy">${i('fire')}</span>` : ''}</div><div class="ds">${desc}</div>
       ${o.best ? `<div class="mt">${badge(`${i('star-fill')} Best seller`, 'tea')}</div>` : ''}
       <div class="mt justify-content-between"><span class="pr">${price}</span>${o.out ? badge('Sold out today', 'neutral') : o.q ? step(o.q) : `<button type="button" class="qs-add" aria-label="Add ${name}">${i('plus-lg')}</button>`}</div></div>
   </div>`;
 const cat = (l, icon, on) => `<button type="button" class="qs-cat${on ? ' on' : ''}"${on ? ' aria-pressed="true"' : ''}>${tile(icon, 'tea', 'sm')}${l}</button>`;
-const menu = [
-  ph('Menu · Browsing', { bar: `<a href="#" class="qs-cartbar text-decoration-none"><span class="n">6</span><span class="flex-grow-1">View cart</span><span>RM35.40</span></a>`, note: 'Category icons replace food photos so the page stays light on slow data. Sold-out dishes stay visible but cannot be added; the fire icon marks spicy dishes.' }, `
+const menuList = (loading) => { const P = (id) => (loading ? 'loading' : id); return `
     <div class="qs-search">${i('search')} Search nasi lemak, teh tarik…</div>
     <div class="qs-chips">${cat('Popular', 'star-fill', 1)}${cat('Rice', 'egg-fried')}${cat('Noodles', 'basket2-fill')}${cat('Roti', 'cookie')}${cat('Drinks', 'cup-hot-fill')}${cat('Desserts', 'cake2-fill')}</div>
     <section class="d-flex flex-column gap-2"><h2 class="h-sec">Popular</h2><div class="qs-dishes">
-      ${dish('Nasi Lemak Ayam', 'Coconut rice, fried chicken, sambal, egg', 'RM9.50', 'rice', { best: 1, hot: 1, q: 2 })}
-      ${dish('Mee Goreng Mamak', 'Fried yellow noodles, tofu, potato, egg', 'RM8.00', 'noodle', { best: 1, hot: 1, q: 1 })}
-      ${dish('Nasi Goreng Kampung', 'Village fried rice with anchovies', 'RM8.50', 'rice', { out: 1 })}
+      ${dish('Nasi Lemak Ayam', 'Coconut rice, fried chicken, sambal, egg', 'RM9.50', 'rice', { best: 1, hot: 1, q: 2, img: P('nasi-lemak') })}
+      ${dish('Mee Goreng Mamak', 'Fried yellow noodles, tofu, potato, egg', 'RM8.00', 'noodle', { best: 1, hot: 1, q: 1, img: P('mee-goreng') })}
+      ${dish('Nasi Goreng Kampung', 'Village fried rice with anchovies', 'RM8.50', 'rice', { out: 1, img: P('nasi-goreng') })}
       ${dish('Roti Canai (2 pcs)', 'Served with dhal and fish curry', 'RM3.00', 'roti')}</div></section>
     <section class="d-flex flex-column gap-2"><h2 class="h-sec">Drinks</h2><div class="qs-dishes">
-      ${dish('Teh Tarik', 'Hot pulled milk tea', 'RM2.80', 'drink', { best: 1, q: 3 })}
-      ${dish('Milo Ais', 'Iced chocolate malt drink', 'RM3.50', 'cold')}</div></section>`),
+      ${dish('Teh Tarik', 'Hot pulled milk tea', 'RM2.80', 'drink', { best: 1, q: 3, img: P('teh-tarik') })}
+      ${dish('Milo Ais', 'Iced chocolate malt drink', 'RM3.50', 'cold', { img: P('milo-ais') })}</div></section>`; };
+const cartbar = `<a href="#" class="qs-cartbar text-decoration-none"><span class="n">6</span><span class="flex-grow-1">View cart</span><span>RM35.40</span></a>`;
+const detail = mod('Nasi Lemak Ayam', `
+  <div class="qs-ph wide">${food('nasi-lemak', 328, 200)}</div>
+  <div class="d-flex flex-wrap align-items-center gap-2">${badge(`${i('star-fill')} Best seller`, 'tea')}<span class="qs-spice">${i('fire')} Spicy</span></div>
+  <div class="text-body-secondary">Coconut rice with fried chicken, sambal, a fried egg, cucumber, peanuts and anchovies.</div>
+  ${btn('Add a note for the kitchen', 'link', { i: 'plus-lg', c: 'align-self-start px-0' })}
+  <div class="d-flex align-items-center justify-content-between"><span class="fs-4 fw-bold">RM9.50</span>${step(1, { min: 1 })}</div>`, btn('Add to cart · RM9.50', 'primary', { lg: 1, block: 1 }));
+const menu = [
+  ph('Menu · Browsing', { bar: cartbar, note: 'Dishes show the photo the merchant uploaded. A dish without a photo (Roti Canai) falls back to its category icon, so the list never shows a broken image. Sold-out dishes stay visible but greyed out.' }, menuList(false)),
+  ph('Menu · Photos still loading', { bar: cartbar, note: 'On slow data the names, prices and Add buttons appear first; each photo fades in when it arrives. Thumbnails are about 10 KB each, so a 30-dish menu costs around 300 KB.' }, menuList(true)),
+  ph('Menu · Dish detail', { bar: cartbar, sheet: 1, modal: detail, note: 'Tapping a dish opens a larger photo and the full description. The larger image (about 60 KB) only loads here, not in the list.' }, menuList(false)),
+
   ph('Menu · QR expired', { head: plain, note: 'Shown instead of the menu when the table token was replaced after payment.' }, `
     ${center(`${tile('qr-code', 'gray', 'xl')}<h1 class="fs-4 mt-2">This QR code has expired</h1><div class="text-body-secondary">The bill for this table has been paid, so this link no longer works. Please ask our staff for help.</div>`, 'py-5')}`),
 ];
