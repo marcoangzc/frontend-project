@@ -381,3 +381,27 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-tile.wait { background: #FFCC00; color: #1C1C1E; } .qs-tile.red { background: #FF3B30; color: #fff; } .qs-tile.gray { background: #8E8E93; color: #fff; }
 .qs-cat .qs-tile { box-shadow: none; }
 .alert .qs-tile.gray, .qs-emp .qs-tile.gray { background: #E5E5EA; color: #6E6E73; }
+
+/* v3.1 additions: queue presence, chips, waste recording, notes, big stepper */
+.qs-step .btn:disabled { opacity: .35; }
+.qs-step.lg .btn { width: 56px; min-height: 52px; font-size: 1.25rem; } .qs-step.lg span { min-width: 44px; font-size: 1.375rem; }
+.qs-seen { display: inline-flex; align-items: center; gap: 6px; font-size: .875rem; font-weight: 600; color: var(--slate); }
+.qs-seen .pip { width: 8px; height: 8px; border-radius: 50%; background: #24935F; flex: 0 0 auto; }
+.qs-seen.here { color: #1A6B40; } .qs-seen.here .pip { background: #24935F; box-shadow: 0 0 0 3px #D3EEDF; }
+.qs-seen.gone { color: #664D03; } .qs-seen.gone .pip { background: #FFCC00; box-shadow: 0 0 0 3px #FFF3CD; }
+.qs-qcard.gone { box-shadow: 0 0 0 2px #FFCC00, var(--sh); }
+.qs-chipset { display: flex; flex-wrap: wrap; gap: 8px; }
+.qs-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border: 0; border-radius: var(--rs); background: #fff; box-shadow: inset 0 0 0 1.5px var(--line2); font: inherit; font-size: .9375rem; font-weight: 700; color: var(--ink); }
+.qs-chip.on { background: var(--p50); box-shadow: inset 0 0 0 2px var(--p600); color: var(--p700); }
+.dev-tb .qs-chip { min-height: 56px; padding: 0 18px; font-size: 1.125rem; }
+.qs-ing { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.qs-ing button { min-height: 72px; border: 0; border-radius: var(--rm); background: #fff; box-shadow: inset 0 0 0 1.5px var(--line2); display: flex; align-items: center; gap: 12px; padding: 0 14px; font: inherit; font-size: 1.125rem; font-weight: 700; color: var(--ink); text-align: left; }
+.qs-ing button.on { background: var(--p50); box-shadow: inset 0 0 0 3px var(--p600); }
+.qs-ing small { display: block; font-size: .875rem; font-weight: 600; color: var(--slate); }
+.qs-note { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border-radius: var(--rs); background: var(--mist); font-size: .9375rem; }
+.qs-note .btn { margin-left: auto; min-height: 44px; padding: 0 4px; }
+.qs-was { color: var(--slate); text-decoration: line-through; }
+.qs-kbar .btn { min-height: 48px; font-size: 1rem; }
+.qs-ledger td.neg { color: #B02A37; font-weight: 700; } .qs-ledger td.pos { color: #1A6B40; font-weight: 700; }
+.qs-ledger tr.waste td { background: #FFF8E1; }
+.qs-table tr.table-warning { --bs-table-bg: #FFF8E1; --bs-table-color: #1C1C1E; }

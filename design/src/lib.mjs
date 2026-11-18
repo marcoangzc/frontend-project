@@ -60,8 +60,9 @@ export const alert = (tone, title, text, icon) => {
 
 export const upd = (t = 'Updated just now') => `<div class="qs-upd">${i('arrow-repeat')} ${t}</div>`;
 
-export const step = (q) =>
-  `<div class="qs-step" role="group" aria-label="Quantity"><button type="button" class="btn btn-link" aria-label="Decrease">${i('dash-lg')}</button><span>${q}</span><button type="button" class="btn btn-link" aria-label="Increase">${i('plus-lg')}</button></div>`;
+// o.min / o.max: that end is reached, so its button is disabled. o.label names the group for screen readers.
+export const step = (q, o = {}) =>
+  `<div class="qs-step${o.lg ? ' lg' : ''}" role="group" aria-label="${o.label || 'Quantity'}"><button type="button" class="btn btn-link" aria-label="Decrease"${o.min ? ' disabled' : ''}>${i('dash-lg')}</button><span>${q}</span><button type="button" class="btn btn-link" aria-label="Increase"${o.max ? ' disabled' : ''}>${i('plus-lg')}</button></div>`;
 
 export const emp = (icon, title, text) =>
   `<div class="qs-emp">${tile(icon, 'gray', 'lg')}<div class="fw-semibold fs-6">${title}</div><div class="small text-secondary">${text}</div></div>`;
@@ -143,7 +144,7 @@ export const pc = (name, act, title, o, body) =>
 
 // Wall tablet for the kitchen: no navigation, very large type
 export const tb = (name, o, body) =>
-  frame('tb', name, o, `<header class="qs-kbar"><h1>Kitchen</h1><div>${o.count}</div><div class="ms-auto">${upd()}</div><div class="qs-kclock">${o.time || '7:29 pm'}</div></header><main class="qs-kbody">${body}</main>`);
+  frame('tb', name, o, `<header class="qs-kbar"><h1>Kitchen</h1><div>${o.count}</div><div class="ms-auto">${upd()}</div>${btn('Record waste', 'band', { i: 'clipboard-minus' })}<div class="qs-kclock">${o.time || '7:29 pm'}</div></header><main class="qs-kbody">${body}</main>`);
 
 // Tablet at the counter for the cashier
 export const ct = (name, title, o, body) =>

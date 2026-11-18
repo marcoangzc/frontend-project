@@ -1,4 +1,4 @@
-import { tile, i, btn, iconBtn, badge, field, kv, alert, upd, step, emp, mod, tabs, ph, sp, tb, ct, section } from './lib.mjs';
+import { tile, i, btn, iconBtn, badge, field, toggle, kv, alert, upd, step, emp, mod, tabs, ph, sp, tb, ct, section } from './lib.mjs';
 
 /* ---------- Staff login ---------- */
 const login = (name, al, o = {}) => ph(`Staff login · ${name}`, { url: 'quickserve.my/staff', head: '', note: o.note }, `
@@ -19,6 +19,10 @@ const logins = [
 const row = (icon, label, num, sub, tone) => `<a href="#">${tile(icon, tone === 'danger-solid' ? 'red' : '')}<span class="flex-grow-1"><span class="d-block fw-semibold">${label}</span>${sub ? `<span class="d-block small text-body-secondary">${sub}</span>` : ''}</span>${tone ? badge(num, tone) : `<span class="num">${num}</span>`}${i('chevron-right')}</a>`;
 const todo = (icon, text, action) => `<div>${tile(icon, 'wait')}<span class="flex-grow-1 fw-semibold">${text}</span>${btn(action, 'outline-primary', { sm: 1 })}</div>`;
 const day = '<div class="d-flex justify-content-between align-items-center"><div class="small text-body-secondary">Tue 17 Nov 2026 · Aina, Cashier</div>';
+const dishSwitch = (name, uses, left, on) => `<div class="d-flex align-items-center gap-3 py-2"><div class="flex-grow-1 min-w-0"><div class="fw-semibold">${name}</div><div class="small text-body-secondary">${uses}. ${left}</div></div>${toggle('Mark ' + name + ' unavailable', on)}</div>`;
+const unavailSheet = mod('Mark dishes unavailable', `
+  <div class="small text-body-secondary">These dishes use Egg or Santan. Switch on the ones customers should not be able to order.</div>
+  <div class="d-flex flex-column">${dishSwitch('Nasi Lemak Ayam', 'Uses 1 egg and 0.2 L santan', 'Enough for about 7 more', true)}${dishSwitch('Nasi Goreng Kampung', 'Uses 1 egg', 'Enough for about 12 more', false)}${dishSwitch('Mee Goreng Mamak', 'Uses 1 egg', 'Enough for about 12 more', false)}</div>`, btn('Cancel', 'outline-secondary') + btn('Save', 'primary'));
 const home = [
   sp('Home · Busy day', 'Home', 'Home', { note: 'Things that need a tap come first; the four counts below link to their pages. No charts or trend arrows.' }, `
     ${day}${upd()}</div>
@@ -50,21 +54,38 @@ const home = [
       ${row('table', 'Open tables', '9 of 15', '4 awaiting payment')}
       ${row('people', 'Queue', 5, 'Longest wait 18 min')}
       ${row('box-seam', 'Low stock', 2, 'Egg, Santan', 'danger-solid')}</div></section>`),
+  sp('Home · Choose dishes to mark unavailable', 'Home', 'Home', { low: 2, sheet: 1, modal: unavailSheet, note: 'Opened from Mark dishes unavailable. Each dish shows roughly how many more plates the stock allows, so staff switch off only what will run out. Nothing changes until Save.' }, `
+    <div class="d-flex justify-content-between align-items-center"><div class="small text-body-secondary">Tue 17 Nov 2026 · Aina, Cashier</div>${upd()}</div>`),
 ];
 
 /* ---------- Queue list ---------- */
-const qrow = (no, name, size, wait, o = {}) => `<div class="qs-qcard${o.called ? ' called' : ''}">
+// seen: 'open' page open now | 'here' tapped I'm here | 'gone' page closed for a while (from polling heartbeats)
+const SEEN = { open: ['', 'Page open'], here: ['here', 'Said "I\'m here" 1 min ago'], gone: ['gone', 'Page closed 25 min ago'] };
+const qrow = (no, name, size, wait, o = {}) => {
+  const sn = SEEN[o.seen || 'open'];
+  return `<div class="qs-qcard${o.called ? ' called' : ''}${o.seen === 'gone' ? ' gone' : ''}">
   <div class="d-flex align-items-center gap-3"><div class="qs-qno">${no}</div><div class="flex-grow-1 min-w-0"><div class="fw-bold">${name}</div><div class="small text-body-secondary">${i('people-fill')} ${size} ${size === 1 ? 'person' : 'people'}, ${wait.toLowerCase()}</div></div>${o.called ? badge('Called', 'solid') : badge('Waiting', 'wait')}</div>
-  <div class="d-flex gap-2">${o.called ? btn('No-show', 'outline-secondary', { c: 'flex-fill', dis: o.early }) + btn('Seated', 'primary', { c: 'flex-fill', i: 'check-lg' }) : btn('Call ' + no, 'outline-primary', { c: 'flex-fill', i: 'megaphone' })}</div>
-  ${o.early ? '<div class="small text-body-secondary">No-show can be marked 5 minutes after calling (in 3 min).</div>' : ''}</div>`;
-const queue = [
-  sp('Queue · Several waiting', 'Queue', 'Queue', { note: 'Oldest ticket first. Call turns the customer\'s ticket page bright teal (no sound). Then staff mark Seated, or No-show after 5 minutes.' }, `
-    <div class="d-flex justify-content-between align-items-center"><div class="fw-medium">5 groups · longest wait 18 min</div>${upd()}</div>
-    ${qrow('A019', 'Hafiz', 2, 'Called 2 min ago', { called: 1, early: 1 })}
-    ${qrow('A020', 'Farid', 2, 'Waiting 18 min')}
-    ${qrow('A021', 'Mei Xin', 5, 'Waiting 14 min')}
+  <div class="qs-seen ${sn[0]}"><span class="pip"></span>${sn[1]}</div>
+  <div class="d-flex gap-2">${o.called ? btn('No-show', 'outline-secondary', { c: 'flex-fill' }) + btn('Seated', 'primary', { c: 'flex-fill', i: 'check-lg' }) : btn('Remove', 'outline-secondary') + btn('Call ' + no, 'outline-primary', { c: 'flex-fill', i: 'megaphone' })}</div>
+  ${o.called ? '<div class="small text-body-secondary">Table held until 7:42 pm. You can call the next group now; No-show can be undone for 15 minutes.</div>' : ''}</div>`;
+};
+const qhead = (n) => `<div class="d-flex justify-content-between align-items-center"><div class="fw-medium">${n} groups, longest wait 32 min</div>${upd()}</div>`;
+const qlist = (o = {}) => `
+    ${o.banner === false ? '' : `<div class="alert alert-warning d-flex align-items-center gap-2 mb-0" role="status"><span class="qs-ai">${i('eye-slash')}</span><div class="flex-grow-1"><div class="fw-semibold">1 group may have left</div><div class="small">A021's page has been closed for 25 minutes.</div></div></div>`}
+    ${qrow('A019', 'Hafiz', 2, 'Called 2 min ago', { called: 1, seen: 'here' })}
+    ${qrow('A020', 'Farid', 2, 'Waiting 32 min', { seen: 'here' })}
+    ${o.removed ? '' : qrow('A021', 'Mei Xin', 5, 'Waiting 28 min', { seen: 'gone' })}
     ${qrow('A022', 'Suresh', 3, 'Waiting 9 min')}
-    ${qrow('A023', 'Nurul', 4, 'Waiting 4 min')}`),
+    ${qrow('A023', 'Nurul', 4, 'Waiting 4 min')}`;
+const removeSheet = mod('Remove A021 from the queue?', `
+  <div>Mei Xin, 5 people. Waiting 28 minutes; their page has been closed for 25 minutes.</div>
+  <fieldset><legend class="form-label">Reason</legend><div class="qs-chipset"><button type="button" class="qs-chip on" aria-pressed="true">Left without telling us</button><button type="button" class="qs-chip">Took two numbers</button><button type="button" class="qs-chip">Asked to cancel</button><button type="button" class="qs-chip">Other</button></div></fieldset>
+  <div class="small text-body-secondary">Their page will say the ticket was cancelled. You can restore it to the same place for 15 minutes.</div>`, btn('Keep in queue', 'outline-secondary') + btn('Remove ticket', 'danger'));
+const queue = [
+  sp('Queue · Several waiting', 'Queue', 'Queue', { note: 'Each ticket shows whether its page is still open (from the polling heartbeat) or the customer tapped "I\'m here". A ticket whose page has been closed for 20 minutes is flagged amber. Staff can remove any waiting ticket at any time, and can mark No-show right after calling: no forced 5-minute wait.' }, `${qhead(5)}${qlist()}`),
+  sp('Queue · Remove a ticket', 'Queue', 'Queue', { sheet: 1, modal: removeSheet, note: 'Removing needs a reason (kept on record). "Took two numbers" covers people holding a ticket at more than one place.' }, `${qhead(5)}${qlist()}`),
+  sp('Queue · Removed, can restore', 'Queue', 'Queue', { note: 'The removed ticket moves to "Recently removed" for 15 minutes. Restore puts it back in its old place, so a customer who stepped away briefly is not sent to the back.' }, `${qhead(4)}${qlist({ removed: 1, banner: false })}
+    <section><h2 class="fs-6 mb-2">Recently removed</h2><div class="qs-list"><div>${tile('people', 'gray')}<span class="flex-grow-1"><span class="d-block fw-semibold">A021 Mei Xin, 5 people</span><span class="d-block small text-body-secondary">Left without telling us, 7:51 pm. Restore until 8:06 pm.</span></span>${btn('Restore', 'outline-secondary', { sm: 1, i: 'arrow-counterclockwise' })}</div></div></section>`),
   sp('Queue · Empty', 'Queue', 'Queue', {}, `
     <div class="d-flex justify-content-between align-items-center"><div class="fw-medium">0 groups</div>${upd()}</div>
     <div class="card">${emp('people', 'No one is waiting', 'New tickets appear here when customers scan the queue QR at the door.')}</div>`),
@@ -84,6 +105,11 @@ const tables = [
   sp('Tables · Waiter call', 'Tables', 'Tables', { note: 'A customer tapped Call waiter on T7. The alert stays pinned until a staff member taps Done.' }, `
     <div class="alert alert-warning d-flex align-items-center gap-2 mb-0" role="alert"><span class="qs-ai">${i('bell-fill')}</span><div class="flex-grow-1"><div class="fw-semibold">T7 is calling a waiter</div><div class="small">1 min ago · Outdoor</div></div>${btn('Done', 'outline-secondary', { sm: 1 })}</div>
     ${legend}${grid(true)}`),
+  sp('Tables · Table detail', 'Tables', 'Tables', { sheet: 1, note: 'On a phone, tapping a table opens its order in a bottom sheet with the two actions staff need most.',
+    modal: mod('T3 · Indoor', `<div class="d-flex justify-content-between align-items-center"><span class="small text-body-secondary">Order #1042, confirmed 7:23 pm by Aina</span>${badge('Waiting for food', 'wait')}</div>
+      <div class="d-flex flex-column gap-1">${kv('2 × Nasi Lemak Ayam', 'RM19.00')}${kv('1 × Mee Goreng Mamak', 'RM8.00')}${kv('3 × Teh Tarik', 'RM8.40')}</div>
+      <hr class="my-0">${kv('Total incl. service charge and SST', 'RM41.28', 'fw-semibold')}${kv('<span class="text-body-secondary">Paying by</span>', 'Card or e-wallet')}`, btn('Edit order', 'outline-secondary') + btn('Take payment', 'primary', { i: 'cash' })) }, `
+    <div class="d-flex justify-content-between align-items-center"><div class="fw-medium">9 of 15 tables open</div>${upd()}</div>${legend}${grid(false, true)}`),
   ct('Tables · Counter tablet', 'Tables', { note: 'Same grid at 1024 px with the selected table\'s order beside it, so the cashier does not leave the page to take payment.' }, `
     <div><div class="d-flex justify-content-between align-items-center"><div class="fw-medium">9 of 15 tables open</div>${upd()}</div>${legend}${grid(false, true)}</div>
     <aside><div class="d-flex justify-content-between align-items-center"><h2 class="fs-4">T3 · Indoor</h2>${badge('Waiting for food', 'wait')}</div>
@@ -107,6 +133,9 @@ const pending = (a) => `<div class="d-flex justify-content-between align-items-c
 const editRow = (name, q) => `<div class="d-flex align-items-center gap-2"><span class="flex-grow-1 fw-medium">${name}</span>${step(q)}${iconBtn('trash', 'Remove ' + name)}</div>`;
 const orders = [
   sp('Orders · Pending to confirm', 'Orders', 'Orders', { note: 'Every QR order lands here first. The kitchen sees it only after Confirm, which also deducts ingredients by recipe.' }, pending()),
+  sp('Orders · New order arrives', 'Orders', 'Orders', { note: 'A new QR order shows a banner on every staff page and raises the Orders badge within 5 s (polling). The banner stays until someone opens the order. A chime can be switched on for the counter tablet in Settings; it is off by default.' }, `
+    <div class="alert alert-primary d-flex align-items-center gap-2 mb-0" role="status"><span class="qs-ai">${i('bell-fill')}</span><div class="flex-grow-1"><div class="fw-semibold">New order from T12</div><div class="small">2 dishes, cash, just now</div></div>${btn('Open', 'primary', { sm: 1 })}</div>
+    ${pending()}`),
   sp('Orders · Insufficient stock', 'Orders', 'Orders', { low: 2, note: 'Confirm failed because a recipe needs more than is in stock. Confirm is disabled and Edit becomes the main action.' }, pending(alert('danger', 'Insufficient stock: Egg', 'This order needs 3 eggs and only 2 are left. Edit the order or reject it.'))),
   sp('Orders · Edit items', 'Orders', 'Orders', { sheet: 1, note: 'Bottom sheet within thumb reach. Saving sends the customer a new total and keeps the order Pending.',
     modal: mod('Edit order #1042 · T3', `${editRow('Nasi Lemak Ayam', 1)}${editRow('Mee Goreng Mamak', 1)}${editRow('Teh Tarik', 3)}${btn('Add a dish', 'outline-primary', { i: 'plus-lg', block: 1 })}${kv('New total', 'RM30.20', 'fs-5 fw-semibold')}`, btn('Cancel', 'outline-secondary') + btn('Save changes', 'primary')) }, pending()),
@@ -128,6 +157,21 @@ const kitchen = [
     ${ticket('T3', 1042, '7:23 pm', '6 min', kl(2, 'Nasi Lemak Ayam', 'less spicy') + kl(1, 'Mee Goreng Mamak') + kl(3, 'Teh Tarik', '1 kurang manis'))}
     ${ticket('T7', 1044, '7:26 pm', '3 min', kl(1, 'Nasi Goreng Kampung') + kl(1, 'Teh Tarik'))}
     <div class="qs-toast" role="status">${i('check-circle-fill')} T5 marked served ${btn('Undo', 'band')}</div>`),
+  tb('Kitchen · Record waste', { count: '4 orders waiting', note: 'For anything the recipe does not cover: dropped or spoiled food, a dish remade, or an extra portion. Big buttons for wet hands. It deducts stock and is logged as waste, separate from sales, so the owner can see where ingredients went.',
+    modal: mod('Record waste', `
+      <fieldset><legend class="form-label fs-6">Ingredient</legend><div class="qs-ing">
+        <button type="button" class="on" aria-pressed="true">${tile('egg-fill', 'c-orange', 'lg')}<span>Egg<small>12 pcs left</small></span></button>
+        <button type="button">${tile('basket-fill', 'c-brown', 'lg')}<span>Rice<small>18.4 kg left</small></span></button>
+        <button type="button">${tile('droplet-fill', 'c-blue', 'lg')}<span>Santan<small>1.5 L left</small></span></button>
+        <button type="button">${tile('box-seam', 'c-teal', 'lg')}<span>Chicken<small>6.2 kg left</small></span></button>
+        <button type="button">${tile('basket2-fill', 'c-teal', 'lg')}<span>Noodles<small>4.5 kg left</small></span></button>
+        <button type="button">${tile('search', 'gray', 'lg')}<span>Other<small>Search all 24</small></span></button></div></fieldset>
+      <div class="d-flex align-items-center gap-4"><span class="form-label fs-6 mb-0">How many</span>${step('2 pcs', { lg: 1, label: 'Quantity of egg' })}</div>
+      <fieldset><legend class="form-label fs-6">What happened</legend><div class="qs-chipset"><button type="button" class="qs-chip on" aria-pressed="true">Dropped</button><button type="button" class="qs-chip">Spoiled</button><button type="button" class="qs-chip">Burnt</button><button type="button" class="qs-chip">Dish remade</button><button type="button" class="qs-chip">Extra in a dish</button></div></fieldset>
+      ${field('For which order? (optional, for "Dish remade" or "Extra in a dish")', 'Not linked to an order', { sel: 1 })}`, btn('Cancel', 'outline-secondary', { lg: 1 }) + btn('Record 2 eggs', 'primary', { lg: 1 }), 720) }, `
+    ${ticket('T5', 1039, '7:18 pm', '11 min', kl(1, 'Nasi Lemak Ayam') + kl(2, 'Mee Goreng Mamak', '1 no egg') + kl(2, 'Teh Tarik'), true)}
+    ${ticket('T11', 1040, '7:21 pm', '8 min', kl(3, 'Roti Canai (2 pcs)') + kl(3, 'Milo Ais'))}
+    ${ticket('T3', 1042, '7:23 pm', '6 min', kl(2, 'Nasi Lemak Ayam', 'less spicy') + kl(1, 'Mee Goreng Mamak') + kl(3, 'Teh Tarik', '1 kurang manis'))}`),
   tb('Kitchen · None waiting', { count: '0 orders waiting', note: 'The device signs in with a staff account and stays on this page; there is no navigation to tap by mistake.' }, `
     <div class="qs-kempty">No orders waiting<div>Confirmed orders appear here within 5 seconds.</div></div>`),
 ];

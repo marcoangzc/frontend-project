@@ -24,7 +24,7 @@ const home = [
 /* ---------- Table setup and QR ---------- */
 const trow = (no, areaName, seats, status, tone) => [`<b>${no}</b>`, areaName, seats, badge(status, tone), `<span class="text-body-secondary">${no === 'T3' ? 'Replaced 7:58 pm' : 'Replaced today'}</span>`, acts(no, btn('QR', 'outline-secondary', { sm: 1, i: 'qr-code' }))];
 const tableRows = [trow('T1', 'Indoor', 4, 'Awaiting payment', 'brand'), trow('T2', 'Indoor', 2, 'Free', 'outline'), trow('T3', 'Indoor', 4, 'Waiting for food', 'wait'), trow('T4', 'Indoor', 6, 'Free', 'outline'), trow('T7', 'Outdoor', 4, 'Waiting for food', 'wait'), trow('T8', 'Outdoor', 2, 'Free', 'outline'), trow('T13', 'Upstairs', 8, 'Free', 'outline')];
-const tablePage = `<div class="qs-toolbar">${sel('All areas')}${searchBox('Search table number')}<div class="ms-auto small text-body-secondary">15 tables · 3 areas</div></div>${tbl(['Table', 'Area', 'Seats', 'Status', 'QR token', { h: '', ...R }], tableRows)}`;
+const tablePage = `<div class="qs-toolbar">${sel('All areas')}${searchBox('Search table number')}<div class="ms-auto small text-body-secondary">15 tables in 3 areas. Largest table: T13, 8 seats, which sets the queue party limit.</div></div>${tbl(['Table', 'Area', 'Seats', 'Status', 'QR token', { h: '', ...R }], tableRows)}`;
 const tact = btn('Print QR codes', 'outline-secondary', { i: 'printer' }) + btn('Add table', 'primary', { i: 'plus-lg' });
 const tset = (name, o) => pc(`Tables & QR · ${name}`, 'Tables & QR', 'Tables & QR', { act: tact, ...o }, tablePage);
 const tablesQr = [
@@ -59,17 +59,30 @@ const menu = [
 /* ---------- Inventory ---------- */
 const irow = (name, stock, min, used, pct, low) => ({ cls: low ? 'table-danger' : '', c: [`<b>${name}</b>`,
   `<div class="qs-meter${low ? ' low' : ''}"><span class="trk" role="img" aria-label="${stock} in stock, minimum ${min}"><i style="width:${pct}%"></i><em></em></span><span><b>${stock}</b> <span class="text-body-secondary">min ${min}</span></span>${low ? badge('Low', 'danger-solid') : ''}</div>`,
-  `<span class="${low ? '' : 'text-body-secondary'}">${used}</span>`, `<div class="d-flex gap-2 justify-content-end">${btn('Stock in', 'outline-primary', { sm: 1 })}${btn('Adjust', 'outline-secondary', { sm: 1 })}${iconBtn('trash', 'Remove ' + name)}</div>`] });
+  `<span class="${low ? '' : 'text-body-secondary'}">${used}</span>`, `<div class="d-flex gap-2 justify-content-end">${btn('Stock in', 'outline-primary', { sm: 1 })}${btn('Adjust', 'outline-secondary', { sm: 1 })}${iconBtn('clock-history', 'History of ' + name)}${iconBtn('trash', 'Remove ' + name)}</div>`] });
 const invRows = [
   irow('Egg', '12 pcs', '30 pcs', '4 dishes', 20, true), irow('Santan (coconut milk)', '1.5 L', '3 L', '2 dishes', 25, true),
   irow('Rice', '18.4 kg', '10 kg', '5 dishes', 92), irow('Chicken', '6.2 kg', '4 kg', '6 dishes', 78), irow('Yellow noodles', '4.5 kg', '3 kg', '2 dishes', 75),
   irow('Condensed milk', '9 cans', '6 cans', '3 dishes', 75), irow('Tea dust', '2.1 kg', '1 kg', '2 dishes', 100), irow('Pandan leaves', '14 bunches', '5 bunches', 'Not in any recipe', 100)];
 const invPage = `<div class="d-flex gap-3">${stat('Ingredients', '24', 'Tracked by recipe')}${stat('Below minimum', '2', 'Egg and Santan')}${stat('Last stock-in', 'Today, 10:15 am', 'Rice 25 kg from Pasar Borong')}</div>${tabs(['All ingredients <span class="badge qs-b-neutral ms-2">24</span>', 'Low stock <span class="badge qs-b-danger-solid ms-2">2</span>'])}<div class="qs-toolbar">${searchBox('Search ingredients')}<div class="ms-auto small text-body-secondary">Stock drops automatically when an order is confirmed</div></div>${tbl(['Ingredient', 'Stock level', 'Used in', { h: '', ...R }], invRows)}`;
-const iset = (name, o) => pc(`Inventory · ${name}`, 'Inventory', 'Inventory', { low: 2, act: btn('Add ingredient', 'primary', { i: 'plus-lg' }), ...o }, invPage);
+const iset = (name, o) => pc(`Inventory · ${name}`, 'Inventory', 'Inventory', { low: 2, act: btn('Record waste', 'outline-secondary', { i: 'clipboard-minus' }) + btn('Add ingredient', 'primary', { i: 'plus-lg' }), ...o }, invPage);
+const L = (time, what, by, chg, after, cls = '') => ({ cls, c: [time, what, by, `<span class="${chg ? 'fw-bold' : ''}">${chg}</span>`, after] });
+const eggHistory = mod('Egg · stock history, today', `
+  <div class="d-flex gap-3">${stat('Used by recipes', '90 pcs', '43 confirmed orders')}${stat('Recorded waste', '4 pcs', 'Dropped 3, extra in a dish 1')}${stat('Not explained', '2 pcs', 'Found at the 7:30 pm count')}</div>
+  <div class="qs-ledger">${tbl(['Time', 'What happened', 'By', { h: 'Change', c: 'text-end' }, { h: 'Stock after', c: 'text-end' }], [
+    L('9:00 am', 'Opening stock', 'Mei Ling', '', '18'),
+    L('10:15 am', 'Stock in: Pasar Borong, 3 trays', 'Mei Ling', '+90', '108'),
+    L('11:02 am to 7:20 pm', '42 confirmed orders, by recipe', 'System', '−88', '20'),
+    L('6:52 pm', 'Waste: dropped', 'Kitchen tablet', '−3', '17', 'table-warning'),
+    L('7:10 pm', 'Waste: extra in a dish. Order #1039, Nasi Goreng Kampung used 2 eggs (recipe says 1)', 'Kitchen tablet', '−1', '16', 'table-warning'),
+    L('7:23 pm', 'Order #1042, 2 × Nasi Lemak Ayam, by recipe', 'System', '−2', '14'),
+    L('7:30 pm', 'Stock-take: counted 12, expected 14', 'Aina', '−2', '12')])}</div>
+  ${alert('warning', 'Nasi Goreng Kampung often uses more egg than its recipe', 'Extra egg was recorded for it 4 times this week. If 2 eggs is normal, update the recipe so stock is deducted correctly.', 'lightbulb')}`, btn('Close', 'outline-secondary') + btn('Edit Nasi Goreng Kampung recipe', 'primary'), 900);
 const inventory = [
   iset('Stock list', { note: 'Rows under the minimum are red, carry a Low badge and sort to the top. Red is used for nothing else on this page.' }),
   iset('Stock-in', { modal: mod('Stock in · Egg', `<div class="small text-body-secondary">In stock now: 12 pcs · minimum 30 pcs</div>${field('Quantity received', '90', { suf: 'pcs' })}${field('Supplier or note (optional)', 'Pasar Borong, 3 trays')}<div class="alert alert-primary mb-0">${kv('New stock level', '102 pcs', 'fw-semibold')}</div>`, btn('Cancel', 'outline-secondary') + btn('Add to stock', 'primary'), 440), note: 'Adds to the current level. The result is shown before saving.' }),
   iset('Stock-take adjust', { modal: mod('Stock-take · Santan (coconut milk)', `<div class="small text-body-secondary">The system expects 1.5 L. Enter what you counted.</div>${field('Counted quantity', '1.0', { suf: 'L' })}${field('Reason', 'Spoiled', { sel: 1 })}<div class="alert alert-secondary mb-0">${kv('Adjustment', '−0.5 L', 'fw-semibold')}<div class="small">Recorded with your name and the time.</div></div>`, btn('Cancel', 'outline-secondary') + btn('Save count', 'primary'), 440), note: 'Sets the level to a counted figure and records the difference with a reason.' }),
+  iset('Ingredient history', { modal: eggHistory, note: 'Every change to stock is a line: stock-in, orders by recipe, waste recorded by the kitchen, and stock-take differences. Waste and unexplained losses are counted separately from sales, so a dropped egg or a heavy-handed recipe shows up instead of silently draining stock.' }),
   iset('Cannot remove', { modal: blocked('Rice cannot be removed', 'Used in recipe: Nasi Goreng Kampung', 'Also used in Nasi Lemak Ayam and 3 other dishes. Remove it from those recipes first.'), note: 'Removal is blocked while any recipe uses the ingredient, with the recipes named.' }),
 ];
 
@@ -123,12 +136,21 @@ const rates = (bad) => `<div class="card" style="max-width:640px"><div class="ca
   <div class="d-flex gap-3 align-items-start"><div class="flex-fill">${field('Service charge', bad ? '25' : '10', { suf: '%', type: 'number', err: bad ? 'Enter a rate from 0 to 20%.' : '', help: bad ? '' : '0 to 20%. Enter 0 to switch it off.' })}</div><div class="flex-fill">${field('SST', '6', { suf: '%', type: 'number', help: '0 to 20%. Enter 0 to switch it off.' })}</div></div>
   <div class="alert alert-secondary mb-0 small">Example on a RM35.40 bill: service charge ${bad ? 'not calculated' : 'RM3.54'}, SST ${bad ? 'not calculated' : 'RM2.34'}, total ${bad ? 'not calculated' : 'RM41.28'}.</div>
   <div class="d-flex gap-2">${btn('Save rates', 'primary')}${btn('Discard changes', 'outline-secondary')}</div></div></div>`;
+const queueRules = `<div class="card" style="max-width:640px"><div class="card-body d-flex flex-column gap-3">
+  <div><h2 class="fs-5">Walk-in queue</h2><div class="small text-body-secondary">Rules for the queue QR at the door. Changes apply to new tickets.</div></div>
+  <fieldset class="d-flex flex-column gap-2"><legend class="form-label">Largest party that can join</legend>
+    <label class="qs-opt on">${tile('grid-3x3-gap')}<span class="flex-grow-1"><span class="d-block fw-semibold">Match my largest table: 8 people</span><span class="d-block small text-body-secondary">Updates by itself when you add or edit tables (now T13, 8 seats).</span></span><input class="form-check-input mt-0" type="radio" name="maxp" checked></label>
+    <label class="qs-opt">${tile('people')}<span class="flex-grow-1"><span class="d-block fw-semibold">Set my own limit</span><span class="d-block small text-body-secondary">For example 12 if staff can join two tables.</span></span><input class="form-check-input mt-0" type="radio" name="maxp"></label></fieldset>
+  <div class="d-flex gap-3 align-items-start"><div class="flex-fill">${field('Hold the table after calling', '5', { suf: 'min', type: 'number', help: 'Staff can call the next group straight away.' })}</div><div class="flex-fill">${field('Flag a ticket when its page has been closed for', '20', { suf: 'min', type: 'number', help: 'Flagged tickets turn amber on the Queue page.' })}</div></div>
+  <div class="d-flex align-items-center gap-3">${toggle('Ask "Are you still here?" when 2 groups are ahead', true)}<span>Ask "Are you still here?" when 2 groups are ahead</span></div>
+  <div class="d-flex gap-2">${btn('Save queue rules', 'primary')}${btn('Discard changes', 'outline-secondary')}</div></div></div>`;
 const staff = [
   pc('Staff · Account list', 'Staff', 'Staff accounts', { upd: false, act: btn('Add staff account', 'primary', { i: 'plus-lg' }), note: 'Accounts are deactivated, not deleted, so past transactions keep their staff name. The kitchen tablet uses its own Cashier-role account.' }, `
     ${tbl(['Name', 'Staff ID', 'Role', 'Status', 'Last sign-in', { h: '', ...R }], [
       srow('Mei Ling', 'meiling', 'Owner', 'Active', 'Today, 9:02 am'), srow('Aina', 'aina', 'Cashier', 'Active', 'Today, 10:55 am'), srow('Kumar', 'kumar', 'Cashier', 'Active', 'Today, 4:58 pm'),
       srow('Kitchen tablet', 'kitchen', 'Cashier', 'Active', 'Today, 10:30 am'), srow('Farah', 'farah', 'Cashier', 'Inactive', '28 Sep 2026', 'qs-void')])}`),
   pc('Settings · Rates', 'Settings', 'Settings', { upd: false, note: 'Both rates default to 0%. The example line shows the owner the effect before saving.' }, rates(false)),
+  pc('Settings · Walk-in queue rules', 'Settings', 'Settings', { upd: false, note: 'The party limit follows the largest table by default instead of a fixed number. The hold time no longer blocks the queue, and closed ticket pages are flagged so staff can remove people who left.' }, queueRules),
   pc('Settings · Rate out of range', 'Settings', 'Settings', { upd: false, note: 'Rates outside 0 to 20% are refused under the field. The other field keeps its value.' }, rates(true)),
 ];
 
@@ -143,7 +165,7 @@ export default [
 ];
 
 function stat(label, value, sub) {
-  const ic = {"Orders today": "clipboard2-check", "Open tables": "grid-3x3-gap", "Queue": "people", "Sales today": "wallet2", "Revenue": "wallet2", "Average bill": "receipt", "Voids and refunds": "slash-circle", "Ingredients": "box-seam", "Below minimum": "exclamation-triangle-fill", "Last stock-in": "box-arrow-in-down"}[label] || 'info-circle';
-  const tone = label === 'Below minimum' ? 'red' : label === 'Voids and refunds' ? 'gray' : '';
+  const ic = {"Orders today": "clipboard2-check", "Open tables": "grid-3x3-gap", "Queue": "people", "Sales today": "wallet2", "Revenue": "wallet2", "Average bill": "receipt", "Voids and refunds": "slash-circle", "Ingredients": "box-seam", "Below minimum": "exclamation-triangle-fill", "Last stock-in": "box-arrow-in-down", "Used by recipes": "clipboard2-check", "Recorded waste": "clipboard-minus", "Not explained": "question-circle"}[label] || 'info-circle';
+  const tone = label === 'Below minimum' ? 'red' : label === 'Voids and refunds' ? 'gray' : label === 'Recorded waste' ? 'c-orange' : label === 'Not explained' ? 'wait' : '';
   return `<div class="qs-stat">${tile(ic, tone, 'lg')}<div class="min-w-0"><span>${label}</span><b>${value}</b><span>${sub}</span></div></div>`;
 }

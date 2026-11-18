@@ -5,15 +5,20 @@ const plain = chd('', false);
 const center = (html, cls = '') => `<div class="text-center d-flex flex-column align-items-center gap-2 ${cls}">${html}</div>`;
 
 /* ---------- Join queue ---------- */
-const joinForm = (err) => ph(`Join queue · ${err ? 'Party size invalid' : 'Form'}`, {
+// The party limit is the largest table in Table setup (T13 seats 8), or the owner's own limit in Settings. Never hard-coded.
+const MAXPAX = 8;
+const partyField = (q) => `<div><div class="form-label" id="pax-l">Party size</div>
+  <div class="d-flex align-items-center justify-content-between gap-3">${step(q, { lg: 1, min: q === 1, max: q >= MAXPAX, label: 'Party size' })}<span class="small text-secondary text-end">1 to ${MAXPAX} people</span></div>
+  ${q >= MAXPAX ? `<div class="mt-2">${alert('warning', `More than ${MAXPAX} people?`, `Our largest table seats ${MAXPAX}. Please speak to our staff at the counter so we can join tables for you.`, 'people')}</div>` : `<div class="form-text">Our largest table seats ${MAXPAX}.</div>`}</div>`;
+const joinForm = (err) => ph(`Join queue · ${err ? 'Party size invalid (over the limit)' : 'Form'}`, {
   url: 'quickserve.my/q', head: qh,
   bar: btn('Get my queue number', 'primary', { lg: 1, block: 1 }),
-  note: err ? 'Party size must be 1 to 12. The message sits under the field and the button stays enabled, so the customer can fix it and resubmit.' : 'Opened by the queue QR at the door. No login, one task on the screen.',
+  note: err ? `The limit comes from the largest table in Table setup (T13, ${MAXPAX} seats), or from the owner's own limit in Settings, so it changes when tables change. The + button stops at the limit, so an invalid number can't be entered; the message says what to do instead.` : 'Opened by the queue QR at the door. No login, one task on the screen. Party size uses + and − instead of typing, so it can\'t be left empty or set to 0.',
 }, `
   <div><h1 class="h-page">Join the queue</h1><p class="mb-0 text-body-secondary">We will call your number on this page when a table is ready.</p></div>
   ${alert('secondary', '6 groups in the queue', 'We will call your number on this page.', 'people')}
   ${field('Your name', 'Nurul')}
-  ${err ? field('Party size', '0', { type: 'number', err: 'Enter a party size from 1 to 12.' }) : field('Party size', '4', { type: 'number', help: '1 to 12 people. For bigger groups, please see our staff.' })}`);
+  ${partyField(err ? MAXPAX : 4)}`);
 
 /* ---------- My ticket ---------- */
 const turl = 'quickserve.my/q/A023';
@@ -34,12 +39,17 @@ const ticket = [
     ${keepOpen}
     <div class="text-center">${upd()}</div>`),
   ph('My ticket · Edit pax', { url: turl, head: qhead, sheet: 1, note: 'Party size can change while waiting. The place in the queue stays the same.',
-    modal: mod('How many people?', `<div class="d-flex align-items-center justify-content-between"><span class="fw-semibold">Party size</span>${step(5)}</div><div class="small text-secondary">1 to 12 people. Your place in the queue stays the same.</div>`, btn('Cancel', 'outline-secondary') + btn('Save', 'primary')) }, qcard('waiting')),
+    modal: mod('How many people?', `<div class="d-flex align-items-center justify-content-between"><span class="fw-semibold">Party size</span>${step(5, { label: 'Party size' })}</div><div class="small text-secondary">1 to ${MAXPAX} people (our largest table). Your place in the queue stays the same.</div>`, btn('Cancel', 'outline-secondary') + btn('Save', 'primary')) }, qcard('waiting')),
   ph('My ticket · Leave the queue?', { url: turl, head: qhead, sheet: 1, note: 'Leaving cannot be undone, so it asks once. Staying is the default button.',
     modal: mod('Leave the queue?', `<div>A023 will be cancelled. To come back you will need a new number at the back of the queue.</div>`, btn('Stay in queue', 'outline-secondary') + btn('Leave queue', 'danger')) }, qcard('waiting')),
+  ph('My ticket · Are you still here?', { url: turl, head: qhead, sheet: 1, note: 'Shown when 2 groups are ahead. "I\'m here" tells staff this group is still nearby, so staff can tell real customers from people who took a number and left.',
+    modal: mod('Your turn is coming soon', `<div class="d-flex flex-column align-items-center text-center gap-2">${tile('person-check', 'c-blue', 'xl')}<div>2 groups are ahead of you. Are you still nearby?</div></div>`, btn('Leave the queue', 'outline-secondary') + btn('I\'m here', 'primary', { i: 'check-lg' })) }, qcard('waiting')),
   ph('My ticket · Called', { url: turl, head: qhead, bg: 'qs-teal', note: 'When staff tap Call, the whole page turns bright teal and the phone vibrates (Android only; iPhone browsers cannot vibrate). No sound.' }, `
     ${qcard('called', { lbl: 'Your table is ready', status: 'Called 7:37 pm', time: 'Please come to the counter now' })}
     <div class="qs-heldcard"><div class="fw-bold">Show this number to our staff</div><div class="small">Your table is held until 7:42 pm (5 minutes).</div></div>`),
+  ph('My ticket · Removed by staff', { url: turl, head: qhead, bar: btn('Get a new queue number', 'primary', { lg: 1, block: 1 }), note: 'Staff removed the ticket (for example the page had been closed for 20 minutes). Staff can restore it to its old place within 15 minutes, so a customer who was only away briefly is not punished.' }, `
+    ${qcard('gone', { lbl: 'This ticket was cancelled', status: 'Removed by staff', time: '7:51 pm: we could not find you' })}
+    ${alert('secondary', 'Still here?', 'Speak to our staff within 15 minutes and they can put you back in your old place.', 'info-circle')}`),
   ph('My ticket · No-show', { url: turl, head: qhead, bar: btn('Get a new queue number', 'primary', { lg: 1, block: 1 }), note: 'Staff marked No-show 5 minutes after calling.' }, `
     ${qcard('gone', { lbl: 'This ticket has expired', status: 'No-show', time: 'Called 7:37 pm, released 7:42 pm' })}
     ${alert('secondary', null, 'Still here? Speak to our staff at the counter or take a new number.')}`),
@@ -82,13 +92,13 @@ const summary = `<div class="card"><div class="card-body d-flex flex-column gap-
   <hr class="my-1">${kv('Total incl. service charge and SST', 'RM41.28', 'fw-semibold')}${kv('<span class="text-secondary">Paying by</span>', 'Card or e-wallet')}</div></div>`;
 const cartItem = (name, price, q, note) => `<div class="d-flex flex-column gap-2 pb-3 border-bottom">
   <div class="d-flex justify-content-between fw-medium"><span>${name}</span><span>${price}</span></div>
-  <div class="d-flex justify-content-between align-items-center">${step(q)}${btn('Remove', 'link')}</div>
-  ${field(null, note || 'Add a note for the kitchen', { ph: !note, aria: `Note for ${name}` })}</div>`;
+  <div class="d-flex justify-content-between align-items-center">${step(q, { min: q === 1 })}${btn('Remove', 'link')}</div>
+  ${note ? `<div class="qs-note">${i('chat-left-text')}<span>${note}</span>${btn('Edit', 'link')}</div>` : btn('Add a note for the kitchen', 'link', { i: 'plus-lg', c: 'align-self-start px-0' })}</div>`;
 const opt = (on, title, desc, icon, g) => `<label class="qs-opt${on ? ' on' : ''}">${tile(icon, on ? 'solid' : 'gray')}<span class="flex-grow-1"><span class="d-block fw-semibold">${title}</span><span class="d-block small text-body-secondary">${desc}</span></span><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="${g}"${on ? ' checked' : ''}></label>`;
 const totals = (rows, total) => `<div class="d-flex flex-column gap-1 small">${rows.map((r) => kv(r[0], r[1], r[2] || '')).join('')}<hr class="my-1">${kv('Total', total, 'fs-5 fw-semibold')}</div>`;
 const status = (name, n, al, bar, note) => ph(`Order status · ${name}`, { bar, note }, `<h1 class="fs-4">Order status</h1>${steps(n)}${al}${summary}<div class="text-center">${upd()}</div>`);
 const cart = [
-  ph('Cart · Review order', { bar: btn('Send order · RM41.28', 'primary', { lg: 1, block: 1 }), note: 'Quantity is limited to 1 to 20 per dish. The payment method is chosen here, before the order is sent.' }, `
+  ph('Cart · Review order', { bar: btn('Send order · RM41.28', 'primary', { lg: 1, block: 1 }), note: 'Quantity is limited to 1 to 20 per dish. Notes stay folded behind a link until the customer adds one. The payment method is chosen here, before the order is sent.' }, `
     <h1 class="fs-4">Your order</h1>
     ${cartItem('Nasi Lemak Ayam', 'RM19.00', 2, 'Less spicy')}${cartItem('Mee Goreng Mamak', 'RM8.00', 1)}${cartItem('Teh Tarik', 'RM8.40', 3, '1 kurang manis')}
     ${totals([['Subtotal', 'RM35.40'], ['Service charge (10%)', 'RM3.54'], ['SST (6%)', 'RM2.34']], 'RM41.28')}
@@ -97,6 +107,12 @@ const cart = [
       ${opt(0, 'Cash at the counter', 'Quote table T3 to the cashier.', 'cash', 'how')}</fieldset>`),
   status('Waiting for confirmation', 0, alert('warning', 'Order sent, waiting for staff confirmation', 'Our staff will check your order shortly. The kitchen starts cooking after that.'), btn('Add more dishes', 'outline-primary', { block: 1 }), 'Every QR order waits here until staff confirm it. Status changes arrive by polling.'),
   status('Confirmed', 1, alert('primary', 'Confirmed by Aina at 7:23 pm', 'The kitchen is preparing your food.'), btn('Pay now · RM41.28', 'primary', { lg: 1, block: 1 }) + btn('Add more dishes', 'outline-primary', { block: 1 }), 'Pay now appears because the customer chose card or e-wallet.'),
+  ph('Order status · Changed by staff', { bar: btn('OK, continue', 'primary', { lg: 1, block: 1 }) + btn('Ask a waiter', 'outline-secondary', { block: 1, i: 'bell' }), note: 'When staff edit a pending order (here because only enough egg was left for one plate), the customer sees exactly what changed and the new total before the kitchen starts.' }, `
+    <h1 class="fs-4">Order status</h1>${steps(0)}
+    ${alert('warning', 'Staff changed your order', 'We only have enough egg for 1 Nasi Lemak Ayam. Aina changed 2 to 1 at 7:24 pm.', 'pencil')}
+    <div class="card"><div class="card-body d-flex flex-column gap-2 small"><h2 class="fs-6">Order #1042</h2>
+      ${kv('<span><span class="qs-was">2</span> 1 × Nasi Lemak Ayam</span>', '<span><span class="qs-was">RM19.00</span> RM9.50</span>')}${kv('1 × Mee Goreng Mamak', 'RM8.00')}${kv('3 × Teh Tarik', 'RM8.40')}<hr class="my-1">
+      ${kv('New total incl. service charge and SST', '<span><span class="qs-was">RM41.28</span> RM30.20</span>', 'fw-semibold')}</div></div>`),
   ph('Order status · Rejected by staff', { bar: btn('Ask a waiter', 'primary', { lg: 1, block: 1, i: 'bell' }) + btn('Back to menu', 'outline-primary', { block: 1 }), note: 'The reason staff picked when rejecting is shown word for word. Nothing was charged and no stock was deducted.' }, `
     <h1 class="fs-4">Order status</h1>
     ${alert('danger', 'Your order was not accepted', 'Staff reason: duplicate order. We already have the same order from table T3 (#1041), which is being prepared.', 'x-circle')}
@@ -122,6 +138,11 @@ const payment = [
     ${totals(withVoucher, 'RM35.45')}
     <div class="alert alert-primary d-flex align-items-center gap-2 mb-0">${i('ticket-perforated')}<div class="flex-grow-1"><div class="fw-semibold">RAYA5 applied</div><div class="small">RM5.00 off bills above RM20</div></div>${btn('Remove', 'link', { c: 'p-0' })}</div>
     <div class="qs-opt">${i('person-badge')}<span class="flex-grow-1"><span class="d-block fw-medium">Siti Aminah</span><span class="d-block small text-body-secondary">Member · 012-345 6789</span></span>${btn('Change', 'link', { c: 'p-0' })}</div>
+    ${methods(0)}`),
+  ph('Payment · Voucher expired', { bar: btn('Pay RM41.28', 'primary', { lg: 1, block: 1, i: 'lock' }) + sandbox, note: 'An expired code is refused under the field with its end date. The bill stays as it was and the customer can still pay.' }, `
+    <h1 class="fs-4">Your bill</h1>${items}
+    ${totals([['Subtotal', 'RM35.40'], ['Service charge (10%)', 'RM3.54'], ['SST (6%)', 'RM2.34']], 'RM41.28')}
+    <div class="d-flex gap-2 align-items-start">${field('Voucher code', 'MERDEKA10', { c: 'flex-grow-1', err: 'MERDEKA10 expired on 31 Aug 2026.' })}<div style="padding-top:30px">${btn('Apply', 'outline-primary')}</div></div>
     ${methods(0)}`),
   ph('Payment · Card sandbox', { url: 'sandbox.paygate.my/checkout', head: `<header class="qs-chd qs-gw"><div class="flex-grow-1"><div class="qs-chd-t">PayGate</div><div class="qs-chd-s">Paying Restoran Sri Melur</div></div>${badge('Test mode', 'outline')}</header>`, bar: btn('Pay RM35.45', 'primary', { lg: 1, block: 1 }) + btn('Cancel and go back', 'link', { block: 1 }), note: 'The gateway\'s own sandbox page. Shown so the hand-off and return are designed, not to restyle the gateway.' }, `
     <div><div class="small text-secondary">Amount</div><div class="qs-mid">RM35.45</div><div class="small text-secondary">Table T3 · Order #1042</div></div>
@@ -164,6 +185,9 @@ const split = [
   ph('Split bill · Join with name', { url: surl, head: shd(), bar: btn('Join the split', 'primary', { lg: 1, block: 1 }), note: 'Opened by the split QR or link. Names must be unique within the split; a taken name shows "Nurul is already in this split. Add an initial, for example Nurul A."' }, `
     <div><h1 class="h-page">Who are you?</h1><p class="mb-0 text-body-secondary">Enter a name your friends will recognise. No account is needed.</p></div>
     ${field('Your name', 'Wei Jie', { help: 'Already here: Nurul, Kavitha' })}`),
+  ph('Split bill · Name already taken', { url: surl, head: shd(), bar: btn('Join the split', 'primary', { lg: 1, block: 1 }), note: 'Names must be unique within one split so claims are not mixed up. The error suggests a fix.' }, `
+    <div><h1 class="h-page">Who are you?</h1><p class="mb-0 text-body-secondary">Enter a name your friends will recognise. No account is needed.</p></div>
+    ${field('Your name', 'Nurul', { err: 'Nurul is already in this split. Add an initial, for example Nurul A.' })}`),
   ph('Split bill · Claiming (live)', { url: surl, head: shd('Wei Jie'), bar: kv('Your share so far', 'RM16.32', 'fs-5 fw-semibold') + '<div class="small text-body-secondary">Includes your part of the voucher, service charge and SST.</div>', note: 'Every phone shows everyone\'s ticks within 5 s. A dish with quantity 2 is listed as (1) and (2). A portion ticked by several people is divided equally.' }, `
     <div class="d-flex justify-content-between align-items-center"><h1 class="fs-5">Tick what you ate</h1>${upd()}</div>
     ${portion(0, 'Nasi Lemak Ayam (1)', 'Nurul', 'RM9.50')}
