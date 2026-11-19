@@ -424,3 +424,4 @@ body { background: var(--bd-bg); color: var(--bd-fg); font-family: var(--font); 
 .qs-prog { height: 8px; border-radius: 4px; background: #E5E5EA; overflow: hidden; } .qs-prog i { display: block; height: 100%; background: var(--p600); border-radius: 4px; }
 .qs-toast.ph { bottom: 92px; gap: 12px; padding: 8px 8px 8px 16px; font-size: 1rem; width: calc(100% - 32px); justify-content: space-between; white-space: normal; }
 .qs-toast.ph .btn { min-height: 44px; font-size: 1rem; padding: 0 16px; }
+.qs-add:disabled { opacity: .4; }

@@ -1,0 +1,10 @@
+const {chromium}=require('playwright');
+(async()=>{const b=await chromium.launch();const p=await b.newPage();
+await p.goto('file:///home/user/frontend-project/design/index.html');
+const r=await p.evaluate(()=>{const m=new Map();
+ document.querySelectorAll('.dev').forEach(dev=>{const name=dev.closest('figure').querySelector('figcaption').textContent;
+  dev.querySelectorAll('*').forEach(el=>{if(![...el.childNodes].some(n=>n.nodeType===3&&n.textContent.trim()))return;if(el.closest('table'))return;
+   const t=[...el.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join(' ').replace(/\s+/g,' ').trim();
+   const w=t.split(' ').length;if(w>=9){if(!m.has(t))m.set(t,[]);m.get(t).push(name)}})});
+ return [...m.entries()].map(([t,n])=>`${t.split(' ').length}w | ${t} || ${n[0]}${n.length>1?' +'+(n.length-1):''}`)});
+console.log(r.length);console.log(r.join('\n'));await b.close()})();

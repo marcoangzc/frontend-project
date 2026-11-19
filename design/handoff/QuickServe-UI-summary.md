@@ -1,6 +1,6 @@
 # QuickServe UI design: summary for the project report
 
-Version 3.2 · 2026-11-19 · 24 screens, 97 states
+Version 3.3 · 2026-11-19 · 25 screens, 124 states
 
 This file summarises the UI/UX design work for QuickServe, a browser-based POS for small family-run Malaysian restaurants (2 to 5 staff, about 30 tables). It goes with **QuickServe-UI-screens.pdf**, which has a screenshot of every state listed below. The source of every screen is in `design/src/` in the repository.
 
@@ -29,7 +29,14 @@ Out of scope, as in the brief: customer accounts, takeaway and delivery, reserva
    - **Light-grey app style.** The page turns bright teal when the customer is called.
    - **Apple-style palette.** iOS system blue with Apple Settings-style icon tiles, chosen from a comparison of four palettes.
    - **New business rules and screens.** Queue removal, party limit, waste recording, dish photos and staff photo permission.
-6. **Acceptance testing.** After every change, automated checks ran over every state (section 6), and the six key flows were walked through step by step.
+6. **Revision v3.3 from the project report.** The report became the source of truth:
+   - **Shorter text.** Every screen's text was cut for a lunch rush: one message per state, hints of 8 words or fewer, errors as "what is wrong + how to fix it", dialog titles as questions. Explanations moved to the design notes.
+   - **Removed.** The language switcher (the system is English only).
+   - **Queue page.** The customer ticket shows groups ahead, with no wait estimate.
+   - **Membership.** An email field and a full membership points flow were added.
+   - **Defects fixed.** Best sellers are ranked by quantity sold, and vouchers are deactivated instead of deleted.
+   - **New screens.** Added for the report's test plan, each with a valid and an invalid run: cancel order, refund, add ingredient, staff account, voucher form, member edit and deactivate, and call waiter.
+7. **Acceptance testing.** After every change, automated checks ran over every state (section 6), and the six key flows were walked through step by step.
 
 ## 3. Design system
 
@@ -87,30 +94,34 @@ No login. Each QR code opens one short flow on the customer's own phone (360 px 
 
 #### Customer menu
 
-*Customer, phone · Menu module (Zi Chen)* · 4 states
+*Customer, phone · Menu module (Zi Chen)* · 5 states
 
 - **Browsing**: Dishes show the photo the merchant uploaded. A dish without a photo (Roti Canai) falls back to its category icon, so the list never shows a broken image. Sold-out dishes stay visible but greyed out.
 - **Photos still loading**: On slow data the names, prices and Add buttons appear first; each photo fades in when it arrives. Thumbnails are about 10 KB each, so a 30-dish menu costs around 300 KB.
 - **Dish detail**: Tapping a dish opens a larger photo and the full description. The larger image (about 60 KB) only loads here, not in the list.
+- **Waiter called**: Right after tapping Call waiter. The button turns into "Waiter called" and stays disabled until a staff member taps Done on the Tables page, so repeated taps do not send more calls.
 - **QR expired**: Shown instead of the menu when the table token was replaced after payment.
 
 #### Cart and order status
 
-*Customer, phone · Order module (Clement)* · 6 states
+*Customer, phone · Order module (Clement)* · 7 states
 
 - **Review order**: Quantity is limited to 1 to 20 per dish. Notes stay folded behind a link until the customer adds one. The payment method is chosen here, before the order is sent.
 - **Waiting for confirmation**: Every QR order waits here until staff confirm it. Status changes arrive by polling.
 - **Confirmed**: Pay now appears because the customer chose card or e-wallet.
 - **Changed by staff**: When staff edit a pending order (here because only enough egg was left for one plate), the customer sees exactly what changed and the new total before the kitchen starts.
+- **Waiter already called**: Blocked state for Call waiter: while a call is open the button stays disabled on every table page, here the order status page.
 - **Rejected by staff**: The reason staff picked when rejecting is shown word for word. Nothing was charged and no stock was deducted.
 - **Served**
 
 #### Payment
 
-*Customer, phone · Payment module (Zheng Yang)* · 6 states
+*Customer, phone · Payment module (Zheng Yang)* · 8 states
 
 - **Bill**: Service charge and SST are separate lines at the owner's rates. Voucher and member phone are optional.
-- **Voucher applied**: The voucher comes off the subtotal first, then service charge and SST are worked out on the new amount.
+- **Member found**: After the voucher and the member phone are matched, the member name and points balance appear with a Use points field. 100 points = RM1.00 (placeholder rate, set in Settings).
+- **Points applied**: Order of discounts: subtotal, voucher, points, then service charge on the discounted subtotal and SST on that plus service charge. Each line is rounded to RM0.01. Points earned on this bill: 29.
+- **Not enough points**: Asking for more points than the balance is refused under the field. The bill is unchanged until a valid amount is entered.
 - **Voucher expired**: An expired code is refused under the field with its end date. The bill stays as it was and the customer can still pay.
 - **Card sandbox**: The gateway's own sandbox page. Shown so the hand-off and return are designed, not to restyle the gateway.
 - **Failed**: The error says what happened, that no money was taken, and what to do next. The bill and voucher are kept.
@@ -174,12 +185,15 @@ Cashier role on a phone or counter tablet. The kitchen wall tablet signs in with
 
 #### Orders
 
-*Cashier, phone · Order module (Clement)* · 5 states
+*Cashier, phone · Order module (Clement)* · 8 states
 
 - **Pending to confirm**: Every QR order lands here first. The kitchen sees it only after Confirm, which also deducts ingredients by recipe.
 - **New order arrives**: A new QR order shows a banner on every staff page and raises the Orders badge within 5 s (polling). The banner stays until someone opens the order. A chime can be switched on for the counter tablet in Settings; it is off by default.
 - **Insufficient stock**: Confirm failed because a recipe needs more than is in stock. Confirm is disabled and Edit becomes the main action.
 - **Edit items**: Bottom sheet within thumb reach. Saving sends the customer a new total and keeps the order Pending.
+- **Cancel a confirmed order**: FR-OR-04. A confirmed order that has not been served yet can be cancelled with a reason. The kitchen ticket disappears and the customer sees the reason.
+- **Order cancelled, stock restored**: Cancelling reverses the recipe deduction made at confirmation. The restored amounts are listed so staff can trust the stock figures.
+- **Already served**: Blocked case for FR-OR-04: a served order cannot be cancelled, because the food and its ingredients are gone. Refunds after payment are done by the owner in Transactions.
 - **Reject**: Rejecting needs a reason, which the customer sees on their order status page. Stops prank and duplicate orders.
 
 #### Kitchen view
@@ -208,11 +222,12 @@ Cashier role on a phone or counter tablet. The kitchen wall tablet signs in with
 
 #### Members
 
-*Cashier or Owner, phone · Membership module (Zheng Yang)* · 4 states
+*Cashier or Owner, phone · Membership module (Zheng Yang)* · 5 states
 
 - **Search results**: Reached from the menu button. Search matches name or any part of the phone number.
 - **No match**
-- **Register**: Two fields only. Members are found by phone at payment; customers never sign in.
+- **Member detail**: Tapping a member opens their details and points history. Cashiers can view it; adjusting points, editing and deactivating are done by the owner.
+- **Register**: Name and phone are required; the phone must be a unique Malaysian mobile number. Email is optional. Members are found by phone at payment; customers never sign in.
 - **Duplicate phone**: The error names the existing member and offers to open that record.
 
 #### Menu and dish photos
@@ -259,35 +274,59 @@ Owner role on a PC (1280 px wide). The owner can also open every front-of-house 
 
 #### Inventory
 
-*Owner, PC · Inventory module (Zi Chen)* · 5 states
+*Owner, PC · Inventory module (Zi Chen)* · 8 states
 
 - **Stock list**: Rows under the minimum are red, carry a Low badge and sort to the top. Red is used for nothing else on this page.
 - **Stock-in**: Adds to the current level. The result is shown before saving.
 - **Stock-take adjust**: Sets the level to a counted figure and records the difference with a reason.
 - **Ingredient history**: Every change to stock is a line: stock-in, orders by recipe, waste recorded by the kitchen, and stock-take differences. Waste and unexplained losses are counted separately from sales, so a dropped egg or a heavy-handed recipe shows up instead of silently draining stock.
+- **Add ingredient**: FR-IN-01. Name, unit and minimum level. Stock is stored in grams, millilitres or pieces; large amounts are shown as kg or L.
+- **Duplicate ingredient**: Names are unique, so recipes and stock never point at two different "Egg" items.
+- **Invalid minimum level**: The minimum level must be 0 or more. 0 turns off the low-stock alert for that ingredient.
 - **Cannot remove**: Removal is blocked while any recipe uses the ingredient, with the recipes named.
 
 #### Transactions and reports
 
-*Owner, PC · Payment module (Zheng Yang)* · 3 states
+*Owner, PC · Payment module (Zheng Yang)* · 6 states
 
 - **Daily sales**: Plain tables the owner can read and check against the cash drawer. Voids and refunds are reported separately and never hidden.
 - **History**: Every bill stays in the list. A voided bill is greyed with its amount struck through and opens to show who voided it and why.
+- **Refund**: FR-PY-03. Owner only. A full or part refund needs a reason and goes back to the original payment method. The bill stays on record.
+- **Refund too large**: Invalid case: the amount can never be more than what was paid. Refund stays disabled until the amount is valid.
+- **Refunded record**: The refunded bill keeps its original total, shows the refunded amount, who did it and when. Reports count it under Voids and refunds.
 - **Empty date range**: A range with no sales says so and offers the nearest useful action, not a page of zero tables.
 
 #### Vouchers
 
-*Owner, PC · Membership module (Zheng Yang)* · 1 states
+*Owner, PC · Membership module (Zheng Yang)* · 4 states
 
-- **List**: Expired and deactivated vouchers stay listed so past bills still make sense. At the counter an expired code is refused with its end date.
+- **List**: Vouchers are never deleted: active ones can be deactivated and reactivated, and expired ones stay listed so past bills still make sense.
+- **Create voucher**: FR-MB-01. Code, % or RM discount, value, minimum bill, dates and members only. The same form opens with values filled in for Edit.
+- **Duplicate code**: Codes must be unique, including deactivated and expired ones, so old receipts stay unambiguous.
+- **End date before start**: Invalid dates are refused under the End date field.
+
+#### Members and points
+
+*Owner, PC · Membership module (Zheng Yang)* · 6 states
+
+- **Member detail**: Opened from the Members list. Owner view of the same record cashiers see, with Edit, Deactivate and Adjust points.
+- **Edit member**: FR-MB-03. Same fields as registration; the phone must stay unique.
+- **Deactivate member**: FR-MB-04. Members are never deleted. Deactivating stops earning and redeeming until reactivated.
+- **Deactivated member**: The record and its points stay. Adjust points is disabled while inactive; Reactivate brings everything back.
+- **Adjust points**: Owner only. Every adjustment needs a reason and shows the balance before and after. It appears in the points history with the owner's name.
+- **Adjust points below zero**: Invalid case: points never go below 0, so removing more than the balance is refused.
 
 #### Staff accounts and settings
 
-*Owner, PC · Shared* · 5 states
+*Owner, PC · Shared* · 9 states
 
 - **Account list**: Accounts are deactivated, not deleted, so past transactions keep their staff name. The kitchen tablet uses its own Cashier-role account.
+- **Add account**: FR-SH-03. Name, Staff ID, password and role. Edit opens the same form; leaving the password empty keeps the current one.
+- **Staff ID taken**: Staff IDs are unique across active and inactive accounts.
+- **Password too short**: Passwords need at least 8 characters.
 - **Rates**: Both rates default to 0%. The example line shows the owner the effect before saving.
 - **Cashier permissions**: Lets the owner hand photo taking to staff without giving away prices or recipes. Defaults: photos on, approval off, so a cashier can fill gaps during a quiet hour.
+- **Points**: The earn rate is fixed by the report (1 point per RM1, rounded down) and shown read-only. The redemption value is a placeholder until the team fixes it.
 - **Walk-in queue rules**: The party limit follows the largest table by default instead of a fixed number. The hold time no longer blocks the queue, and closed ticket pages are flagged so staff can remove people who left.
 - **Rate out of range**: Rates outside 0 to 20% are refused under the field. The other field keeps its value.
 
@@ -302,11 +341,16 @@ These change or add to the brief. They need team agreement and backend support.
 5. **Waste and extra use.** The kitchen records waste (dropped, spoiled, burnt, dish remade, extra in a dish, optionally linked to an order). Each ingredient has a full stock history: recipe deductions, waste, stock-in and stock-take differences. Repeated extra use on one dish suggests fixing that recipe.
 6. **Dish photos.** Photos are optional. They are shrunk in the browser before upload: about 10 KB thumbnails for the list and about 60 KB for the dish detail, stored in Supabase Storage. Text loads first and photos fill in.
 7. **Staff photo permission.** Cashiers can add or replace dish photos from their phone, but cannot change names, prices or recipes. The owner can switch this off or require approval before photos go live. The backend should expose photo upload as its own endpoint.
-8. **Visual rules.** The brief asked for one brand colour and a system font. The approved style uses iOS blue with decorative icon colours, and SF or Inter.
+8. **Membership points.** Members earn 1 point per RM1 paid, rounded down, added after payment. Points are redeemed at payment at **100 points = RM1.00. This value is a placeholder until the team fixes it, and the owner can change it in Settings.** The order of discounts is: subtotal → voucher → points → service charge on the discounted subtotal → SST on (discounted subtotal + service charge), each line rounded to RM0.01. Example: RM35.40 − RM5.00 voucher − 500 points (RM5.00) = RM25.40; service RM2.54; SST RM1.68; total RM29.62, which earns 29 points. Points never go below 0. Owner adjustments need a reason and appear in the member's points history.
+9. **Members.** Members have a name and phone (both required; the phone is a unique Malaysian mobile number) and an optional email. Members and vouchers are never deleted, only deactivated and reactivated.
+10. **Best sellers.** Ranked by quantity sold. The top 5 over the last 30 days get the Best seller label on the menu.
+11. **Cancel and refund.** A confirmed order that has not been served can be cancelled with a reason, and its stock is restored. A served order cannot be cancelled. After payment, the owner can refund all or part of a bill (never more than was paid), with a reason, back to the original payment method.
+12. **Customer queue page.** Shows the number of groups ahead, never an estimated waiting time. Call waiter stays disabled until staff tap Done.
+13. **Visual rules.** The brief asked for one brand colour and a system font. The approved style uses iOS blue with decorative icon colours, and SF or Inter.
 
 ## 6. Acceptance testing
 
-**Method.** Automated checks ran in a real browser (Playwright and Chromium) over all 97 states after every change:
+**Method.** Automated checks ran in a real browser (Playwright and Chromium) over all 124 states after every change:
 
 | Check | How it is measured | Result |
 |---|---|---|
@@ -323,6 +367,10 @@ These change or add to the brief. They need team agreement and backend support.
 | Page layout | The board at 400 px and 1440 px, light and dark theme | No sideways scroll |
 
 The colour comparison page was checked the same way for 4 palettes × 2 icon styles.
+
+**Text length (v3.3).** All on-screen text was listed by length. The 88 texts of 9 words or more were cut to 13, and those 13 are data lines (dates, receipt numbers, stock figures) or 9-word lines.
+
+**Arithmetic.** Every bill, split and receipt that changed was recalculated: points bill RM29.62, cashier bill with points RM21.57 (change RM28.43 from RM50), points earned and balances (1,205 + 35 = 1,240) and member history balances. The daily sales report was checked: the seven days add up to RM9,412.80, which matches Revenue and the payment-method total (302 bills both ways).
 
 **Problems found and fixed by testing:**
 - Four 36 px buttons on phones.
@@ -342,11 +390,12 @@ The colour comparison page was checked the same way for 4 palettes × 2 icon sty
 - QR codes are placeholders, and food images are illustrations.
 - The brief's step of offering two layout directions per screen was done for colour (four palettes compared) but not for layout.
 - Without sound, customers may miss being called if they are not looking at the page.
+- The points redemption value (100 points = RM1.00) is a placeholder.
 
 ## 7. Next steps
 
 1. **Agree the rules.** The team agrees the rules in section 5 and updates the brief.
-2. **Design the data and APIs.** Design the database tables (Supabase PostgreSQL) and the API list (Express) from these screens.
+2. **Design the data and APIs.** Design the database tables (Supabase PostgreSQL) and the API list (Python FastAPI) from these screens.
 3. **Build feature by feature, backend and frontend together:**
    1. Login and roles
    2. Tables and QR

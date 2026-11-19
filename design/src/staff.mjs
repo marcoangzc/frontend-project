@@ -1,4 +1,5 @@
 import { food } from './food.mjs';
+import { SITI, HISTORY } from './members-data.mjs';
 import { tile, i, btn, iconBtn, badge, field, toggle, kv, alert, upd, step, emp, mod, tabs, ph, sp, tb, ct, section } from './lib.mjs';
 
 /* ---------- Staff login ---------- */
@@ -9,21 +10,21 @@ const login = (name, al, o = {}) => ph(`Staff login · ${name}`, { url: 'quickse
   ${field('Staff ID', o.id || 'aina')}
   ${field('Password', o.pw === undefined ? 'password1' : o.pw, { type: 'password', ph: o.pw === '' })}
   ${btn('Sign in', 'primary', { lg: 1, block: 1 })}
-  <div class="small text-body-secondary">Forgot your password? Ask the owner to reset it in Staff accounts.</div>`);
+  <div class="small text-body-secondary">Forgot your password? Ask the owner.</div>`);
 const logins = [
   login('Normal', '', { note: 'Same page for Cashier and Owner. The role decides which navigation appears after sign-in.' }),
   login('Wrong password', alert('danger', 'Staff ID or password is incorrect', 'Check both and try again.'), { pw: '', note: 'The message does not say which of the two is wrong. The Staff ID is kept; the password is cleared.' }),
-  login('Inactive account', alert('danger', 'This account is inactive', 'Ask the owner to reactivate it in Staff accounts.'), { id: 'kumar', pw: '', note: 'Deactivated staff cannot sign in. Their past transactions stay on record.' }),
+  login('Inactive account', alert('danger', 'This account is inactive', 'Ask the owner to reactivate it.'), { id: 'kumar', pw: '', note: 'Deactivated staff cannot sign in. Their past transactions stay on record.' }),
 ];
 
 /* ---------- Home ---------- */
 const row = (icon, label, num, sub, tone) => `<a href="#">${tile(icon, tone === 'danger-solid' ? 'red' : '')}<span class="flex-grow-1"><span class="d-block fw-semibold">${label}</span>${sub ? `<span class="d-block small text-body-secondary">${sub}</span>` : ''}</span>${tone ? badge(num, tone) : `<span class="num">${num}</span>`}${i('chevron-right')}</a>`;
 const todo = (icon, text, action) => `<div>${tile(icon, 'wait')}<span class="flex-grow-1 fw-semibold">${text}</span>${btn(action, 'outline-primary', { sm: 1 })}</div>`;
 const day = '<div class="d-flex justify-content-between align-items-center"><div class="small text-body-secondary">Tue 17 Nov 2026 · Aina, Cashier</div>';
-const dishSwitch = (name, uses, left, on) => `<div class="d-flex align-items-center gap-3 py-2"><div class="flex-grow-1 min-w-0"><div class="fw-semibold">${name}</div><div class="small text-body-secondary">${uses}. ${left}</div></div>${toggle('Mark ' + name + ' unavailable', on)}</div>`;
+const dishSwitch = (name, uses, left, on) => `<div class="d-flex align-items-center gap-3 py-2"><div class="flex-grow-1 min-w-0"><div class="fw-semibold">${name}</div><div class="small text-body-secondary">${left}</div></div>${toggle('Mark ' + name + ' unavailable', on)}</div>`;
 const unavailSheet = mod('Mark dishes unavailable', `
-  <div class="small text-body-secondary">These dishes use Egg or Santan. Switch on the ones customers should not be able to order.</div>
-  <div class="d-flex flex-column">${dishSwitch('Nasi Lemak Ayam', 'Uses 1 egg and 0.2 L santan', 'Enough for about 7 more', true)}${dishSwitch('Nasi Goreng Kampung', 'Uses 1 egg', 'Enough for about 12 more', false)}${dishSwitch('Mee Goreng Mamak', 'Uses 1 egg', 'Enough for about 12 more', false)}</div>`, btn('Cancel', 'outline-secondary') + btn('Save', 'primary'));
+  <div class="small text-body-secondary">Switch on to mark unavailable.</div>
+  <div class="d-flex flex-column">${dishSwitch('Nasi Lemak Ayam', 'Uses 1 egg and 0.2 L santan', 'About 7 plates left', true)}${dishSwitch('Nasi Goreng Kampung', 'Uses 1 egg', 'About 12 plates left', false)}${dishSwitch('Mee Goreng Mamak', 'Uses 1 egg', 'About 12 plates left', false)}</div>`, btn('Cancel', 'outline-secondary') + btn('Save', 'primary'));
 const home = [
   sp('Home · Busy day', 'Home', 'Home', { note: 'Things that need a tap come first; the four counts below link to their pages. No charts or trend arrows.' }, `
     ${day}${upd()}</div>
@@ -38,7 +39,7 @@ const home = [
       ${row('box-seam', 'Low stock', 0, 'All ingredients above minimum')}</div></section>`),
   sp('Home · Quiet morning', 'Home', 'Home', { note: 'Zeros are shown as zeros, with one line saying what will appear here.' }, `
     <div class="d-flex justify-content-between align-items-center"><div class="small text-body-secondary">Tue 17 Nov 2026 · Aina, Cashier</div>${upd()}</div>
-    <section><h2 class="fs-6 mb-2">Needs attention</h2><div class="qs-list"><div class="text-body-secondary">${tile('check-lg', 'gray')}Nothing right now. New QR orders, waiter calls and queue tickets appear here.</div></div></section>
+    <section><h2 class="fs-6 mb-2">Needs attention</h2><div class="qs-list"><div class="text-body-secondary">${tile('check-lg', 'gray')}Nothing needs you right now.</div></div></section>
     <section><h2 class="fs-6 mb-2">Today</h2><div class="qs-list">
       ${row('journal-text', 'Orders', 0, 'No orders yet today')}
       ${row('table', 'Open tables', '0 of 15', 'All tables free')}
@@ -48,7 +49,7 @@ const home = [
     <div class="d-flex justify-content-between align-items-center"><div class="small text-body-secondary">Tue 17 Nov 2026 · Aina, Cashier</div>${upd()}</div>
     <div class="alert alert-danger d-flex flex-column gap-2 mb-0" role="alert"><div class="d-flex align-items-center gap-2 fw-semibold"><span class="qs-ai">${i('exclamation-triangle-fill')}</span>2 ingredients are low</div>
       <div class="small">${kv('Egg', '12 pcs left · minimum 30')}${kv('Santan (coconut milk)', '1.5 L left · minimum 3 L')}</div>
-      <div class="small">Affects Nasi Lemak Ayam, Mee Goreng Mamak and Nasi Goreng Kampung.</div>
+      <div class="small">Affects 3 dishes.</div>
       ${btn('Mark dishes unavailable', 'danger', { block: 1 })}</div>
     <section><h2 class="fs-6 mb-2">Today</h2><div class="qs-list">
       ${row('journal-text', 'Orders', 47, '3 pending · 5 in the kitchen')}
@@ -68,7 +69,7 @@ const qrow = (no, name, size, wait, o = {}) => {
   <div class="d-flex align-items-center gap-3"><div class="qs-qno">${no}</div><div class="flex-grow-1 min-w-0"><div class="fw-bold">${name}</div><div class="small text-body-secondary">${i('people-fill')} ${size} ${size === 1 ? 'person' : 'people'}, ${wait.toLowerCase()}</div></div>${o.called ? badge('Called', 'solid') : badge('Waiting', 'wait')}</div>
   <div class="qs-seen ${sn[0]}"><span class="pip"></span>${sn[1]}</div>
   <div class="d-flex gap-2">${o.called ? btn('No-show', 'outline-secondary', { c: 'flex-fill' }) + btn('Seated', 'primary', { c: 'flex-fill', i: 'check-lg' }) : btn('Remove', 'outline-secondary') + btn('Call ' + no, 'outline-primary', { c: 'flex-fill', i: 'megaphone' })}</div>
-  ${o.called ? '<div class="small text-body-secondary">Table held until 7:42 pm. You can call the next group now; No-show can be undone for 15 minutes.</div>' : ''}</div>`;
+  ${o.called ? '<div class="small text-body-secondary">Table held until 7:42 pm</div>' : ''}</div>`;
 };
 const qhead = (n) => `<div class="d-flex justify-content-between align-items-center"><div class="fw-medium">${n} groups, longest wait 32 min</div>${upd()}</div>`;
 const qlist = (o = {}) => `
@@ -79,17 +80,17 @@ const qlist = (o = {}) => `
     ${qrow('A022', 'Suresh', 3, 'Waiting 9 min')}
     ${qrow('A023', 'Nurul', 4, 'Waiting 4 min')}`;
 const removeSheet = mod('Remove A021 from the queue?', `
-  <div>Mei Xin, 5 people. Waiting 28 minutes; their page has been closed for 25 minutes.</div>
+  <div>Mei Xin, 5 people. Page closed 25 min.</div>
   <fieldset><legend class="form-label">Reason</legend><div class="qs-chipset"><button type="button" class="qs-chip on" aria-pressed="true">Left without telling us</button><button type="button" class="qs-chip">Took two numbers</button><button type="button" class="qs-chip">Asked to cancel</button><button type="button" class="qs-chip">Other</button></div></fieldset>
-  <div class="small text-body-secondary">Their page will say the ticket was cancelled. You can restore it to the same place for 15 minutes.</div>`, btn('Keep in queue', 'outline-secondary') + btn('Remove ticket', 'danger'));
+  <div class="small text-body-secondary">You can restore it for 15 min.</div>`, btn('Keep in queue', 'outline-secondary') + btn('Remove ticket', 'danger'));
 const queue = [
   sp('Queue · Several waiting', 'Queue', 'Queue', { note: 'Each ticket shows whether its page is still open (from the polling heartbeat) or the customer tapped "I\'m here". A ticket whose page has been closed for 20 minutes is flagged amber. Staff can remove any waiting ticket at any time, and can mark No-show right after calling: no forced 5-minute wait.' }, `${qhead(5)}${qlist()}`),
   sp('Queue · Remove a ticket', 'Queue', 'Queue', { sheet: 1, modal: removeSheet, note: 'Removing needs a reason (kept on record). "Took two numbers" covers people holding a ticket at more than one place.' }, `${qhead(5)}${qlist()}`),
   sp('Queue · Removed, can restore', 'Queue', 'Queue', { note: 'The removed ticket moves to "Recently removed" for 15 minutes. Restore puts it back in its old place, so a customer who stepped away briefly is not sent to the back.' }, `${qhead(4)}${qlist({ removed: 1, banner: false })}
-    <section><h2 class="fs-6 mb-2">Recently removed</h2><div class="qs-list"><div>${tile('people', 'gray')}<span class="flex-grow-1"><span class="d-block fw-semibold">A021 Mei Xin, 5 people</span><span class="d-block small text-body-secondary">Left without telling us, 7:51 pm. Restore until 8:06 pm.</span></span>${btn('Restore', 'outline-secondary', { sm: 1, i: 'arrow-counterclockwise' })}</div></div></section>`),
+    <section><h2 class="fs-6 mb-2">Recently removed</h2><div class="qs-list"><div>${tile('people', 'gray')}<span class="flex-grow-1"><span class="d-block fw-semibold">A021 Mei Xin, 5 people</span><span class="d-block small text-body-secondary">Removed 7:51 pm · Restore by 8:06 pm</span></span>${btn('Restore', 'outline-secondary', { sm: 1, i: 'arrow-counterclockwise' })}</div></div></section>`),
   sp('Queue · Empty', 'Queue', 'Queue', {}, `
     <div class="d-flex justify-content-between align-items-center"><div class="fw-medium">0 groups</div>${upd()}</div>
-    <div class="card">${emp('people', 'No one is waiting', 'New tickets appear here when customers scan the queue QR at the door.')}</div>`),
+    <div class="card">${emp('people', 'No one is waiting', 'Tickets appear when customers scan the door QR.')}</div>`),
 ];
 
 /* ---------- Table grid ---------- */
@@ -114,7 +115,7 @@ const tables = [
   ct('Tables · Counter tablet', 'Tables', { note: 'Same grid at 1024 px with the selected table\'s order beside it, so the cashier does not leave the page to take payment.' }, `
     <div><div class="d-flex justify-content-between align-items-center"><div class="fw-medium">9 of 15 tables open</div>${upd()}</div>${legend}${grid(false, true)}</div>
     <aside><div class="d-flex justify-content-between align-items-center"><h2 class="fs-4">T3 · Indoor</h2>${badge('Waiting for food', 'wait')}</div>
-      <div class="small text-body-secondary">Order #1042 · confirmed 7:23 pm by Aina · card or e-wallet</div>
+      <div class="small text-body-secondary">Order #1042 · confirmed 7:23 pm</div>
       <div class="d-flex flex-column gap-1">${kv('2 × Nasi Lemak Ayam', 'RM19.00')}<div class="small text-body-secondary">Less spicy</div>${kv('1 × Mee Goreng Mamak', 'RM8.00')}${kv('3 × Teh Tarik', 'RM8.40')}</div>
       <hr class="my-1"><div class="d-flex flex-column gap-1 small">${kv('Subtotal', 'RM35.40')}${kv('Service charge (10%)', 'RM3.54')}${kv('SST (6%)', 'RM2.34')}</div>${kv('Total', 'RM41.28', 'fs-5 fw-semibold')}
       <div class="mt-auto d-flex flex-column gap-2">${btn('Take payment', 'primary', { lg: 1, block: 1, i: 'cash' })}${btn('Edit order', 'outline-secondary', { block: 1 })}</div></aside>`),
@@ -132,16 +133,31 @@ const o1043 = line(1, 'Nasi Goreng Kampung') + line(2, 'Roti Canai (2 pcs)') + l
 const otabs = tabs(['Pending <span class="badge qs-b-wait-solid ms-2">2</span>', 'Confirmed', 'Served']);
 const pending = (a) => `<div class="d-flex justify-content-between align-items-center">${otabs}</div>${upd()}${order('T3', 1042, '2 min ago', 'Card / e-wallet', o1042, { alert: a })}${order('T9', 1043, '1 min ago', 'Cash', o1043)}`;
 const editRow = (name, q) => `<div class="d-flex align-items-center gap-2"><span class="flex-grow-1 fw-medium">${name}</span>${step(q)}${iconBtn('trash', 'Remove ' + name)}</div>`;
+const ctabs = tabs(['Pending', 'Confirmed <span class="badge qs-b-neutral ms-2">2</span>', 'Served'], 1);
+const conf = (tbl, no, st, lines, served) => `<div class="card"><div class="card-body d-flex flex-column gap-2 p-3">
+  <div class="d-flex align-items-center gap-2"><span class="fs-4 fw-bold lh-1">${tbl}</span><span class="flex-grow-1 small text-body-secondary">#${no}</span>${badge(st, served ? 'brand' : 'wait')}</div>
+  <div class="d-flex flex-column gap-1">${lines}</div>
+  <div class="d-flex gap-2">${btn('Cancel order', 'outline-danger', { c: 'flex-fill' })}</div></div></div>`;
+const confirmedList = (o = {}) => `${ctabs}${upd()}
+  ${o.cancelled ? '' : conf('T3', 1042, 'In the kitchen 6 min', o1042)}
+  ${conf('T5', 1039, 'Served 7:30 pm', line(1, 'Nasi Lemak Ayam') + line(2, 'Mee Goreng Mamak') + line(2, 'Teh Tarik'), true)}`;
+const cancelSheet = mod('Cancel order #1042?', `
+  <fieldset><legend class="form-label">Reason</legend><div class="qs-chipset"><button type="button" class="qs-chip on" aria-pressed="true">Customer changed mind</button><button type="button" class="qs-chip">Wrong order</button><button type="button" class="qs-chip">Out of stock</button><button type="button" class="qs-chip">Other</button></div></fieldset>
+  <div class="small text-body-secondary">${i('arrow-counterclockwise')} Stock goes back automatically.</div>`, btn('Keep order', 'outline-secondary') + btn('Cancel order', 'danger'));
 const orders = [
   sp('Orders · Pending to confirm', 'Orders', 'Orders', { note: 'Every QR order lands here first. The kitchen sees it only after Confirm, which also deducts ingredients by recipe.' }, pending()),
   sp('Orders · New order arrives', 'Orders', 'Orders', { note: 'A new QR order shows a banner on every staff page and raises the Orders badge within 5 s (polling). The banner stays until someone opens the order. A chime can be switched on for the counter tablet in Settings; it is off by default.' }, `
     <div class="alert alert-primary d-flex align-items-center gap-2 mb-0" role="status"><span class="qs-ai">${i('bell-fill')}</span><div class="flex-grow-1"><div class="fw-semibold">New order from T12</div><div class="small">2 dishes, cash, just now</div></div>${btn('Open', 'primary', { sm: 1 })}</div>
     ${pending()}`),
-  sp('Orders · Insufficient stock', 'Orders', 'Orders', { low: 2, note: 'Confirm failed because a recipe needs more than is in stock. Confirm is disabled and Edit becomes the main action.' }, pending(alert('danger', 'Insufficient stock: Egg', 'This order needs 3 eggs and only 2 are left. Edit the order or reject it.'))),
+  sp('Orders · Insufficient stock', 'Orders', 'Orders', { low: 2, note: 'Confirm failed because a recipe needs more than is in stock. Confirm is disabled and Edit becomes the main action.' }, pending(alert('danger', 'Insufficient stock: Egg', 'Only 2 eggs left. Edit or reject.'))),
   sp('Orders · Edit items', 'Orders', 'Orders', { sheet: 1, note: 'Bottom sheet within thumb reach. Saving sends the customer a new total and keeps the order Pending.',
     modal: mod('Edit order #1042 · T3', `${editRow('Nasi Lemak Ayam', 1)}${editRow('Mee Goreng Mamak', 1)}${editRow('Teh Tarik', 3)}${btn('Add a dish', 'outline-primary', { i: 'plus-lg', block: 1 })}${kv('New total', 'RM30.20', 'fs-5 fw-semibold')}`, btn('Cancel', 'outline-secondary') + btn('Save changes', 'primary')) }, pending()),
+  sp('Orders · Cancel a confirmed order', 'Orders', 'Orders', { sheet: 1, modal: cancelSheet, note: 'FR-OR-04. A confirmed order that has not been served yet can be cancelled with a reason. The kitchen ticket disappears and the customer sees the reason.' }, confirmedList()),
+  sp('Orders · Order cancelled, stock restored', 'Orders', 'Orders', { note: 'Cancelling reverses the recipe deduction made at confirmation. The restored amounts are listed so staff can trust the stock figures.' }, `${alert('primary', 'Order #1042 cancelled', 'Stock restored: Egg +3 and 6 more.', 'arrow-counterclockwise')}${confirmedList({ cancelled: 1 })}`),
+  sp('Orders · Already served', 'Orders', 'Orders', { sheet: 1, note: 'Blocked case for FR-OR-04: a served order cannot be cancelled, because the food and its ingredients are gone. Refunds after payment are done by the owner in Transactions.',
+    modal: mod('Can\'t cancel #1039', `<div>${alert('danger', 'Order already served', 'Served at 7:30 pm.')}</div>`, btn('Close', 'primary')) }, confirmedList()),
   sp('Orders · Reject', 'Orders', 'Orders', { sheet: 1, note: 'Rejecting needs a reason, which the customer sees on their order status page. Stops prank and duplicate orders.',
-    modal: mod('Reject order #1043 · T9?', `${field('Reason shown to the customer', 'Duplicate order', { sel: 1 })}${field('Note (optional)', 'Add a note', { ph: 1 })}<div class="small text-body-secondary">The order is kept on record as Rejected. No stock is deducted.</div>`, btn('Keep order', 'outline-secondary') + btn('Reject order', 'danger')) }, pending()),
+    modal: mod('Reject order #1043 · T9?', `${field('Reason shown to the customer', 'Duplicate order', { sel: 1 })}${field('Note (optional)', 'Add a note', { ph: 1 })}<div class="small text-body-secondary">Kept on record. No stock deducted.</div>`, btn('Keep order', 'outline-secondary') + btn('Reject order', 'danger')) }, pending()),
 ];
 
 /* ---------- Kitchen view ---------- */
@@ -169,7 +185,7 @@ const kitchen = [
         <button type="button">${tile('search', 'gray', 'lg')}<span>Other<small>Search all 24</small></span></button></div></fieldset>
       <div class="d-flex align-items-center gap-4"><span class="form-label fs-6 mb-0">How many</span>${step('2 pcs', { lg: 1, label: 'Quantity of egg' })}</div>
       <fieldset><legend class="form-label fs-6">What happened</legend><div class="qs-chipset"><button type="button" class="qs-chip on" aria-pressed="true">Dropped</button><button type="button" class="qs-chip">Spoiled</button><button type="button" class="qs-chip">Burnt</button><button type="button" class="qs-chip">Dish remade</button><button type="button" class="qs-chip">Extra in a dish</button></div></fieldset>
-      ${field('For which order? (optional, for "Dish remade" or "Extra in a dish")', 'Not linked to an order', { sel: 1 })}`, btn('Cancel', 'outline-secondary', { lg: 1 }) + btn('Record 2 eggs', 'primary', { lg: 1 }), 720) }, `
+      ${field('Linked order (optional)', 'Not linked to an order', { sel: 1 })}`, btn('Cancel', 'outline-secondary', { lg: 1 }) + btn('Record 2 eggs', 'primary', { lg: 1 }), 720) }, `
     ${ticket('T5', 1039, '7:18 pm', '11 min', kl(1, 'Nasi Lemak Ayam') + kl(2, 'Mee Goreng Mamak', '1 no egg') + kl(2, 'Teh Tarik'), true)}
     ${ticket('T11', 1040, '7:21 pm', '8 min', kl(3, 'Roti Canai (2 pcs)') + kl(3, 'Milo Ais'))}
     ${ticket('T3', 1042, '7:23 pm', '6 min', kl(2, 'Nasi Lemak Ayam', 'less spicy') + kl(1, 'Mee Goreng Mamak') + kl(3, 'Teh Tarik', '1 kurang manis'))}`),
@@ -179,18 +195,22 @@ const kitchen = [
 
 /* ---------- Payment (cashier) ---------- */
 const bill9 = `<div class="d-flex flex-column gap-1 small">${kv('1 × Nasi Goreng Kampung', 'RM8.50')}${kv('2 × Roti Canai (2 pcs)', 'RM6.00')}${kv('2 × Milo Ais', 'RM7.00')}<hr class="my-1">${kv('Subtotal', 'RM21.50')}${kv('Service charge (10%)', 'RM2.15')}${kv('SST (6%)', 'RM1.42')}</div>${kv('Total', 'RM25.07', 'fs-5 fw-semibold')}`;
+// 21.50 − 3.00 points = 18.50; service 10% = 1.85; SST 6% of 20.35 = 1.22; total 21.57; change from RM50 = 28.43
+const bill9p = `<div class="d-flex flex-column gap-1 small">${kv('1 × Nasi Goreng Kampung', 'RM8.50')}${kv('2 × Roti Canai (2 pcs)', 'RM6.00')}${kv('2 × Milo Ais', 'RM7.00')}<hr class="my-1">${kv('Subtotal', 'RM21.50')}${kv('Points (−300)', '−RM3.00', 'text-primary fw-medium')}${kv('Service charge (10%)', 'RM1.85')}${kv('SST (6%)', 'RM1.22')}</div>${kv('Total', 'RM21.57', 'fs-5 fw-semibold')}`;
+const memberCash = `<div class="qs-opt">${tile('person-badge-fill')}<span class="flex-grow-1"><span class="d-block fw-semibold">Tan Wei Jie</span><span class="d-block small">${badge('640 pts', 'tea')} <span class="text-body-secondary">worth RM6.40</span></span></span>${btn('Change', 'link', { c: 'p-0' })}</div>
+    <div class="d-flex gap-2 align-items-start">${field('Use points', '300', { type: 'number', suf: 'pts', c: 'flex-grow-1', help: '−RM3.00 · 340 pts left' })}<div class="flex-shrink-0" style="padding-top:30px">${btn('Use max', 'outline-secondary', { c: 'text-nowrap' })}</div></div>`;
 const quick = (v, on) => `<button type="button" class="btn ${on ? 'btn-primary' : 'btn-outline-secondary'} flex-fill">${v}</button>`;
 const cash = [
   sp('Take payment · Cash with change', 'Take payment', 'Pay', { bar: btn('Record cash payment', 'primary', { lg: 1, block: 1 }), note: 'The customer quotes the table number at the counter. Change is worked out as the cashier types. Recording the payment replaces the table\'s QR token and opens the e-receipt.' }, `
-    ${field('Table', 'T9 · Outdoor · RM25.07', { sel: 1 })}
-    <div class="card"><div class="card-body d-flex flex-column gap-2 p-3">${bill9}</div></div>
+    ${field('Table', 'T9 · Outdoor', { sel: 1 })}
+    <div class="card"><div class="card-body d-flex flex-column gap-2 p-3">${bill9p}</div></div>
     <div class="d-flex gap-2 align-items-end">${field('Voucher code', 'Enter code', { ph: 1, c: 'flex-grow-1' })}${btn('Apply', 'outline-primary')}</div>
-    ${field('Member phone (optional)', '012-345 6789', { ph: 1, type: 'tel' })}
+    ${memberCash}
     ${field('Cash tendered', '50.00', { pre: 'RM' })}
     <div class="d-flex gap-2">${quick('Exact')}${quick('RM30')}${quick('RM50', 1)}${quick('RM100')}</div>
-    <div class="alert alert-primary mb-0">${kv('Change to give', 'RM24.93', 'fs-4 fw-semibold')}</div>`),
+    <div class="alert alert-primary mb-0">${kv('Change to give', 'RM28.43', 'fs-4 fw-semibold')}</div>`),
   sp('Take payment · Expired voucher', 'Take payment', 'Pay', { bar: btn('Record cash payment', 'primary', { lg: 1, block: 1, dis: 1 }), note: 'An expired or deactivated voucher is refused with its end date. The bill is unchanged.' }, `
-    ${field('Table', 'T9 · Outdoor · RM25.07', { sel: 1 })}
+    ${field('Table', 'T9 · Outdoor', { sel: 1 })}
     <div class="card"><div class="card-body d-flex flex-column gap-2 p-3">${bill9}</div></div>
     <div class="d-flex gap-2 align-items-start">${field('Voucher code', 'MERDEKA10', { c: 'flex-grow-1', err: 'MERDEKA10 expired on 31 Aug 2026.' })}<div style="padding-top:25px">${btn('Apply', 'outline-primary')}</div></div>
     ${field('Member phone (optional)', '012-345 6789', { ph: 1, type: 'tel' })}
@@ -205,11 +225,11 @@ const tx = (voided) => `
     <div class="small text-body-secondary">17 Nov 2026, 7:02 pm · Table T6 · Cash · Aina</div>
     <div class="d-flex flex-column gap-1 small">${kv('3 × Nasi Lemak Ayam', 'RM28.50')}${kv('2 × Mee Goreng Mamak', 'RM16.00')}<hr class="my-1">${kv('Subtotal', 'RM44.50')}${kv('Service charge (10%)', 'RM4.45')}${kv('SST (6%)', 'RM2.94')}</div>
     ${kv('Total', `<span class="${voided ? 'text-decoration-line-through text-secondary' : ''}">RM51.89</span>`, 'fs-5 fw-semibold')}</div></div>
-  ${voided ? `<div class="alert alert-secondary mb-0"><span class="qs-ai">${i('slash-circle')}</span><div class="flex-grow-1"><div class="fw-semibold">Voided on 17 Nov 2026, 8:12 pm</div><div class="small">${kv('Requested by', 'Aina (Cashier)')}${kv('Approved by', 'Mei Ling (Owner)')}${kv('Reason', 'Charged to the wrong table')}</div></div></div><div class="small text-body-secondary">Voided transactions stay in history and reports. Nothing is deleted.</div>` : btn('Void this transaction', 'outline-danger', { block: 1 })}`;
+  ${voided ? `<div class="alert alert-secondary mb-0"><span class="qs-ai">${i('slash-circle')}</span><div class="flex-grow-1"><div class="fw-semibold">Voided on 17 Nov 2026, 8:12 pm</div><div class="small">${kv('Requested by', 'Aina (Cashier)')}${kv('Approved by', 'Mei Ling (Owner)')}${kv('Reason', 'Charged to the wrong table')}</div></div></div><div class="small text-body-secondary">Kept in history and reports.</div>` : btn('Void this transaction', 'outline-danger', { block: 1 })}`;
 const voidForm = (failed) => mod('Void R-20261117-0038', `
   ${failed ? alert('danger', 'Owner ID or password is incorrect', 'The transaction was not voided. Try again.') : ''}
   ${field('Reason for the void', 'Charged to the wrong table')}
-  <div><div class="fw-semibold">Supervisor approval</div><div class="small text-body-secondary">The owner enters their own ID and password on this device.</div></div>
+  <div><div class="fw-semibold">Supervisor approval</div><div class="small text-body-secondary">Owner enters their ID and password.</div></div>
   ${field('Owner ID', 'meiling')}
   ${field('Owner password', failed ? '' : 'password1', { type: 'password', ph: failed, aria: 'Owner password' })}`, btn('Cancel', 'outline-secondary') + btn('Approve void', 'danger'));
 const voids = [
@@ -235,7 +255,7 @@ const smenu = (o = {}) => {
       ${sdish('Roti Canai (2 pcs)', 'Roti, RM3.00', roti, { can, icon: 'cookie', pending: o.pending, fresh: o.fresh })}
       ${sdish('Cendol', 'Desserts, RM4.50', '', { can, icon: 'cake2-fill' })}
       ${o.filter === 1 ? '' : sdish('Teh Tarik', 'Drinks, RM2.80', 'teh-tarik', { can })}</div>
-    ${can && !o.fresh ? '<div class="small text-body-secondary">You can add or replace dish photos. Prices, recipes and new dishes are managed by the owner.</div>' : ''}`;
+    ${can && !o.fresh ? '<div class="small text-body-secondary">You can change dish photos only.</div>' : ''}`;
 };
 const checkPhoto = `<div class="qs-photo">${food('roti-canai', 328)}</div>
     <div class="fw-bold">Roti Canai (2 pcs)</div>
@@ -247,22 +267,30 @@ const smenus = [
   sp('Menu · Dishes without photos', 'Menu', '', { note: 'Reached from the menu button. Cashiers can search the menu but not change it, except photos: dishes without one show Add photo, and the "No photo" filter lists the gaps.' }, smenu({ filter: 1 })),
   sp('Menu · Check the photo', 'New photo', '', { bar: btn('Use this photo', 'primary', { lg: 1, block: 1, i: 'check-lg' }) + btn('Retake', 'outline-secondary', { block: 1, i: 'camera' }), note: 'Add photo opens the phone camera directly. After the shot the cashier checks it against three simple tips before it goes on the menu. Drag to move the dish inside the square.' }, checkPhoto),
   sp('Menu · Photo added', 'Menu', '', { note: 'With approval off (the default) the photo goes on the customer menu at once. Undo is offered for 8 seconds; after that the owner can still replace or remove it.' }, `${smenu({ roti: 'roti-canai', fresh: 1 })}<div class="qs-toast ph" role="status">${i('check-circle-fill')} Photo added to Roti Canai ${btn('Undo', 'band')}</div>`),
-  sp('Menu · Sent for approval', 'Menu', '', { note: 'If the owner turned on approval, the photo waits for them. Customers keep seeing the old photo, or the category icon, until it is approved.' }, `${smenu({ roti: 'roti-canai', pending: 1 })}${alert('warning', 'Sent to Mei Ling for approval', 'Customers will see the new photo once it is approved.', 'hourglass-split')}`),
-  sp('Menu · Photos turned off', 'Menu', '', { note: 'When the owner switches photo uploads off for cashiers, the buttons disappear instead of failing when tapped. The server also refuses the upload.' }, `${smenu({ can: false })}${alert('secondary', null, 'Only the owner can change dish photos right now. Ask Mei Ling if you want to add one.', 'lock')}`),
+  sp('Menu · Sent for approval', 'Menu', '', { note: 'If the owner turned on approval, the photo waits for them. Customers keep seeing the old photo, or the category icon, until it is approved.' }, `${smenu({ roti: 'roti-canai', pending: 1 })}${alert('warning', 'Sent to Mei Ling for approval', 'Shown to customers once approved.', 'hourglass-split')}`),
+  sp('Menu · Photos turned off', 'Menu', '', { note: 'When the owner switches photo uploads off for cashiers, the buttons disappear instead of failing when tapped. The server also refuses the upload.' }, `${smenu({ can: false })}${alert('secondary', null, 'Only the owner can change photos now.', 'lock')}`),
 ];
 
 /* ---------- Members ---------- */
-const member = (name, phone, since) => `<a href="#">${tile('person-badge-fill', 'tea')}<span class="flex-grow-1"><span class="d-block fw-semibold">${name}</span><span class="d-block small text-body-secondary">${phone} · member since ${since}</span></span>${i('chevron-right')}</a>`;
+const member = (name, phone, pts) => `<a href="#">${tile('person-badge-fill', 'tea')}<span class="flex-grow-1 min-w-0"><span class="d-block fw-semibold">${name}</span><span class="d-block small text-body-secondary">${phone}</span></span>${badge(pts + ' pts', 'tea')}${i('chevron-right')}</a>`;
 const regForm = (dup) => mod('Register member', `
   ${field('Name', 'Kavitha Raj')}
-  ${field('Phone number', '012-345 6789', dup ? { type: 'tel', err: 'This phone number is already registered to Siti Aminah.' } : { type: 'tel', help: 'Used to find the member at payment.' })}
+  ${field('Phone number', '012-345 6789', dup ? { type: 'tel', err: 'Already registered to Siti Aminah.' } : { type: 'tel', help: 'Malaysian mobile number' })}
+  ${field('Email (optional)', 'kavitha.raj@example.com', { type: 'email' })}
   ${dup ? btn('Open Siti Aminah', 'outline-primary', { block: 1 }) : ''}`, btn('Cancel', 'outline-secondary') + btn('Register', 'primary'));
 const search = (q) => `<div class="d-flex gap-2 align-items-end">${field(null, q, { aria: 'Search members by name or phone', pre: i('search'), c: 'flex-grow-1' })}</div>`;
-const mlist = `<div class="small text-body-secondary">3 members match "012"</div><div class="qs-list">${member('Siti Aminah', '012-345 6789', 'Mar 2026')}${member('Tan Wei Jie', '012-880 1432', 'Jul 2026')}${member('Kumar Selvam', '016-012 7755', 'Sep 2026')}</div>`;
+const mlist = `<div class="small text-body-secondary">3 members match "012"</div><div class="qs-list">${member('Siti Aminah', '012-345 6789', '1,240')}${member('Tan Wei Jie', '012-880 1432', '640')}${member('Kumar Selvam', '016-012 7755', '85')}</div>`;
+const hist = HISTORY.map((h) => `<div><span class="flex-grow-1 min-w-0"><span class="d-block fw-semibold">${h.what}</span><span class="d-block small text-body-secondary">${h.date}${h.bill ? ' · ' + h.bill : ''}</span></span><span class="text-end"><span class="d-block fw-bold">${h.pts}</span><span class="d-block small text-body-secondary">${h.after}</span></span></div>`).join('');
+const memberDetail = `<div class="card"><div class="card-body d-flex flex-column gap-2 p-3">
+    <div class="d-flex align-items-center gap-3">${tile('person-badge-fill', 'tea', 'lg')}<div class="min-w-0"><div class="fs-5 fw-bold">${SITI.name}</div><div class="small text-body-secondary">Member since ${SITI.since}</div></div></div>
+    ${kv('<span class="text-body-secondary">Phone</span>', SITI.phone)}${kv('<span class="text-body-secondary">Email</span>', SITI.email)}</div></div>
+  <div class="card"><div class="card-body d-flex align-items-center justify-content-between p-3"><span class="fw-semibold">Points balance</span><span class="qs-mid">${SITI.balance}</span></div></div>
+  <section><h2 class="fs-6 mb-2">Points history</h2><div class="qs-list">${hist}</div></section>`;
 const members = [
   sp('Members · Search results', 'Members', '', { bar: btn('Register a member', 'primary', { block: 1, i: 'person-plus' }), note: 'Reached from the menu button. Search matches name or any part of the phone number.' }, `${search('012')}${mlist}`),
-  sp('Members · No match', 'Members', '', { bar: btn('Register a member', 'primary', { block: 1, i: 'person-plus' }) }, `${search('019-55')}<div class="card">${emp('person-badge', 'No member matches "019-55"', 'Check the number, or register this customer as a new member.')}</div>`),
-  sp('Members · Register', 'Members', '', { sheet: 1, modal: regForm(false), note: 'Two fields only. Members are found by phone at payment; customers never sign in.' }, `${search('012')}${mlist}`),
+  sp('Members · No match', 'Members', '', { bar: btn('Register a member', 'primary', { block: 1, i: 'person-plus' }) }, `${search('019-55')}<div class="card">${emp('person-badge', 'No member matches "019-55"', 'Check the number or register them.')}</div>`),
+  sp('Members · Member detail', 'Member', '', { note: 'Tapping a member opens their details and points history. Cashiers can view it; adjusting points, editing and deactivating are done by the owner.' }, memberDetail),
+  sp('Members · Register', 'Members', '', { sheet: 1, modal: regForm(false), note: 'Name and phone are required; the phone must be a unique Malaysian mobile number. Email is optional. Members are found by phone at payment; customers never sign in.' }, `${search('012')}${mlist}`),
   sp('Members · Duplicate phone', 'Members', '', { sheet: 1, modal: regForm(true), note: 'The error names the existing member and offers to open that record.' }, `${search('012')}${mlist}`),
 ];
 
