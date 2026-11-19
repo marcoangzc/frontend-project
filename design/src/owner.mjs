@@ -38,11 +38,11 @@ const tablesQr = [
 
 /* ---------- Menu management ---------- */
 const thumb = (img, name) => img ? `<span class="qs-ph sm">${food(img, 44)}</span>` : `<button type="button" class="qs-ph-add" aria-label="Add a photo of ${name}">${i('camera')}<span>Add photo</span></button>`;
-const mrow = (name, catName, price, recipe, on, o = {}) => ({ c: [thumb(o.img, name), `<b>${name}</b>${o.best ? ' ' + badge('Best seller', 'brand') : ''}`, catName, price, `<span class="text-body-secondary">${recipe}</span>`, `<div class="d-flex align-items-center gap-2">${toggle('Available: ' + name, on)}<span>${on ? 'Available' : 'Unavailable'}</span></div>`, acts(name)] });
+const mrow = (name, catName, price, recipe, on, o = {}) => ({ c: [thumb(o.img, name), `<b>${name}</b>${o.best ? ' ' + badge('Best seller', 'brand') : ''}${o.reward ? ' ' + badge(`${i('gift-fill')} Reward · ${o.reward} pts`, 'tea') : ''}`, catName, price, `<span class="text-body-secondary">${recipe}</span>`, `<div class="d-flex align-items-center gap-2">${toggle('Available: ' + name, on)}<span>${on ? 'Available' : 'Unavailable'}</span></div>`, acts(name)] });
 const menuRows = [
-  mrow('Nasi Lemak Ayam', 'Rice', 'RM9.50', '5 ingredients', true, { best: 1, img: 'nasi-lemak' }), mrow('Nasi Goreng Kampung', 'Rice', 'RM8.50', '6 ingredients', false, { img: 'nasi-goreng' }),
-  mrow('Mee Goreng Mamak', 'Noodles', 'RM8.00', '7 ingredients', true, { best: 1, img: 'mee-goreng' }), mrow('Roti Canai (2 pcs)', 'Roti', 'RM3.00', '3 ingredients', true, { best: 1 }),
-  mrow('Teh Tarik', 'Drinks', 'RM2.80', '3 ingredients', true, { best: 1, img: 'teh-tarik' }), mrow('Milo Ais', 'Drinks', 'RM3.50', '3 ingredients', true, { img: 'milo-ais' }), mrow('Cendol', 'Desserts', 'RM4.50', 'No recipe yet', true)];
+  mrow('Nasi Lemak Ayam', 'Rice', 'RM9.50', '5 ingredients', true, { best: 1, img: 'nasi-lemak', reward: '1,290' }), mrow('Nasi Goreng Kampung', 'Rice', 'RM8.50', '6 ingredients', false, { img: 'nasi-goreng' }),
+  mrow('Mee Goreng Mamak', 'Noodles', 'RM8.00', '7 ingredients', true, { best: 1, img: 'mee-goreng' }), mrow('Roti Canai (2 pcs)', 'Roti', 'RM3.00', '3 ingredients', true, { best: 1, reward: 300 }),
+  mrow('Teh Tarik', 'Drinks', 'RM2.80', '3 ingredients', true, { best: 1, img: 'teh-tarik', reward: 200 }), mrow('Milo Ais', 'Drinks', 'RM3.50', '3 ingredients', true, { img: 'milo-ais', reward: 250 }), mrow('Cendol', 'Desserts', 'RM4.50', 'No recipe yet', true)];
 const menuPage = `<div class="qs-toolbar">${sel('All categories')}${searchBox('Search dishes')}<button type="button" class="qs-chip">${i('camera')} No photo <span class="badge qs-b-neutral">2</span></button>${btn('Manage categories', 'link')}<div class="ms-auto small text-body-secondary">32 dishes, 1 unavailable</div></div>${tbl([{ h: 'Photo' }, 'Dish', 'Category', { h: 'Price', ...R }, 'Recipe', 'Availability', { h: '', ...R }], menuRows)}`;
 const mset = (name, o) => pc(`Menu · ${name}`, 'Menu', 'Menu', { act: btn('Add dish', 'primary', { i: 'plus-lg' }), ...o }, menuPage);
 
@@ -65,6 +65,7 @@ const details = (st) => {
   return `<div class="card"><div class="card-body d-flex flex-column gap-3"><h2 class="fs-6">Details</h2>
   <div class="d-flex gap-3 align-items-start">${field('Dish name', empty || bad ? 'For example Nasi Goreng Ayam' : 'Nasi Goreng Ayam', { c: 'flex-fill', ph: empty || bad, err: bad ? 'Enter a dish name.' : '' })}${field('Category', 'Rice', { sel: 1, c: 'flex-fill' })}</div>
   <div class="d-flex gap-3 align-items-start"><div style="width:200px">${field('Price', bad ? '0.00' : empty ? '0.00' : '9.00', { pre: 'RM', ph: empty, err: bad ? 'Enter a price above RM0.00.' : '' })}</div><div class="flex-fill">${field('Description (shown to customers)', empty ? 'What is in it, in one line' : 'Fried rice with chicken and egg', { ph: empty })}</div></div>
+  <div style="max-width:320px">${field('Reward points cost (optional)', 'For example 200', { ph: 1, suf: 'pts', type: 'number', help: 'Members can exchange points for it' })}</div>
   <div class="d-flex flex-wrap gap-4">${check('Spicy (shows a fire icon)', false)}${check('Available as soon as it is saved', true)}</div>
   <div class="small text-body-secondary">Best seller: top 5 sold, last 30 days.</div></div></div>`;
 };
@@ -230,7 +231,7 @@ const mprofile = (inactive) => `<div class="d-flex gap-3 align-items-start"><div
     <div class="d-flex align-items-center gap-3">${tile('person-badge-fill', 'tea', 'lg')}<div class="flex-grow-1"><div class="fs-5 fw-bold">${SITI.name}</div><div class="small text-body-secondary">Member since ${SITI.since}</div></div>${inactive ? badge('Inactive', 'neutral') : badge('Active', 'brand')}</div>
     ${kv('<span class="text-body-secondary">Phone</span>', SITI.phone)}${kv('<span class="text-body-secondary">Email</span>', SITI.email)}
     <div class="d-flex gap-2 mt-1">${btn('Edit', 'outline-secondary', { sm: 1, i: 'pencil' })}${inactive ? btn('Reactivate', 'outline-secondary', { sm: 1 }) : btn('Deactivate', 'outline-secondary', { sm: 1 })}</div></div></div>
-  <div class="card" style="width:300px"><div class="card-body d-flex flex-column gap-2"><div class="fw-semibold">Points balance</div><div class="qs-mid">${SITI.balance}</div><div class="small text-body-secondary">Worth RM12.40</div>${btn('Adjust points', 'outline-secondary', { sm: 1, dis: inactive })}</div></div></div>
+  <div class="card" style="width:300px"><div class="card-body d-flex flex-column gap-2"><div class="fw-semibold">Points balance</div><div class="qs-mid">${SITI.balance}</div>${btn('Redeem reward', 'primary', { sm: 1, i: 'gift-fill', dis: inactive })}${btn('Adjust points', 'outline-secondary', { sm: 1, dis: inactive })}</div></div></div>
   ${inactive ? alert('secondary', 'Deactivated 18 Nov 2026 by Mei Ling', 'Points are kept.', 'slash-circle') : ''}
   <h2 class="fs-6 mb-0">Points history</h2>${phist(HISTORY)}`;
 const adjForm = (err) => mod('Adjust points · Siti Aminah', `
@@ -253,27 +254,20 @@ const staffForm = (err) => mod('Add staff account', `
   ${field('Name', 'Siva')}
   ${field('Staff ID', err === 'id' ? 'aina' : 'siva', { err: err === 'id' ? 'aina is taken. Try aina2.' : '', help: err === 'id' ? '' : 'Used to sign in' })}
   ${field('Password', err === 'pw' ? '•••••' : '•••••••••', { type: 'text', err: err === 'pw' ? 'Use at least 8 characters.' : '', help: err === 'pw' ? '' : 'At least 8 characters' })}
-  <fieldset><legend class="form-label">Role</legend><div class="qs-chipset"><button type="button" class="qs-chip on" aria-pressed="true">Cashier</button><button type="button" class="qs-chip">Owner</button></div></fieldset>`, btn('Cancel', 'outline-secondary') + btn('Create account', 'primary'), 440);
+  <fieldset class="d-flex flex-column gap-2"><legend class="form-label">Role</legend>
+    ${[['Owner', 'Everything, including back office'], ['Cashier', 'Front of house: orders, tables, queue, payments'], ['Kitchen', 'Kitchen view only']].map(([r, d]) => `<label class="qs-opt${r === 'Cashier' ? ' on' : ''}"><span class="flex-grow-1"><span class="d-block fw-semibold">${r}</span><span class="d-block small text-body-secondary">${d}</span></span><input class="form-check-input mt-0" type="radio" name="role-${err}"${r === 'Cashier' ? ' checked' : ''}></label>`).join('')}</fieldset>`, btn('Cancel', 'outline-secondary') + btn('Create account', 'primary'), 440);
 const staffList = () => `
     ${tbl(['Name', 'Staff ID', 'Role', 'Status', 'Last sign-in', { h: '', ...R }], [
       srow('Mei Ling', 'meiling', 'Owner', 'Active', 'Today, 9:02 am'), srow('Aina', 'aina', 'Cashier', 'Active', 'Today, 10:55 am'), srow('Kumar', 'kumar', 'Cashier', 'Active', 'Today, 4:58 pm'),
-      srow('Kitchen tablet', 'kitchen', 'Cashier', 'Active', 'Today, 10:30 am'), srow('Farah', 'farah', 'Cashier', 'Inactive', '28 Sep 2026', 'qs-void')])}`;
+      srow('Kitchen tablet', 'kitchen', 'Kitchen', 'Active', 'Today, 10:30 am'), srow('Farah', 'farah', 'Cashier', 'Inactive', '28 Sep 2026', 'qs-void')])}`;
 const sacct = (name, o) => pc(`Staff · ${name}`, 'Staff', 'Staff accounts', { upd: false, act: btn('Add staff account', 'primary', { i: 'plus-lg' }), ...o }, staffList());
-// ---------- points settings
-const pointsCard = `<div class="card" style="max-width:640px"><div class="card-body d-flex flex-column gap-3">
-  <div><h2 class="fs-5">Membership points</h2></div>
-  <div class="d-flex justify-content-between align-items-center"><div><div class="fw-semibold">Earn rate</div><div class="small text-body-secondary">Added after payment, rounded down</div></div><span class="d-inline-flex align-items-center gap-2 fw-semibold">${i('lock')} 1 point per RM1</span></div>
-  <div class="d-flex align-items-end gap-2"><div style="width:160px">${field('Redemption value', '100', { suf: 'points', type: 'number' })}</div><span class="pb-2 fw-semibold">=</span><div style="width:150px">${field(null, '1.00', { pre: 'RM', aria: 'Value in ringgit' })}</div></div>
-  <div class="alert alert-secondary mb-0 small">RM35.45 bill earns 35 pts. 500 pts = RM5.00 off.</div>
-  <div class="d-flex gap-2">${btn('Save', 'primary')}${btn('Discard changes', 'outline-secondary')}</div></div></div>`;
 const staff = [
-  sacct('Account list', { note: 'Accounts are deactivated, not deleted, so past transactions keep their staff name. The kitchen tablet uses its own Cashier-role account.' }),
+  sacct('Account list', { note: 'Accounts are deactivated, not deleted, so past transactions keep their staff name. The kitchen tablet has a Kitchen-role account: it can only see confirmed orders, mark them served and record waste.' }),
   sacct('Add account', { modal: staffForm(''), note: 'FR-SH-03. Name, Staff ID, password and role. Edit opens the same form; leaving the password empty keeps the current one.' }),
   sacct('Staff ID taken', { modal: staffForm('id'), note: 'Staff IDs are unique across active and inactive accounts.' }),
   sacct('Password too short', { modal: staffForm('pw'), note: 'Passwords need at least 8 characters.' }),
   pc('Settings · Rates', 'Settings', 'Settings', { upd: false, note: 'Both rates default to 0%. The example line shows the owner the effect before saving.' }, rates(false)),
   pc('Staff · Cashier permissions', 'Staff', 'Staff accounts', { upd: false, sub: 'Permissions', note: 'Lets the owner hand photo taking to staff without giving away prices or recipes. Defaults: photos on, approval off, so a cashier can fill gaps during a quiet hour.' }, `${tabs(['Accounts', 'Permissions'], 1)}${permCard}`),
-  pc('Settings · Points', 'Settings', 'Settings', { upd: false, note: 'The earn rate is fixed by the report (1 point per RM1, rounded down) and shown read-only. The redemption value is a placeholder until the team fixes it.' }, pointsCard),
   pc('Settings · Walk-in queue rules', 'Settings', 'Settings', { upd: false, note: 'The party limit follows the largest table by default instead of a fixed number. The hold time no longer blocks the queue, and closed ticket pages are flagged so staff can remove people who left.' }, queueRules),
   pc('Settings · Rate out of range', 'Settings', 'Settings', { upd: false, note: 'Rates outside 0 to 20% are refused under the field. The other field keeps its value.' }, rates(true)),
 ];

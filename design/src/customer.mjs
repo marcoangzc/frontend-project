@@ -1,5 +1,5 @@
 import { food } from './food.mjs';
-import { uid, tile, mod, i, btn, badge, field, check, kv, alert, upd, step, qr, chd, ph, section } from './lib.mjs';
+import { uid, tile, mod, i, btn, badge, reward, field, check, kv, alert, upd, step, qr, chd, ph, section } from './lib.mjs';
 
 const qh = chd('Walk-in queue', false);
 const plain = chd('', false);
@@ -139,11 +139,8 @@ const methods = (sel) => { const g = uid(); return `<fieldset class="d-flex flex
   ${opt(sel === 0, 'Card', 'Visa or Mastercard', 'credit-card', g)}${opt(sel === 1, 'E-wallet', 'Touch \'n Go, GrabPay, Boost', 'wallet2', g)}${opt(sel === 2, 'Cash at the counter', 'Quote table T3 to the cashier.', 'cash', g)}</fieldset>`; };
 const sandbox = '<div class="small text-secondary text-center">Sandbox payment. No real money is charged.</div>';
 const withVoucher = [['Subtotal', 'RM35.40'], ['Voucher RAYA5', '−RM5.00', 'text-primary fw-medium'], ['Service charge (10%)', 'RM3.04'], ['SST (6%)', 'RM2.01']];
-// 35.40 − 5.00 voucher − 5.00 points = 25.40; service 10% = 2.54; SST 6% of 27.94 = 1.68; total 29.62
-const withPoints = [['Subtotal', 'RM35.40'], ['Voucher RAYA5', '−RM5.00', 'text-primary fw-medium'], ['Points (−500)', '−RM5.00', 'text-primary fw-medium'], ['Service charge (10%)', 'RM2.54'], ['SST (6%)', 'RM1.68']];
 const voucherOn = `<div class="alert alert-primary d-flex align-items-center gap-2 mb-0"><span class="qs-ai">${i('ticket-perforated')}</span><div class="flex-grow-1"><div class="fw-semibold">RAYA5 applied</div></div>${btn('Remove', 'link', { c: 'p-0' })}</div>`;
-const memberOn = `<div class="qs-opt">${tile('person-badge-fill')}<span class="flex-grow-1"><span class="d-block fw-semibold">Siti Aminah</span><span class="d-block small">${badge('1,205 pts', 'tea')} <span class="text-body-secondary">worth RM12.05</span></span></span>${btn('Change', 'link', { c: 'p-0' })}</div>`;
-const usePoints = (v, o = {}) => `<div class="d-flex gap-2 align-items-start">${field('Use points', v, { type: 'number', suf: 'pts', c: 'flex-grow-1', err: o.err, help: o.err ? '' : o.help })}<div class="flex-shrink-0" style="padding-top:30px">${btn('Use max', 'outline-secondary', { c: 'text-nowrap' })}</div></div>`;
+const memberOn = `<div class="qs-opt">${tile('person-badge-fill')}<span class="flex-grow-1"><span class="d-block fw-semibold">Siti Aminah</span><span class="d-block small">${badge('1,205 pts', 'tea')}</span></span>${btn('Change', 'link', { c: 'p-0' })}</div>`;
 const payment = [
   ph('Payment · Bill', { bar: btn('Pay RM41.28', 'primary', { lg: 1, block: 1, i: 'lock' }) + sandbox, note: 'Service charge and SST are separate lines at the owner\'s rates. Voucher and member phone are optional.' }, `
     <h1 class="fs-4">Your bill</h1>${items}
@@ -151,23 +148,16 @@ const payment = [
     <div class="d-flex gap-2 align-items-end">${field('Voucher code', 'Enter code', { ph: 1, c: 'flex-grow-1' })}${btn('Apply', 'outline-primary')}</div>
     ${field('Member phone (optional)', '012-345 6789', { ph: 1, type: 'tel' })}
     ${methods(0)}`),
-  ph('Payment · Member found', { bar: btn('Pay RM35.45', 'primary', { lg: 1, block: 1, i: 'lock' }) + sandbox, note: 'After the voucher and the member phone are matched, the member name and points balance appear with a Use points field. 100 points = RM1.00 (placeholder rate, set in Settings).' }, `
+  ph('Payment · Member found', { bar: btn('Pay RM35.45', 'primary', { lg: 1, block: 1, i: 'lock' }) + sandbox, note: 'Once the member phone matches, the member name and points balance appear. Points are earned after payment (1 per RM1, rounded down). They are never used as a discount: members exchange them for reward dishes at the counter.' }, `
     <h1 class="fs-4">Your bill</h1>${items}
     ${totals(withVoucher, 'RM35.45')}
     ${voucherOn}${memberOn}
-    ${usePoints('0', { help: '100 points = RM1.00' })}
     ${methods(0)}`),
-  ph('Payment · Points applied', { bar: btn('Pay RM29.62', 'primary', { lg: 1, block: 1, i: 'lock' }) + sandbox, note: 'Order of discounts: subtotal, voucher, points, then service charge on the discounted subtotal and SST on that plus service charge. Each line is rounded to RM0.01. Points earned on this bill: 29.' }, `
-    <h1 class="fs-4">Your bill</h1>${items}
-    ${totals(withPoints, 'RM29.62')}
-    ${voucherOn}${memberOn}
-    ${usePoints('500', { help: '−RM5.00 · 705 pts left' })}
-    ${methods(0)}`),
-  ph('Payment · Not enough points', { bar: btn('Pay RM35.45', 'primary', { lg: 1, block: 1, i: 'lock' }) + sandbox, note: 'Asking for more points than the balance is refused under the field. The bill is unchanged until a valid amount is entered.' }, `
-    <h1 class="fs-4">Your bill</h1>${items}
-    ${totals(withVoucher, 'RM35.45')}
-    ${voucherOn}${memberOn}
-    ${usePoints('1500', { err: 'Only 1,205 points. Enter 1,205 or less.' })}
+  ph('Payment · Bill with a reward', { bar: btn('Pay RM9.33', 'primary', { lg: 1, block: 1, i: 'lock' }) + sandbox, note: 'Next visit (18 Nov): the cashier redeemed a Teh Tarik for 200 points. It shows with a Reward tag at RM0.00 and earns nothing; this bill earns 9 points. 8.00 + service 0.80 + SST 0.53 = 9.33.' }, `
+    <h1 class="fs-4">Your bill</h1>
+    <div class="d-flex flex-column gap-1 small">${kv('1 × Mee Goreng Mamak', 'RM8.00')}${kv(`1 × Teh Tarik ${reward(false)}`, 'RM0.00')}</div>
+    ${totals([['Subtotal', 'RM8.00'], ['Service charge (10%)', 'RM0.80'], ['SST (6%)', 'RM0.53']], 'RM9.33')}
+    <div class="qs-opt">${tile('person-badge-fill')}<span class="flex-grow-1"><span class="d-block fw-semibold">Siti Aminah</span><span class="d-block small">${badge('1,040 pts', 'tea')}</span></span></div>
     ${methods(0)}`),
   ph('Payment · Voucher expired', { bar: btn('Pay RM41.28', 'primary', { lg: 1, block: 1, i: 'lock' }) + sandbox, note: 'An expired code is refused under the field with its end date. The bill stays as it was and the customer can still pay.' }, `
     <h1 class="fs-4">Your bill</h1>${items}

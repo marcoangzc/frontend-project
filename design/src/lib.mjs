@@ -24,6 +24,8 @@ export const tile = (icon, tone = '', size = '') => {
 };
 
 export const badge = (label, tone = 'neutral') => `<span class="badge qs-b-${tone}">${label}</span>`;
+// A dish redeemed with points: Reward tag and RM0.00
+export const reward = (price = true) => `<span class="badge qs-b-tea">${i('gift-fill')} Reward</span>${price ? ' <span class="small text-body-secondary">RM0.00</span>' : ''}`;
 
 export const field = (label, value, o = {}) => {
   const d = id();
@@ -144,7 +146,7 @@ export const pc = (name, act, title, o, body) =>
 
 // Wall tablet for the kitchen: no navigation, very large type
 export const tb = (name, o, body) =>
-  frame('tb', name, o, `<header class="qs-kbar"><h1>Kitchen</h1><div>${o.count}</div><div class="ms-auto">${upd()}</div>${btn('Record waste', 'band', { i: 'clipboard-minus' })}<div class="qs-kclock">${o.time || '7:29 pm'}</div></header><main class="qs-kbody">${body}</main>`);
+  frame('tb', name, o, `<header class="qs-kbar"><h1>Kitchen</h1><div>${o.count}</div><div class="ms-auto">${upd()}</div>${btn('Record waste', 'band', { i: 'clipboard-minus' })}<div class="qs-kclock">${o.time || '7:29 pm'}</div><button type="button" class="btn qs-kmenu" aria-label="Account menu"${o.menu ? ' aria-expanded="true"' : ''}>${i('three-dots-vertical')}</button></header>${o.menu ? `<div class="qs-kdrop" role="menu"><div class="small text-body-secondary px-3 pt-2 pb-1">Signed in as Kitchen tablet</div><button type="button" class="qs-kdrop-item" role="menuitem">${i('box-arrow-right')} Sign out</button></div>` : ''}<main class="qs-kbody">${body}</main>`);
 
 // Tablet at the counter for the cashier
 export const ct = (name, title, o, body) =>

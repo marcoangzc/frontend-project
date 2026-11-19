@@ -61,7 +61,7 @@ figure.pc, figure.tb, figure.ct { width: 200mm; } figure.pc img, figure.tb img, 
 <div class="cover"><h1>QuickServe UI screens</h1>
 <p>Browser-based POS for small family-run Malaysian restaurants. ${screens} screens and ${states} states across three roles, drawn in Bootstrap 5 with Bootstrap Icons.</p>
 <p>Each page shows one screen with all of its states. The grey line under a state says what triggers it.</p>
-<p>Version 3.3, ${new Date().toISOString().slice(0, 10)}. Food images are flat illustrations standing in for the photos merchants upload; QR codes are placeholders.</p></div>
+<p>Version 3.4, ${new Date().toISOString().slice(0, 10)}. Food images are flat illustrations standing in for the photos merchants upload; QR codes are placeholders.</p></div>
 ${roles.map((r) => r.sections.map((s) => `<section><p class="role">${r.title}</p><h2>${s.title}</h2><p class="meta">${s.meta}</p><div class="grid">${s.frames.map(fig).join('')}</div></section>`).join('')).join('')}
 </body></html>`;
 const pdfSrc = join(shots, 'print.html');
@@ -76,7 +76,7 @@ const list = roles.map((r) => `### ${r.title}\n\n${r.sub}\n\n` + r.sections.map(
 
 const md = `# QuickServe UI design: summary for the project report
 
-Version 3.3 · ${new Date().toISOString().slice(0, 10)} · ${screens} screens, ${states} states
+Version 3.4 · ${new Date().toISOString().slice(0, 10)} · ${screens} screens, ${states} states
 
 This file summarises the UI/UX design work for QuickServe, a browser-based POS for small family-run Malaysian restaurants (2 to 5 staff, about 30 tables). It goes with **QuickServe-UI-screens.pdf**, which has a screenshot of every state listed below. The source of every screen is in \`design/src/\` in the repository.
 
@@ -85,9 +85,9 @@ This file summarises the UI/UX design work for QuickServe, a browser-based POS f
 | Role | Logs in | Device | What they do |
 |---|---|---|---|
 | Customer | No (QR links only) | Own phone, 360 px | Join the walk-in queue, browse the menu, order, pay, split the bill |
-| Cashier / waiter | Yes, Cashier role | Phone, or tablet at the counter | Confirm QR orders, watch tables, run the queue, take cash, request voids, add dish photos |
-| Kitchen | Staff account, kitchen view only | Wall tablet, read from a metre away | See confirmed orders oldest first, mark served, record waste |
-| Owner | Yes, Owner role | PC or tablet | Menu, recipes, inventory, tables and QR, vouchers, staff, settings, reports, void approval |
+| Cashier / waiter | Yes, Cashier role | Phone, or tablet at the counter | Confirm QR orders, watch tables, run the queue, take cash, request voids, redeem member rewards, add dish photos |
+| Kitchen | Yes, Kitchen role | Wall tablet, read from a metre away | See confirmed orders oldest first, mark served (with undo), record waste. Nothing else: the backend refuses every other request |
+| Owner | Yes, Owner role | PC or tablet | Menu, recipes, reward dishes, inventory, tables and QR, vouchers, members and points, staff, settings, reports, refunds, void approval; also every front-of-house page and the Kitchen view |
 
 Out of scope, as in the brief: customer accounts, takeaway and delivery, reservations, printers, native apps.
 
@@ -109,10 +109,13 @@ Out of scope, as in the brief: customer accounts, takeaway and delivery, reserva
    - **Shorter text.** Every screen's text was cut for a lunch rush: one message per state, hints of 8 words or fewer, errors as "what is wrong + how to fix it", dialog titles as questions. Explanations moved to the design notes.
    - **Removed.** The language switcher (the system is English only).
    - **Queue page.** The customer ticket shows groups ahead, with no wait estimate.
-   - **Membership.** An email field and a full membership points flow were added.
+   - **Membership.** Members now have an email field, and they earn points (later changed in v3.4, below).
    - **Defects fixed.** Best sellers are ranked by quantity sold, and vouchers are deactivated instead of deleted.
    - **New screens.** Added for the report's test plan, each with a valid and an invalid run: cancel order, refund, add ingredient, staff account, voucher form, member edit and deactivate, and call waiter.
-7. **Acceptance testing.** After every change, automated checks ran over every state (section 6), and the six key flows were walked through step by step.
+7. **Revision v3.4, part 2 of the report review.** Two decisions changed:
+   - **Points buy reward dishes.** Points are no longer a discount, so the Use points control, its states, the points bill line and Settings · Points were removed. Points now buy reward dishes: the owner gives a dish a points cost, and the cashier redeems it from the member's page onto a table's order at RM0.00 with a Reward tag.
+   - **Kitchen role.** A third staff role was added. Kitchen accounts open the Kitchen view directly, have only a small Sign out menu, and see a blocked page anywhere else.
+8. **Acceptance testing.** After every change, automated checks ran over every state (section 6), and the six key flows were walked through step by step.
 
 ## 3. Design system
 
@@ -158,12 +161,19 @@ These change or add to the brief. They need team agreement and backend support.
 5. **Waste and extra use.** The kitchen records waste (dropped, spoiled, burnt, dish remade, extra in a dish, optionally linked to an order). Each ingredient has a full stock history: recipe deductions, waste, stock-in and stock-take differences. Repeated extra use on one dish suggests fixing that recipe.
 6. **Dish photos.** Photos are optional. They are shrunk in the browser before upload: about 10 KB thumbnails for the list and about 60 KB for the dish detail, stored in Supabase Storage. Text loads first and photos fill in.
 7. **Staff photo permission.** Cashiers can add or replace dish photos from their phone, but cannot change names, prices or recipes. The owner can switch this off or require approval before photos go live. The backend should expose photo upload as its own endpoint.
-8. **Membership points.** Members earn 1 point per RM1 paid, rounded down, added after payment. Points are redeemed at payment at **100 points = RM1.00. This value is a placeholder until the team fixes it, and the owner can change it in Settings.** The order of discounts is: subtotal → voucher → points → service charge on the discounted subtotal → SST on (discounted subtotal + service charge), each line rounded to RM0.01. Example: RM35.40 − RM5.00 voucher − 500 points (RM5.00) = RM25.40; service RM2.54; SST RM1.68; total RM29.62, which earns 29 points. Points never go below 0. Owner adjustments need a reason and appear in the member's points history.
+8. **Membership points and reward dishes.**
+   - **Earning.** Members earn 1 point per RM1 paid, rounded down, added automatically after payment.
+   - **No cash value.** Points are never cash or a discount, and bills stay subtotal → voucher → service charge on the discounted subtotal → SST on (discounted subtotal + service charge), each rounded to RM0.01.
+   - **Reward dishes.** Points can only be exchanged for a reward dish: a menu dish the owner has given a points cost (Teh Tarik 200, Milo Ais 250, Roti Canai 300, Nasi Lemak Ayam 1,290).
+   - **Redeeming.** The cashier finds the member by phone, picks a reward and a table, and the points are deducted at once. The dish joins that table's order at RM0.00 with a Reward tag, goes to the kitchen and deducts stock by recipe. It earns no points.
+   - **Limits.** A reward the member can't afford is greyed with "Need 50 more points". Points never go below 0, and owner adjustments need a reason.
+   - **Example.** On 17 Nov Siti earns 35 points on RM35.45 (balance 1,240). On her next visit she redeems a Teh Tarik for 200 points (1,040 left). That visit's bill, RM8.00 + service charge RM0.80 + SST RM0.53 = RM9.33, earns 9 points.
 9. **Members.** Members have a name and phone (both required; the phone is a unique Malaysian mobile number) and an optional email. Members and vouchers are never deleted, only deactivated and reactivated.
 10. **Best sellers.** Ranked by quantity sold. The top 5 over the last 30 days get the Best seller label on the menu.
 11. **Cancel and refund.** A confirmed order that has not been served can be cancelled with a reason, and its stock is restored. A served order cannot be cancelled. After payment, the owner can refund all or part of a bill (never more than was paid), with a reason, back to the original payment method.
 12. **Customer queue page.** Shows the number of groups ahead, never an estimated waiting time. Call waiter stays disabled until staff tap Done.
-13. **Visual rules.** The brief asked for one brand colour and a system font. The approved style uses iOS blue with decorative icon colours, and SF or Inter.
+13. **Staff roles.** There are three roles. Owner has everything. Cashier has the front of house plus dish photos and reward redemption. Kitchen can only view confirmed orders, mark them served (with undo) and record waste. A Kitchen account signs straight into the Kitchen view; any other page shows "Not available for this account" with a way back. The backend refuses every other request from a Kitchen account.
+14. **Visual rules.** The brief asked for one brand colour and a system font. The approved style uses iOS blue with decorative icon colours, and SF or Inter.
 
 ## 6. Acceptance testing
 
@@ -187,7 +197,12 @@ The colour comparison page was checked the same way for 4 palettes × 2 icon sty
 
 **Text length (v3.3).** All on-screen text was listed by length. The 88 texts of 9 words or more were cut to 13, and those 13 are data lines (dates, receipt numbers, stock figures) or 9-word lines.
 
-**Arithmetic.** Every bill, split and receipt that changed was recalculated: points bill RM29.62, cashier bill with points RM21.57 (change RM28.43 from RM50), points earned and balances (1,205 + 35 = 1,240) and member history balances. The daily sales report was checked: the seven days add up to RM9,412.80, which matches Revenue and the payment-method total (302 bills both ways).
+**Arithmetic.** Every bill, split and receipt that changed was recalculated:
+- **Customer bill.** RM35.40 − RM5.00 voucher = RM30.40; service charge RM3.04; SST RM2.01; total RM35.45, which earns 35 points.
+- **Cashier bill.** RM21.50 + RM2.15 + RM1.42 = RM25.07; change from RM50 is RM24.93.
+- **Bills with a reward.** RM8.00 + RM0.80 + RM0.53 = RM9.33 on the customer side; RM8.50 + RM0.85 + RM0.56 = RM9.91 on the staff table detail.
+- **Points balances.** 1,205 + 35 = 1,240, then − 200 = 1,040. Every line of the member's points history adds up.
+- **Daily sales report.** The seven days add up to RM9,412.80, which matches Revenue and the payment-method total (302 bills both ways).
 
 **Problems found and fixed by testing:**
 - Four 36 px buttons on phones.
@@ -207,7 +222,7 @@ The colour comparison page was checked the same way for 4 palettes × 2 icon sty
 - QR codes are placeholders, and food images are illustrations.
 - The brief's step of offering two layout directions per screen was done for colour (four palettes compared) but not for layout.
 - Without sound, customers may miss being called if they are not looking at the page.
-- The points redemption value (100 points = RM1.00) is a placeholder.
+- Reward points costs are sample values for the mock-up; the owner sets the real ones.
 
 ## 7. Next steps
 

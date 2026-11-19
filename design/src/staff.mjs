@@ -1,6 +1,6 @@
 import { food } from './food.mjs';
-import { SITI, HISTORY } from './members-data.mjs';
-import { tile, i, btn, iconBtn, badge, field, toggle, kv, alert, upd, step, emp, mod, tabs, ph, sp, tb, ct, section } from './lib.mjs';
+import { SITI, HISTORY, REWARDS, REDEEMED } from './members-data.mjs';
+import { tile, i, btn, iconBtn, badge, reward, field, toggle, kv, alert, upd, step, emp, mod, tabs, ph, sp, tb, ct, section } from './lib.mjs';
 
 /* ---------- Staff login ---------- */
 const login = (name, al, o = {}) => ph(`Staff login · ${name}`, { url: 'quickserve.my/staff', head: '', note: o.note }, `
@@ -12,7 +12,8 @@ const login = (name, al, o = {}) => ph(`Staff login · ${name}`, { url: 'quickse
   ${btn('Sign in', 'primary', { lg: 1, block: 1 })}
   <div class="small text-body-secondary">Forgot your password? Ask the owner.</div>`);
 const logins = [
-  login('Normal', '', { note: 'Same page for Cashier and Owner. The role decides which navigation appears after sign-in.' }),
+  login('Kitchen account', '', { id: 'kitchen', note: 'A Kitchen-role account goes straight to the Kitchen view after signing in. It has no other pages.' }),
+  login('Normal', '', { note: 'Same page for every role. Owner and Cashier get their navigation after sign-in; a Kitchen account opens the Kitchen view.' }),
   login('Wrong password', alert('danger', 'Staff ID or password is incorrect', 'Check both and try again.'), { pw: '', note: 'The message does not say which of the two is wrong. The Staff ID is kept; the password is cleared.' }),
   login('Inactive account', alert('danger', 'This account is inactive', 'Ask the owner to reactivate it.'), { id: 'kumar', pw: '', note: 'Deactivated staff cannot sign in. Their past transactions stay on record.' }),
 ];
@@ -107,11 +108,11 @@ const tables = [
   sp('Tables · Waiter call', 'Tables', 'Tables', { note: 'A customer tapped Call waiter on T7. The alert stays pinned until a staff member taps Done.' }, `
     <div class="alert alert-warning d-flex align-items-center gap-2 mb-0" role="alert"><span class="qs-ai">${i('bell-fill')}</span><div class="flex-grow-1"><div class="fw-semibold">T7 is calling a waiter</div><div class="small">1 min ago · Outdoor</div></div>${btn('Done', 'outline-secondary', { sm: 1 })}</div>
     ${legend}${grid(true)}`),
-  sp('Tables · Table detail', 'Tables', 'Tables', { sheet: 1, note: 'On a phone, tapping a table opens its order in a bottom sheet with the two actions staff need most.',
-    modal: mod('T3 · Indoor', `<div class="d-flex justify-content-between align-items-center"><span class="small text-body-secondary">Order #1042, confirmed 7:23 pm by Aina</span>${badge('Waiting for food', 'wait')}</div>
-      <div class="d-flex flex-column gap-1">${kv('2 × Nasi Lemak Ayam', 'RM19.00')}${kv('1 × Mee Goreng Mamak', 'RM8.00')}${kv('3 × Teh Tarik', 'RM8.40')}</div>
-      <hr class="my-0">${kv('Total incl. service charge and SST', 'RM41.28', 'fw-semibold')}${kv('<span class="text-body-secondary">Paying by</span>', 'Card or e-wallet')}`, btn('Edit order', 'outline-secondary') + btn('Take payment', 'primary', { i: 'cash' })) }, `
-    <div class="d-flex justify-content-between align-items-center"><div class="fw-medium">9 of 15 tables open</div>${upd()}</div>${legend}${grid(false, true)}`),
+  sp('Tables · Table detail', 'Tables', 'Tables', { sheet: 1, note: 'Tapping a table opens its order with the two actions staff need most. T7\'s Teh Tarik was redeemed with points, so it shows a Reward tag at RM0.00. 8.50 + service 0.85 + SST 0.56 = 9.91.',
+    modal: mod('T7 · Outdoor', `<div class="d-flex justify-content-between align-items-center"><span class="small text-body-secondary">Order #1044 · confirmed 7:26 pm</span>${badge('Waiting for food', 'wait')}</div>
+      <div class="d-flex flex-column gap-1">${kv('1 × Nasi Goreng Kampung', 'RM8.50')}${kv(`1 × Teh Tarik ${reward(false)}`, 'RM0.00')}</div>
+      <hr class="my-0">${kv('Total incl. service charge and SST', 'RM9.91', 'fw-semibold')}${kv('<span class="text-body-secondary">Paying by</span>', 'Cash')}`, btn('Edit order', 'outline-secondary') + btn('Take payment', 'primary', { i: 'cash' })) }, `
+    <div class="d-flex justify-content-between align-items-center"><div class="fw-medium">9 of 15 tables open</div>${upd()}</div>${legend}${grid(false)}`),
   ct('Tables · Counter tablet', 'Tables', { note: 'Same grid at 1024 px with the selected table\'s order beside it, so the cashier does not leave the page to take payment.' }, `
     <div><div class="d-flex justify-content-between align-items-center"><div class="fw-medium">9 of 15 tables open</div>${upd()}</div>${legend}${grid(false, true)}</div>
     <aside><div class="d-flex justify-content-between align-items-center"><h2 class="fs-4">T3 · Indoor</h2>${badge('Waiting for food', 'wait')}</div>
@@ -133,13 +134,15 @@ const o1043 = line(1, 'Nasi Goreng Kampung') + line(2, 'Roti Canai (2 pcs)') + l
 const otabs = tabs(['Pending <span class="badge qs-b-wait-solid ms-2">2</span>', 'Confirmed', 'Served']);
 const pending = (a) => `<div class="d-flex justify-content-between align-items-center">${otabs}</div>${upd()}${order('T3', 1042, '2 min ago', 'Card / e-wallet', o1042, { alert: a })}${order('T9', 1043, '1 min ago', 'Cash', o1043)}`;
 const editRow = (name, q) => `<div class="d-flex align-items-center gap-2"><span class="flex-grow-1 fw-medium">${name}</span>${step(q)}${iconBtn('trash', 'Remove ' + name)}</div>`;
-const ctabs = tabs(['Pending', 'Confirmed <span class="badge qs-b-neutral ms-2">2</span>', 'Served'], 1);
+const ctabs = tabs(['Pending', 'Confirmed <span class="badge qs-b-neutral ms-2">3</span>', 'Served'], 1);
+const rline = (q, name) => `<div><span class="fw-semibold me-2">${q} ×</span>${name} ${reward()}</div>`;
 const conf = (tbl, no, st, lines, served) => `<div class="card"><div class="card-body d-flex flex-column gap-2 p-3">
   <div class="d-flex align-items-center gap-2"><span class="fs-4 fw-bold lh-1">${tbl}</span><span class="flex-grow-1 small text-body-secondary">#${no}</span>${badge(st, served ? 'brand' : 'wait')}</div>
   <div class="d-flex flex-column gap-1">${lines}</div>
   <div class="d-flex gap-2">${btn('Cancel order', 'outline-danger', { c: 'flex-fill' })}</div></div></div>`;
 const confirmedList = (o = {}) => `${ctabs}${upd()}
   ${o.cancelled ? '' : conf('T3', 1042, 'In the kitchen 6 min', o1042)}
+  ${conf('T7', 1044, 'In the kitchen 3 min', line(1, 'Nasi Goreng Kampung') + rline(1, 'Teh Tarik'))}
   ${conf('T5', 1039, 'Served 7:30 pm', line(1, 'Nasi Lemak Ayam') + line(2, 'Mee Goreng Mamak') + line(2, 'Teh Tarik'), true)}`;
 const cancelSheet = mod('Cancel order #1042?', `
   <fieldset><legend class="form-label">Reason</legend><div class="qs-chipset"><button type="button" class="qs-chip on" aria-pressed="true">Customer changed mind</button><button type="button" class="qs-chip">Wrong order</button><button type="button" class="qs-chip">Out of stock</button><button type="button" class="qs-chip">Other</button></div></fieldset>
@@ -168,11 +171,11 @@ const kitchen = [
     ${ticket('T5', 1039, '7:18 pm', '11 min', kl(1, 'Nasi Lemak Ayam') + kl(2, 'Mee Goreng Mamak', '1 no egg') + kl(2, 'Teh Tarik'), true)}
     ${ticket('T11', 1040, '7:21 pm', '8 min', kl(3, 'Roti Canai (2 pcs)') + kl(3, 'Milo Ais'))}
     ${ticket('T3', 1042, '7:23 pm', '6 min', kl(2, 'Nasi Lemak Ayam', 'less spicy') + kl(1, 'Mee Goreng Mamak') + kl(3, 'Teh Tarik', '1 kurang manis'))}
-    ${ticket('T7', 1044, '7:26 pm', '3 min', kl(1, 'Nasi Goreng Kampung') + kl(1, 'Teh Tarik'))}`),
+    ${ticket('T7', 1044, '7:26 pm', '3 min', kl(1, 'Nasi Goreng Kampung') + `<li><b>1 ×</b>Teh Tarik ${reward()}</li>`)}`),
   tb('Kitchen · Served with undo', { count: '3 orders waiting', note: 'Tapping Served removes the ticket at once and shows Undo for 8 seconds, because a wet hand on a wall tablet will mis-tap. The kitchen never needs a confirmation dialog.' }, `
     ${ticket('T11', 1040, '7:21 pm', '8 min', kl(3, 'Roti Canai (2 pcs)') + kl(3, 'Milo Ais'))}
     ${ticket('T3', 1042, '7:23 pm', '6 min', kl(2, 'Nasi Lemak Ayam', 'less spicy') + kl(1, 'Mee Goreng Mamak') + kl(3, 'Teh Tarik', '1 kurang manis'))}
-    ${ticket('T7', 1044, '7:26 pm', '3 min', kl(1, 'Nasi Goreng Kampung') + kl(1, 'Teh Tarik'))}
+    ${ticket('T7', 1044, '7:26 pm', '3 min', kl(1, 'Nasi Goreng Kampung') + `<li><b>1 ×</b>Teh Tarik ${reward()}</li>`)}
     <div class="qs-toast" role="status">${i('check-circle-fill')} T5 marked served ${btn('Undo', 'band')}</div>`),
   tb('Kitchen · Record waste', { count: '4 orders waiting', note: 'For anything the recipe does not cover: dropped or spoiled food, a dish remade, or an extra portion. Big buttons for wet hands. It deducts stock and is logged as waste, separate from sales, so the owner can see where ingredients went.',
     modal: mod('Record waste', `
@@ -189,26 +192,29 @@ const kitchen = [
     ${ticket('T5', 1039, '7:18 pm', '11 min', kl(1, 'Nasi Lemak Ayam') + kl(2, 'Mee Goreng Mamak', '1 no egg') + kl(2, 'Teh Tarik'), true)}
     ${ticket('T11', 1040, '7:21 pm', '8 min', kl(3, 'Roti Canai (2 pcs)') + kl(3, 'Milo Ais'))}
     ${ticket('T3', 1042, '7:23 pm', '6 min', kl(2, 'Nasi Lemak Ayam', 'less spicy') + kl(1, 'Mee Goreng Mamak') + kl(3, 'Teh Tarik', '1 kurang manis'))}`),
+  tb('Kitchen · Account menu', { count: '4 orders waiting', menu: 1, note: 'The only navigation on the kitchen device: a small corner menu with Sign out, so the tablet can switch accounts. Owners keep Kitchen view in their sidebar.' }, `
+    ${ticket('T5', 1039, '7:18 pm', '11 min', kl(1, 'Nasi Lemak Ayam') + kl(2, 'Mee Goreng Mamak', '1 no egg') + kl(2, 'Teh Tarik'), true)}
+    ${ticket('T11', 1040, '7:21 pm', '8 min', kl(3, 'Roti Canai (2 pcs)') + kl(3, 'Milo Ais'))}
+    ${ticket('T3', 1042, '7:23 pm', '6 min', kl(2, 'Nasi Lemak Ayam', 'less spicy') + kl(1, 'Mee Goreng Mamak') + kl(3, 'Teh Tarik', '1 kurang manis'))}`),
+  tb('Kitchen · Not available for this account', { count: '', note: 'Shown when a Kitchen account opens any other page, for example an old bookmark. The server refuses the request as well.' }, `
+    <div class="qs-knot">${tile('lock-fill', 'gray', 'xl')}<div>This page is not available for kitchen accounts.</div>${btn('Back to kitchen view', 'primary', { i: 'arrow-left' })}</div>`),
   tb('Kitchen · None waiting', { count: '0 orders waiting', note: 'The device signs in with a staff account and stays on this page; there is no navigation to tap by mistake.' }, `
     <div class="qs-kempty">No orders waiting<div>Confirmed orders appear here within 5 seconds.</div></div>`),
 ];
 
 /* ---------- Payment (cashier) ---------- */
 const bill9 = `<div class="d-flex flex-column gap-1 small">${kv('1 × Nasi Goreng Kampung', 'RM8.50')}${kv('2 × Roti Canai (2 pcs)', 'RM6.00')}${kv('2 × Milo Ais', 'RM7.00')}<hr class="my-1">${kv('Subtotal', 'RM21.50')}${kv('Service charge (10%)', 'RM2.15')}${kv('SST (6%)', 'RM1.42')}</div>${kv('Total', 'RM25.07', 'fs-5 fw-semibold')}`;
-// 21.50 − 3.00 points = 18.50; service 10% = 1.85; SST 6% of 20.35 = 1.22; total 21.57; change from RM50 = 28.43
-const bill9p = `<div class="d-flex flex-column gap-1 small">${kv('1 × Nasi Goreng Kampung', 'RM8.50')}${kv('2 × Roti Canai (2 pcs)', 'RM6.00')}${kv('2 × Milo Ais', 'RM7.00')}<hr class="my-1">${kv('Subtotal', 'RM21.50')}${kv('Points (−300)', '−RM3.00', 'text-primary fw-medium')}${kv('Service charge (10%)', 'RM1.85')}${kv('SST (6%)', 'RM1.22')}</div>${kv('Total', 'RM21.57', 'fs-5 fw-semibold')}`;
-const memberCash = `<div class="qs-opt">${tile('person-badge-fill')}<span class="flex-grow-1"><span class="d-block fw-semibold">Tan Wei Jie</span><span class="d-block small">${badge('640 pts', 'tea')} <span class="text-body-secondary">worth RM6.40</span></span></span>${btn('Change', 'link', { c: 'p-0' })}</div>
-    <div class="d-flex gap-2 align-items-start">${field('Use points', '300', { type: 'number', suf: 'pts', c: 'flex-grow-1', help: '−RM3.00 · 340 pts left' })}<div class="flex-shrink-0" style="padding-top:30px">${btn('Use max', 'outline-secondary', { c: 'text-nowrap' })}</div></div>`;
+const memberCash = `<div class="qs-opt">${tile('person-badge-fill')}<span class="flex-grow-1"><span class="d-block fw-semibold">Tan Wei Jie</span><span class="d-block small">${badge('640 pts', 'tea')}</span></span>${btn('Change', 'link', { c: 'p-0' })}</div>`;
 const quick = (v, on) => `<button type="button" class="btn ${on ? 'btn-primary' : 'btn-outline-secondary'} flex-fill">${v}</button>`;
 const cash = [
   sp('Take payment · Cash with change', 'Take payment', 'Pay', { bar: btn('Record cash payment', 'primary', { lg: 1, block: 1 }), note: 'The customer quotes the table number at the counter. Change is worked out as the cashier types. Recording the payment replaces the table\'s QR token and opens the e-receipt.' }, `
     ${field('Table', 'T9 · Outdoor', { sel: 1 })}
-    <div class="card"><div class="card-body d-flex flex-column gap-2 p-3">${bill9p}</div></div>
+    <div class="card"><div class="card-body d-flex flex-column gap-2 p-3">${bill9}</div></div>
     <div class="d-flex gap-2 align-items-end">${field('Voucher code', 'Enter code', { ph: 1, c: 'flex-grow-1' })}${btn('Apply', 'outline-primary')}</div>
     ${memberCash}
     ${field('Cash tendered', '50.00', { pre: 'RM' })}
     <div class="d-flex gap-2">${quick('Exact')}${quick('RM30')}${quick('RM50', 1)}${quick('RM100')}</div>
-    <div class="alert alert-primary mb-0">${kv('Change to give', 'RM28.43', 'fs-4 fw-semibold')}</div>`),
+    <div class="alert alert-primary mb-0">${kv('Change to give', 'RM24.93', 'fs-4 fw-semibold')}</div>`),
   sp('Take payment · Expired voucher', 'Take payment', 'Pay', { bar: btn('Record cash payment', 'primary', { lg: 1, block: 1, dis: 1 }), note: 'An expired or deactivated voucher is refused with its end date. The bill is unchanged.' }, `
     ${field('Table', 'T9 · Outdoor', { sel: 1 })}
     <div class="card"><div class="card-body d-flex flex-column gap-2 p-3">${bill9}</div></div>
@@ -281,15 +287,26 @@ const regForm = (dup) => mod('Register member', `
 const search = (q) => `<div class="d-flex gap-2 align-items-end">${field(null, q, { aria: 'Search members by name or phone', pre: i('search'), c: 'flex-grow-1' })}</div>`;
 const mlist = `<div class="small text-body-secondary">3 members match "012"</div><div class="qs-list">${member('Siti Aminah', '012-345 6789', '1,240')}${member('Tan Wei Jie', '012-880 1432', '640')}${member('Kumar Selvam', '016-012 7755', '85')}</div>`;
 const hist = HISTORY.map((h) => `<div><span class="flex-grow-1 min-w-0"><span class="d-block fw-semibold">${h.what}</span><span class="d-block small text-body-secondary">${h.date}${h.bill ? ' · ' + h.bill : ''}</span></span><span class="text-end"><span class="d-block fw-bold">${h.pts}</span><span class="d-block small text-body-secondary">${h.after}</span></span></div>`).join('');
-const memberDetail = `<div class="card"><div class="card-body d-flex flex-column gap-2 p-3">
+const histRows = (rows) => rows.map((h) => `<div><span class="flex-grow-1 min-w-0"><span class="d-block fw-semibold">${h.what}</span><span class="d-block small text-body-secondary">${h.date}${h.bill ? ' · ' + h.bill : ''}</span></span><span class="text-end"><span class="d-block fw-bold">${h.pts}</span><span class="d-block small text-body-secondary">${h.after}</span></span></div>`).join('');
+const memberDetail = (o = {}) => `${o.top || ''}<div class="card"><div class="card-body d-flex flex-column gap-2 p-3">
     <div class="d-flex align-items-center gap-3">${tile('person-badge-fill', 'tea', 'lg')}<div class="min-w-0"><div class="fs-5 fw-bold">${SITI.name}</div><div class="small text-body-secondary">Member since ${SITI.since}</div></div></div>
     ${kv('<span class="text-body-secondary">Phone</span>', SITI.phone)}${kv('<span class="text-body-secondary">Email</span>', SITI.email)}</div></div>
-  <div class="card"><div class="card-body d-flex align-items-center justify-content-between p-3"><span class="fw-semibold">Points balance</span><span class="qs-mid">${SITI.balance}</span></div></div>
-  <section><h2 class="fs-6 mb-2">Points history</h2><div class="qs-list">${hist}</div></section>`;
+  <div class="card"><div class="card-body d-flex align-items-center justify-content-between p-3"><span class="fw-semibold">Points balance</span><span class="qs-mid">${o.balance || SITI.balance}</span></div></div>
+  <section><h2 class="fs-6 mb-2">Points history</h2><div class="qs-list">${histRows(o.redeemed ? [REDEEMED, ...HISTORY] : HISTORY)}</div></section>`;
+const BAL = 1240;
+const rewardRow = (r, sel, err) => { const short = r.cost > BAL; return `<label class="qs-opt${sel ? ' on' : ''}${short ? ' qs-off' : ''}${err ? ' err' : ''}"><span class="qs-ph sm">${food(r.img, 44)}</span><span class="flex-grow-1 min-w-0"><span class="d-block fw-semibold">${r.name}</span><span class="d-block small ${short ? 'fw-semibold' : 'text-body-secondary'}"${short ? ' style="color:#664D03"' : ''}>${short ? `Need ${(r.cost - BAL).toLocaleString('en')} more points` : r.cost.toLocaleString('en') + ' pts'}</span></span><input class="form-check-input mt-0 flex-shrink-0" type="radio" name="rw"${sel ? ' checked' : ''}${short ? ' disabled' : ''} aria-label="${r.name}"></label>`; };
+const redeemSheet = (err) => mod('Which reward for Siti?', `
+  ${err ? alert('danger', 'Not enough points', 'Need 50 more. Choose another reward.') : `<div class="small text-body-secondary">1,240 pts available</div>`}
+  <div class="d-flex flex-column gap-2">${REWARDS.map((r, k) => rewardRow(r, err ? k === 3 : k === 0, err && k === 3)).join('')}</div>
+  ${field('Add to table', 'T3 · Indoor', { sel: 1 })}`, btn('Cancel', 'outline-secondary') + btn(err ? 'Confirm' : 'Confirm · 200 pts', 'primary', { dis: err }));
+
 const members = [
   sp('Members · Search results', 'Members', '', { bar: btn('Register a member', 'primary', { block: 1, i: 'person-plus' }), note: 'Reached from the menu button. Search matches name or any part of the phone number.' }, `${search('012')}${mlist}`),
   sp('Members · No match', 'Members', '', { bar: btn('Register a member', 'primary', { block: 1, i: 'person-plus' }) }, `${search('019-55')}<div class="card">${emp('person-badge', 'No member matches "019-55"', 'Check the number or register them.')}</div>`),
-  sp('Members · Member detail', 'Member', '', { note: 'Tapping a member opens their details and points history. Cashiers can view it; adjusting points, editing and deactivating are done by the owner.' }, memberDetail),
+  sp('Members · Member detail', 'Member', '', { bar: btn('Redeem reward', 'primary', { lg: 1, block: 1, i: 'gift-fill' }), note: 'Tapping a member opens their details and points history (earned, redeemed, adjusted, each with a date and bill or order number). Cashiers can redeem rewards; adjusting points, editing and deactivating are done by the owner.' }, memberDetail()),
+  sp('Members · Redeem reward', 'Member', '', { sheet: 1, modal: redeemSheet(false), note: 'Reward dishes are menu dishes the owner gave a points cost. The cashier picks one and a table; points are deducted at once and the dish joins that table\'s order at RM0.00 with a Reward tag. Dishes the member can\'t afford are greyed with how many points are missing.' }, memberDetail()),
+  sp('Members · Not enough points', 'Member', '', { sheet: 1, modal: redeemSheet(true), note: 'Invalid case: a reward that costs more than the balance cannot be confirmed. Points never go below 0.' }, memberDetail()),
+  sp('Members · Reward redeemed', 'Member', '', { bar: btn('Redeem reward', 'primary', { lg: 1, block: 1, i: 'gift-fill' }), note: 'Next visit, 18 Nov: 1,240 − 200 = 1,040. The Teh Tarik goes to the kitchen and deducts stock by recipe like any other dish; it earns no points.' }, memberDetail({ top: alert('primary', 'Teh Tarik added to T3 · 1,040 points left', null, 'check-circle-fill'), balance: '1,040', redeemed: 1 })),
   sp('Members · Register', 'Members', '', { sheet: 1, modal: regForm(false), note: 'Name and phone are required; the phone must be a unique Malaysian mobile number. Email is optional. Members are found by phone at payment; customers never sign in.' }, `${search('012')}${mlist}`),
   sp('Members · Duplicate phone', 'Members', '', { sheet: 1, modal: regForm(true), note: 'The error names the existing member and offers to open that record.' }, `${search('012')}${mlist}`),
 ];
