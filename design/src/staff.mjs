@@ -1,3 +1,4 @@
+import { food } from './food.mjs';
 import { tile, i, btn, iconBtn, badge, field, toggle, kv, alert, upd, step, emp, mod, tabs, ph, sp, tb, ct, section } from './lib.mjs';
 
 /* ---------- Staff login ---------- */
@@ -217,6 +218,39 @@ const voids = [
   sp('Void · Voided record', 'Transactions', 'Pay', { note: 'The record shows who, when and why. The amount is struck through, not removed.' }, tx(true)),
 ];
 
+/* ---------- Menu (cashier): read only, except dish photos when the owner allows it ---------- */
+// photo: image id, '' = none. o.can: cashier may add photos. o.pending / o.fresh: just-added states.
+const sdish = (name, meta, img, o = {}) => `<div class="qs-dish">${img ? `<span class="qs-ph">${food(img, 72)}</span>` : tile(o.icon || 'egg-fried', 'tea')}
+  <div class="flex-grow-1 min-w-0"><div class="nm">${name}</div><div class="ds">${meta}</div>
+  ${o.pending ? `<div class="mt">${badge('Awaiting approval', 'wait')}</div>` : o.fresh ? `<div class="mt">${badge('Photo added', 'brand')}</div>` : ''}
+  ${o.can && !img ? `<div class="mt">${btn('Add photo', 'outline-secondary', { sm: 1, i: 'camera' })}</div>` : ''}</div>
+  ${o.can && img ? iconBtn('camera', 'Replace the photo of ' + name) : ''}</div>`;
+const smenu = (o = {}) => {
+  const roti = o.roti || '';
+  const can = o.can !== false;
+  return `<div class="qs-search">${i('search')} Search dishes</div>
+    <div class="qs-chipset">${['All 32', 'No photo 2', 'Unavailable 1'].map((l, j) => `<button type="button" class="qs-chip${j === (o.filter || 0) ? ' on' : ''}"${j === (o.filter || 0) ? ' aria-pressed="true"' : ''}>${l}</button>`).join('')}</div>
+    <div class="qs-dishes">
+      ${o.filter === 1 ? '' : sdish('Nasi Lemak Ayam', 'Rice, RM9.50', 'nasi-lemak', { can })}
+      ${sdish('Roti Canai (2 pcs)', 'Roti, RM3.00', roti, { can, icon: 'cookie', pending: o.pending, fresh: o.fresh })}
+      ${sdish('Cendol', 'Desserts, RM4.50', '', { can, icon: 'cake2-fill' })}
+      ${o.filter === 1 ? '' : sdish('Teh Tarik', 'Drinks, RM2.80', 'teh-tarik', { can })}</div>
+    ${can && !o.fresh ? '<div class="small text-body-secondary">You can add or replace dish photos. Prices, recipes and new dishes are managed by the owner.</div>' : ''}`;
+};
+const checkPhoto = `<div class="qs-photo">${food('roti-canai', 328)}</div>
+    <div class="fw-bold">Roti Canai (2 pcs)</div>
+    <ul class="list-unstyled d-flex flex-column gap-2 mb-0 small">
+      <li class="d-flex gap-2">${i('check-circle-fill', 'text-primary')}Whole plate inside the square</li>
+      <li class="d-flex gap-2">${i('check-circle-fill', 'text-primary')}Daylight or bright light, no flash</li>
+      <li class="d-flex gap-2">${i('check-circle-fill', 'text-primary')}Shot from above, plain table behind</li></ul>`;
+const smenus = [
+  sp('Menu · Dishes without photos', 'Menu', '', { note: 'Reached from the menu button. Cashiers can search the menu but not change it, except photos: dishes without one show Add photo, and the "No photo" filter lists the gaps.' }, smenu({ filter: 1 })),
+  sp('Menu · Check the photo', 'New photo', '', { bar: btn('Use this photo', 'primary', { lg: 1, block: 1, i: 'check-lg' }) + btn('Retake', 'outline-secondary', { block: 1, i: 'camera' }), note: 'Add photo opens the phone camera directly. After the shot the cashier checks it against three simple tips before it goes on the menu. Drag to move the dish inside the square.' }, checkPhoto),
+  sp('Menu · Photo added', 'Menu', '', { note: 'With approval off (the default) the photo goes on the customer menu at once. Undo is offered for 8 seconds; after that the owner can still replace or remove it.' }, `${smenu({ roti: 'roti-canai', fresh: 1 })}<div class="qs-toast ph" role="status">${i('check-circle-fill')} Photo added to Roti Canai ${btn('Undo', 'band')}</div>`),
+  sp('Menu · Sent for approval', 'Menu', '', { note: 'If the owner turned on approval, the photo waits for them. Customers keep seeing the old photo, or the category icon, until it is approved.' }, `${smenu({ roti: 'roti-canai', pending: 1 })}${alert('warning', 'Sent to Mei Ling for approval', 'Customers will see the new photo once it is approved.', 'hourglass-split')}`),
+  sp('Menu · Photos turned off', 'Menu', '', { note: 'When the owner switches photo uploads off for cashiers, the buttons disappear instead of failing when tapped. The server also refuses the upload.' }, `${smenu({ can: false })}${alert('secondary', null, 'Only the owner can change dish photos right now. Ask Mei Ling if you want to add one.', 'lock')}`),
+];
+
 /* ---------- Members ---------- */
 const member = (name, phone, since) => `<a href="#">${tile('person-badge-fill', 'tea')}<span class="flex-grow-1"><span class="d-block fw-semibold">${name}</span><span class="d-block small text-body-secondary">${phone} · member since ${since}</span></span>${i('chevron-right')}</a>`;
 const regForm = (dup) => mod('Register member', `
@@ -242,4 +276,5 @@ export default [
   section('take-payment', 'Payment at the counter', 'Cashier, phone · Payment module (Zheng Yang)', cash),
   section('void-approval', 'Void approval', 'Cashier with the Owner beside · Payment module (Zheng Yang)', voids),
   section('members', 'Members', 'Cashier or Owner, phone · Membership module (Zheng Yang)', members),
+  section('staff-menu', 'Menu and dish photos', 'Cashier, phone · Menu module (Zi Chen)', smenus),
 ];

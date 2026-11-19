@@ -84,6 +84,11 @@ const menu = [
   addPage('Dish with photo', 'filled', 'done', 'The photo is shrunk in the browser before upload (4.1 MB to 180 KB), so it is quick on restaurant Wi-Fi and light for customers. The preview shows exactly how the dish will look on the menu.'),
   addPage('Photo not accepted', 'filled', 'error', 'Only a wrong file type is refused. Large photos are never refused; they are shrunk instead. iPhone photos arrive as JPG automatically.'),
   addPage('Validation errors', 'invalid', 'done', 'Save shows a short summary at the top and each message under its field. Everything already entered, including the photo, is kept.'),
+  pc('Menu · Photo to approve', 'Menu', 'Menu', { act: btn('Add dish', 'primary', { i: 'plus-lg' }), note: 'Only when "Staff photos need my approval" is on. The banner shows on the Menu page and on Home until the photo is approved or rejected. Rejecting tells the cashier why.',
+    modal: mod('New photo for Roti Canai (2 pcs)', `<div class="small text-body-secondary">Taken by Aina with a phone camera, today 2:14 pm.</div>
+      <div class="d-flex gap-3"><div class="flex-fill d-flex flex-column gap-2"><div class="fw-semibold">Now on the menu</div><div class="qs-photo d-flex align-items-center justify-content-center">${tile('cookie', 'tea', 'xl')}</div><div class="small text-body-secondary">No photo, category icon</div></div>
+      <div class="flex-fill d-flex flex-column gap-2"><div class="fw-semibold">New photo</div><div class="qs-photo">${food('roti-canai', 240)}</div><div class="small text-body-secondary">180 KB, already shrunk</div></div></div>`, btn('Reject', 'outline-secondary') + btn('Approve and show on menu', 'primary', { i: 'check-lg' }), 560) }, `
+    ${alert('warning', '1 photo from Aina is waiting for your approval', 'Roti Canai (2 pcs). Customers will see it once you approve.', 'hourglass-split')}${menuPage}`),
   mset('Cannot remove', { modal: blocked('Mee Goreng Mamak cannot be removed', 'This dish is in an active order', 'Order #1042 on T3 includes it. Mark the dish unavailable now and remove it after the order is paid.'), note: 'Removal is blocked while a dish is in a pending, confirmed or unpaid order.' }),
 ];
 
@@ -175,12 +180,21 @@ const queueRules = `<div class="card" style="max-width:640px"><div class="card-b
   <div class="d-flex gap-3 align-items-start"><div class="flex-fill">${field('Hold the table after calling', '5', { suf: 'min', type: 'number', help: 'Staff can call the next group straight away.' })}</div><div class="flex-fill">${field('Flag a ticket when its page has been closed for', '20', { suf: 'min', type: 'number', help: 'Flagged tickets turn amber on the Queue page.' })}</div></div>
   <div class="d-flex align-items-center gap-3">${toggle('Ask "Are you still here?" when 2 groups are ahead', true)}<span>Ask "Are you still here?" when 2 groups are ahead</span></div>
   <div class="d-flex gap-2">${btn('Save queue rules', 'primary')}${btn('Discard changes', 'outline-secondary')}</div></div></div>`;
+const perm = (title, desc, ctl) => `<div class="d-flex align-items-center gap-3 py-3 border-bottom"><div class="flex-grow-1 min-w-0"><div class="fw-semibold">${title}</div><div class="small text-body-secondary">${desc}</div></div>${ctl}</div>`;
+const locked = (t) => `<span class="d-inline-flex align-items-center gap-2 small fw-semibold text-body-secondary">${i('lock')}${t}</span>`;
+const permCard = `<div class="card" style="max-width:760px"><div class="card-body"><h2 class="fs-5 mb-1">What cashiers can do</h2><div class="small text-body-secondary">Applies to every Cashier account, including the kitchen tablet. The server checks these too, not just the screens.</div>
+  ${perm('Orders, tables, queue and payments', 'Confirm orders, call the queue, take cash, request voids.', locked('Always on'))}
+  ${perm('Mark dishes unavailable', 'When stock runs low.', toggle('Cashiers can mark dishes unavailable', true))}
+  ${perm('Add or replace dish photos', 'From their phone camera, on the Menu page. They cannot change names, prices or recipes.', toggle('Cashiers can add or replace dish photos', true))}
+  ${perm('Staff photos need my approval', 'Off: photos go on the menu at once and you can still replace them. On: you approve each photo first.', toggle('Staff photos need my approval', false))}
+  ${perm('Prices, recipes, new dishes, stock-in, vouchers, reports', 'Back office.', locked('Owner only'))}</div></div>`;
 const staff = [
   pc('Staff · Account list', 'Staff', 'Staff accounts', { upd: false, act: btn('Add staff account', 'primary', { i: 'plus-lg' }), note: 'Accounts are deactivated, not deleted, so past transactions keep their staff name. The kitchen tablet uses its own Cashier-role account.' }, `
     ${tbl(['Name', 'Staff ID', 'Role', 'Status', 'Last sign-in', { h: '', ...R }], [
       srow('Mei Ling', 'meiling', 'Owner', 'Active', 'Today, 9:02 am'), srow('Aina', 'aina', 'Cashier', 'Active', 'Today, 10:55 am'), srow('Kumar', 'kumar', 'Cashier', 'Active', 'Today, 4:58 pm'),
       srow('Kitchen tablet', 'kitchen', 'Cashier', 'Active', 'Today, 10:30 am'), srow('Farah', 'farah', 'Cashier', 'Inactive', '28 Sep 2026', 'qs-void')])}`),
   pc('Settings · Rates', 'Settings', 'Settings', { upd: false, note: 'Both rates default to 0%. The example line shows the owner the effect before saving.' }, rates(false)),
+  pc('Staff · Cashier permissions', 'Staff', 'Staff accounts', { upd: false, sub: 'Permissions', note: 'Lets the owner hand photo taking to staff without giving away prices or recipes. Defaults: photos on, approval off, so a cashier can fill gaps during a quiet hour.' }, `${tabs(['Accounts', 'Permissions'], 1)}${permCard}`),
   pc('Settings · Walk-in queue rules', 'Settings', 'Settings', { upd: false, note: 'The party limit follows the largest table by default instead of a fixed number. The hold time no longer blocks the queue, and closed ticket pages are flagged so staff can remove people who left.' }, queueRules),
   pc('Settings · Rate out of range', 'Settings', 'Settings', { upd: false, note: 'Rates outside 0 to 20% are refused under the field. The other field keeps its value.' }, rates(true)),
 ];
