@@ -42,8 +42,8 @@ const mrow = (name, catName, price, recipe, on, o = {}) => ({ c: [thumb(o.img, n
 const menuRows = [
   mrow('Nasi Lemak Ayam', 'Rice', 'RM9.50', '5 ingredients', true, { best: 1, img: 'nasi-lemak', reward: '1,290' }), mrow('Nasi Goreng Kampung', 'Rice', 'RM8.50', '6 ingredients', false, { img: 'nasi-goreng' }),
   mrow('Mee Goreng Mamak', 'Noodles', 'RM8.00', '7 ingredients', true, { best: 1, img: 'mee-goreng' }), mrow('Roti Canai (2 pcs)', 'Roti', 'RM3.00', '3 ingredients', true, { best: 1, reward: 300 }),
-  mrow('Teh Tarik', 'Drinks', 'RM2.80', '3 ingredients', true, { best: 1, img: 'teh-tarik', reward: 200 }), mrow('Milo Ais', 'Drinks', 'RM3.50', '3 ingredients', true, { img: 'milo-ais', reward: 250 }), mrow('Cendol', 'Desserts', 'RM4.50', 'No recipe yet', true)];
-const menuPage = `<div class="qs-toolbar">${sel('All categories')}${searchBox('Search dishes')}<button type="button" class="qs-chip">${i('camera')} No photo <span class="badge qs-b-neutral">2</span></button>${btn('Manage categories', 'link')}<div class="ms-auto small text-body-secondary">32 dishes, 1 unavailable</div></div>${tbl([{ h: 'Photo' }, 'Dish', 'Category', { h: 'Price', ...R }, 'Recipe', 'Availability', { h: '', ...R }], menuRows)}`;
+  mrow('Teh Tarik', 'Drinks', 'RM2.80', '3 ingredients', true, { best: 1, img: 'teh-tarik', reward: 200 }), mrow('Milo Ais', 'Drinks', 'RM3.50', '3 ingredients', true, { best: 1, img: 'milo-ais', reward: 250 }), mrow('Cendol', 'Desserts', 'RM4.50', 'No recipe yet', true)];
+const menuPage = `<div class="qs-toolbar">${sel('All categories')}${searchBox('Search dishes')}<button type="button" class="qs-chip">${i('camera')} No photo <span class="badge qs-b-neutral">2</span></button>${btn('Manage categories', 'link')}<div class="ms-auto small text-body-secondary">32 dishes, 1 unavailable</div></div><div class="small text-body-secondary">${i('star-fill')} Best seller: top 5 by quantity, last 30 days</div>${tbl([{ h: 'Photo' }, 'Dish', 'Category', { h: 'Price', ...R }, 'Recipe', 'Availability', { h: '', ...R }], menuRows)}`;
 const mset = (name, o) => pc(`Menu · ${name}`, 'Menu', 'Menu', { act: btn('Add dish', 'primary', { i: 'plus-lg' }), ...o }, menuPage);
 
 // Add dish is a full page: photo and live preview on the left, details and recipe on the right.
@@ -67,7 +67,7 @@ const details = (st) => {
   <div class="d-flex gap-3 align-items-start"><div style="width:200px">${field('Price', bad ? '0.00' : empty ? '0.00' : '9.00', { pre: 'RM', ph: empty, err: bad ? 'Enter a price above RM0.00.' : '' })}</div><div class="flex-fill">${field('Description (shown to customers)', empty ? 'What is in it, in one line' : 'Fried rice with chicken and egg', { ph: empty })}</div></div>
   <div style="max-width:320px">${field('Reward points cost (optional)', 'For example 200', { ph: 1, suf: 'pts', type: 'number', help: 'Members can exchange points for it' })}</div>
   <div class="d-flex flex-wrap gap-4">${check('Spicy (shows a fire icon)', false)}${check('Available as soon as it is saved', true)}</div>
-  <div class="small text-body-secondary">Best seller: top 5 sold, last 30 days.</div></div></div>`;
+  <div class="small text-body-secondary">Best seller: top 5 by quantity, last 30 days</div></div></div>`;
 };
 const recipe = (st) => {
   const bad = st === 'invalid', empty = st === 'empty';
@@ -160,7 +160,7 @@ const reports = [
         ['Sun 15 Nov', 52, bar(77, 'RM1,702.50')], ['Mon 16 Nov', 31, bar(36, 'RM787.10')], ['Tue 17 Nov', 39, bar(58, 'RM1,284.60')]])}</div>
       <div class="flex-fill d-flex flex-column gap-3">
         <div><h2 class="fs-6 mb-2">Revenue by payment method</h2>${tbl(['Method', { h: 'Bills', ...R }, { h: 'Revenue', ...R }, { h: 'Share', ...R }], [['Card', 112, 'RM3,812.20', '40.5%'], ['E-wallet', 96, 'RM2,970.40', '31.6%'], ['Cash', 94, 'RM2,630.20', '27.9%']])}</div>
-        <div><h2 class="fs-6 mb-2">Best sellers, by quantity sold</h2>${tbl(['Dish', { h: 'Sold', ...R }, { h: 'Revenue', ...R }], [['Teh Tarik', 286, 'RM800.80'], ['Nasi Lemak Ayam', 214, 'RM2,033.00'], ['Roti Canai (2 pcs)', 143, 'RM429.00'], ['Mee Goreng Mamak', 97, 'RM776.00']])}</div>
+        <div><h2 class="fs-6 mb-2">Best sellers, by quantity sold</h2>${tbl(['Dish', { h: 'Sold', ...R }, { h: 'Revenue', ...R }], [['Teh Tarik', 286, 'RM800.80'], ['Nasi Lemak Ayam', 214, 'RM2,033.00'], ['Roti Canai (2 pcs)', 143, 'RM429.00'], ['Mee Goreng Mamak', 97, 'RM776.00'], ['Milo Ais', 88, 'RM308.00']])}</div>
       </div>
     </div>`),
   pc('Transactions · History', 'Transactions', 'Transactions', { sub: 'Tue 17 Nov 2026', note: 'Every bill stays in the list. A voided bill is greyed with its amount struck through and opens to show who voided it and why.' }, `
@@ -182,18 +182,23 @@ const reports = [
 /* ---------- Vouchers ---------- */
 const vact = (code, status) => `<div class="d-flex gap-2 justify-content-end">${iconBtn('pencil', 'Edit ' + code)}${status === 'Active' ? btn('Deactivate', 'outline-secondary', { sm: 1 }) : status === 'Deactivated' ? btn('Reactivate', 'outline-secondary', { sm: 1 }) : ''}</div>`;
 const vrow = (code, off, min, valid, used, status, tone, cls) => ({ cls, c: [`<b>${code}</b>`, off, min, valid, used, badge(status, tone), vact(code, status)] });
-const vForm = (err) => mod(err === 'edit' ? 'Edit voucher RAYA5' : 'Create voucher', `
-  ${field('Code', err === 'dup' ? 'RAYA5' : 'CNY8', { err: err === 'dup' ? 'RAYA5 already exists. Choose another code.' : '' })}
-  <fieldset><legend class="form-label">Discount</legend><div class="qs-chipset"><button type="button" class="qs-chip">% off</button><button type="button" class="qs-chip on" aria-pressed="true">RM off</button></div></fieldset>
-  <div class="d-flex gap-3 align-items-start">${field('Value', '8.00', { pre: 'RM', c: 'flex-fill' })}${field('Minimum bill', '40.00', { pre: 'RM', c: 'flex-fill' })}</div>
-  <div class="d-flex gap-3 align-items-start">${field('Start date', '29 Jan 2027', { c: 'flex-fill' })}${field('End date', err === 'dates' ? '20 Jan 2027' : '12 Feb 2027', { c: 'flex-fill', err: err === 'dates' ? 'End date is before the start date.' : '' })}</div>
-  <div class="d-flex align-items-center gap-3">${toggle('Members only', false)}<span>Members only</span></div>`, btn('Cancel', 'outline-secondary') + btn('Save voucher', 'primary'), 520);
+const vForm = (err) => {
+  const ne = err === 'noend';
+  return mod(err === 'edit' ? 'Edit voucher RAYA5' : 'Create voucher', `
+  ${field('Code', err === 'dup' ? 'RAYA5' : ne ? 'MEMBER10' : 'CNY8', { err: err === 'dup' ? 'RAYA5 already exists. Choose another code.' : '' })}
+  <fieldset><legend class="form-label">Discount</legend><div class="qs-chipset"><button type="button" class="qs-chip${ne ? ' on' : ''}"${ne ? ' aria-pressed="true"' : ''}>% off</button><button type="button" class="qs-chip${ne ? '' : ' on'}"${ne ? '' : ' aria-pressed="true"'}>RM off</button></div></fieldset>
+  <div class="d-flex gap-3 align-items-start">${ne ? field('Value', '10', { suf: '%', c: 'flex-fill' }) : field('Value', '8.00', { pre: 'RM', c: 'flex-fill' })}${field('Minimum bill', ne ? '0.00' : '40.00', { pre: 'RM', c: 'flex-fill', help: ne ? 'No minimum' : '' })}</div>
+  <div class="d-flex gap-3 align-items-start">${field('Start date', ne ? '1 Jan 2026' : '29 Jan 2027', { c: 'flex-fill' })}<div class="flex-fill d-flex flex-column gap-2">${ne ? field('End date', 'No end date', { ph: 1, dis: 1, help: 'Valid until you deactivate it' }) : field('End date', err === 'dates' ? '20 Jan 2027' : '12 Feb 2027', { err: err === 'dates' ? 'End date is before the start date.' : '' })}
+    <div class="d-flex align-items-center gap-2">${toggle('No end date', ne)}<span class="small fw-semibold">No end date</span></div></div></div>
+  <div class="d-flex align-items-center gap-3">${toggle('Members only', ne)}<span>Members only</span></div>`, btn('Cancel', 'outline-secondary') + btn('Save voucher', 'primary'), 520);
+};
 const vlist = () => vlistBody;
 const vouchers = () => [
   pc('Vouchers · List', 'Vouchers', 'Vouchers', { act: btn('Create voucher', 'primary', { i: 'plus-lg' }), note: 'Vouchers are never deleted: active ones can be deactivated and reactivated, and expired ones stay listed so past bills still make sense.' }, vlist()),
   pc('Vouchers · Create voucher', 'Vouchers', 'Vouchers', { act: btn('Create voucher', 'primary', { i: 'plus-lg' }), modal: vForm(''), note: 'FR-MB-01. Code, % or RM discount, value, minimum bill, dates and members only. The same form opens with values filled in for Edit.' }, vlist()),
+  pc('Vouchers · Create voucher · No end date', 'Vouchers', 'Vouchers', { act: btn('Create voucher', 'primary', { i: 'plus-lg' }), modal: vForm('noend'), note: 'With No end date on, the End date field is disabled and the voucher runs until it is deactivated. MEMBER10 is set up this way, so the list shows "No end date" for it.' }, vlist()),
   pc('Vouchers · Duplicate code', 'Vouchers', 'Vouchers', { act: btn('Create voucher', 'primary', { i: 'plus-lg' }), modal: vForm('dup'), note: 'Codes must be unique, including deactivated and expired ones, so old receipts stay unambiguous.' }, vlist()),
-  pc('Vouchers · End date before start', 'Vouchers', 'Vouchers', { act: btn('Create voucher', 'primary', { i: 'plus-lg' }), modal: vForm('dates'), note: 'Invalid dates are refused under the End date field.' }, vlist()),
+  pc('Vouchers · End date before start', 'Vouchers', 'Vouchers', { act: btn('Create voucher', 'primary', { i: 'plus-lg' }), modal: vForm('dates'), note: 'Only checked when an end date is set: an end date before the start date is refused under the field. With No end date on there is nothing to check.' }, vlist()),
 ];
 const vlistBody = `
     ${tabs(['Vouchers', 'Members <span class="badge qs-b-neutral ms-2">186</span>'])}

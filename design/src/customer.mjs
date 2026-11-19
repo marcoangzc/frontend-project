@@ -68,14 +68,14 @@ const cat = (l, icon, on) => `<button type="button" class="qs-cat${on ? ' on' : 
 const menuList = (loading) => { const P = (id) => (loading ? 'loading' : id); return `
     <div class="qs-search">${i('search')} Search nasi lemak, teh tarik…</div>
     <div class="qs-chips">${cat('Popular', 'star-fill', 1)}${cat('Rice', 'egg-fried')}${cat('Noodles', 'basket2-fill')}${cat('Roti', 'cookie')}${cat('Drinks', 'cup-hot-fill')}${cat('Desserts', 'cake2-fill')}</div>
-    <section class="d-flex flex-column gap-2"><h2 class="h-sec">Popular</h2><div class="qs-dishes">
+    <section class="d-flex flex-column gap-2"><div><h2 class="h-sec">Popular</h2><div class="small text-body-secondary">${i('star-fill')} Best seller: top 5 by quantity, last 30 days</div></div><div class="qs-dishes">
       ${dish('Nasi Lemak Ayam', 'Coconut rice, fried chicken, sambal, egg', 'RM9.50', 'rice', { best: 1, hot: 1, q: 2, img: P('nasi-lemak') })}
       ${dish('Mee Goreng Mamak', 'Fried yellow noodles, tofu, potato, egg', 'RM8.00', 'noodle', { best: 1, hot: 1, q: 1, img: P('mee-goreng') })}
       ${dish('Nasi Goreng Kampung', 'Village fried rice with anchovies', 'RM8.50', 'rice', { out: 1, img: P('nasi-goreng') })}
       ${dish('Roti Canai (2 pcs)', 'Served with dhal and fish curry', 'RM3.00', 'roti', { best: 1 })}</div></section>
     <section class="d-flex flex-column gap-2"><h2 class="h-sec">Drinks</h2><div class="qs-dishes">
       ${dish('Teh Tarik', 'Hot pulled milk tea', 'RM2.80', 'drink', { best: 1, q: 3, img: P('teh-tarik') })}
-      ${dish('Milo Ais', 'Iced chocolate malt drink', 'RM3.50', 'cold', { img: P('milo-ais') })}</div></section>`; };
+      ${dish('Milo Ais', 'Iced chocolate malt drink', 'RM3.50', 'cold', { best: 1, img: P('milo-ais') })}</div></section>`; };
 const cartbar = `<a href="#" class="qs-cartbar text-decoration-none"><span class="n">6</span><span class="flex-grow-1">View cart</span><span>RM35.40</span></a>`;
 const detail = mod('Nasi Lemak Ayam', `
   <div class="qs-ph wide">${food('nasi-lemak', 328, 200)}</div>

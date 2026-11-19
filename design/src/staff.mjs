@@ -139,7 +139,7 @@ const rline = (q, name) => `<div><span class="fw-semibold me-2">${q} ×</span>${
 const conf = (tbl, no, st, lines, served) => `<div class="card"><div class="card-body d-flex flex-column gap-2 p-3">
   <div class="d-flex align-items-center gap-2"><span class="fs-4 fw-bold lh-1">${tbl}</span><span class="flex-grow-1 small text-body-secondary">#${no}</span>${badge(st, served ? 'brand' : 'wait')}</div>
   <div class="d-flex flex-column gap-1">${lines}</div>
-  <div class="d-flex gap-2">${btn('Cancel order', 'outline-danger', { c: 'flex-fill' })}</div></div></div>`;
+  ${served ? '' : `<div class="d-flex gap-2">${btn('Cancel order', 'outline-danger', { c: 'flex-fill' })}</div>`}</div></div>`;
 const confirmedList = (o = {}) => `${ctabs}${upd()}
   ${o.cancelled ? '' : conf('T3', 1042, 'In the kitchen 6 min', o1042)}
   ${conf('T7', 1044, 'In the kitchen 3 min', line(1, 'Nasi Goreng Kampung') + rline(1, 'Teh Tarik'))}
@@ -157,7 +157,7 @@ const orders = [
     modal: mod('Edit order #1042 · T3', `${editRow('Nasi Lemak Ayam', 1)}${editRow('Mee Goreng Mamak', 1)}${editRow('Teh Tarik', 3)}${btn('Add a dish', 'outline-primary', { i: 'plus-lg', block: 1 })}${kv('New total', 'RM30.20', 'fs-5 fw-semibold')}`, btn('Cancel', 'outline-secondary') + btn('Save changes', 'primary')) }, pending()),
   sp('Orders · Cancel a confirmed order', 'Orders', 'Orders', { sheet: 1, modal: cancelSheet, note: 'FR-OR-04. A confirmed order that has not been served yet can be cancelled with a reason. The kitchen ticket disappears and the customer sees the reason.' }, confirmedList()),
   sp('Orders · Order cancelled, stock restored', 'Orders', 'Orders', { note: 'Cancelling reverses the recipe deduction made at confirmation. The restored amounts are listed so staff can trust the stock figures.' }, `${alert('primary', 'Order #1042 cancelled', 'Stock restored: Egg +3 and 6 more.', 'arrow-counterclockwise')}${confirmedList({ cancelled: 1 })}`),
-  sp('Orders · Already served', 'Orders', 'Orders', { sheet: 1, note: 'Blocked case for FR-OR-04: a served order cannot be cancelled, because the food and its ingredients are gone. Refunds after payment are done by the owner in Transactions.',
+  sp('Orders · Already served', 'Orders', 'Orders', { sheet: 1, note: 'Blocked case for FR-OR-04. Served orders show no Cancel button, so this only appears when Cancel is tapped from an old link or on a second device after the kitchen marked the order served. Refunds after payment are done by the owner in Transactions.',
     modal: mod('Can\'t cancel #1039', `<div>${alert('danger', 'Order already served', 'Served at 7:30 pm.')}</div>`, btn('Close', 'primary')) }, confirmedList()),
   sp('Orders · Reject', 'Orders', 'Orders', { sheet: 1, note: 'Rejecting needs a reason, which the customer sees on their order status page. Stops prank and duplicate orders.',
     modal: mod('Reject order #1043 · T9?', `${field('Reason shown to the customer', 'Duplicate order', { sel: 1 })}${field('Note (optional)', 'Add a note', { ph: 1 })}<div class="small text-body-secondary">Kept on record. No stock deducted.</div>`, btn('Keep order', 'outline-secondary') + btn('Reject order', 'danger')) }, pending()),
@@ -198,7 +198,7 @@ const kitchen = [
     ${ticket('T3', 1042, '7:23 pm', '6 min', kl(2, 'Nasi Lemak Ayam', 'less spicy') + kl(1, 'Mee Goreng Mamak') + kl(3, 'Teh Tarik', '1 kurang manis'))}`),
   tb('Kitchen · Not available for this account', { count: '', note: 'Shown when a Kitchen account opens any other page, for example an old bookmark. The server refuses the request as well.' }, `
     <div class="qs-knot">${tile('lock-fill', 'gray', 'xl')}<div>This page is not available for kitchen accounts.</div>${btn('Back to kitchen view', 'primary', { i: 'arrow-left' })}</div>`),
-  tb('Kitchen · None waiting', { count: '0 orders waiting', note: 'The device signs in with a staff account and stays on this page; there is no navigation to tap by mistake.' }, `
+  tb('Kitchen · None waiting', { count: '0 orders waiting', note: 'The device signs in with a Kitchen account and stays on this page; there is no navigation to tap by mistake.' }, `
     <div class="qs-kempty">No orders waiting<div>Confirmed orders appear here within 5 seconds.</div></div>`),
 ];
 

@@ -61,7 +61,7 @@ figure.pc, figure.tb, figure.ct { width: 200mm; } figure.pc img, figure.tb img, 
 <div class="cover"><h1>QuickServe UI screens</h1>
 <p>Browser-based POS for small family-run Malaysian restaurants. ${screens} screens and ${states} states across three roles, drawn in Bootstrap 5 with Bootstrap Icons.</p>
 <p>Each page shows one screen with all of its states. The grey line under a state says what triggers it.</p>
-<p>Version 3.4, ${new Date().toISOString().slice(0, 10)}. Food images are flat illustrations standing in for the photos merchants upload; QR codes are placeholders.</p></div>
+<p>Version 3.5, ${new Date().toISOString().slice(0, 10)}. Food images are flat illustrations standing in for the photos merchants upload; QR codes are placeholders.</p></div>
 ${roles.map((r) => r.sections.map((s) => `<section><p class="role">${r.title}</p><h2>${s.title}</h2><p class="meta">${s.meta}</p><div class="grid">${s.frames.map(fig).join('')}</div></section>`).join('')).join('')}
 </body></html>`;
 const pdfSrc = join(shots, 'print.html');
@@ -76,7 +76,7 @@ const list = roles.map((r) => `### ${r.title}\n\n${r.sub}\n\n` + r.sections.map(
 
 const md = `# QuickServe UI design: summary for the project report
 
-Version 3.4 · ${new Date().toISOString().slice(0, 10)} · ${screens} screens, ${states} states
+Version 3.5 · ${new Date().toISOString().slice(0, 10)} · ${screens} screens, ${states} states
 
 This file summarises the UI/UX design work for QuickServe, a browser-based POS for small family-run Malaysian restaurants (2 to 5 staff, about 30 tables). It goes with **QuickServe-UI-screens.pdf**, which has a screenshot of every state listed below. The source of every screen is in \`design/src/\` in the repository.
 
@@ -115,7 +115,12 @@ Out of scope, as in the brief: customer accounts, takeaway and delivery, reserva
 7. **Revision v3.4, part 2 of the report review.** Two decisions changed:
    - **Points buy reward dishes.** Points are no longer a discount, so the Use points control, its states, the points bill line and Settings · Points were removed. Points now buy reward dishes: the owner gives a dish a points cost, and the cashier redeems it from the member's page onto a table's order at RM0.00 with a Reward tag.
    - **Kitchen role.** A third staff role was added. Kitchen accounts open the Kitchen view directly, have only a small Sign out menu, and see a blocked page anywhere else.
-8. **Acceptance testing.** After every change, automated checks ran over every state (section 6), and the six key flows were walked through step by step.
+8. **Revision v3.5, small fixes:**
+   - **Vouchers.** The voucher form gained a No end date switch (MEMBER10 uses it), and the end-before-start check applies only when an end date is set.
+   - **Orders.** Served orders no longer show Cancel order.
+   - **Kitchen.** The kitchen caption now names the Kitchen account.
+   - **Best seller.** The rule reads the same on the customer menu, the owner dish list and the Add dish page: top 5 by quantity, last 30 days. Milo Ais was added as the fifth best seller.
+9. **Acceptance testing.** After every change, automated checks ran over every state (section 6), and the six key flows were walked through step by step.
 
 ## 3. Design system
 
@@ -168,9 +173,9 @@ These change or add to the brief. They need team agreement and backend support.
    - **Redeeming.** The cashier finds the member by phone, picks a reward and a table, and the points are deducted at once. The dish joins that table's order at RM0.00 with a Reward tag, goes to the kitchen and deducts stock by recipe. It earns no points.
    - **Limits.** A reward the member can't afford is greyed with "Need 50 more points". Points never go below 0, and owner adjustments need a reason.
    - **Example.** On 17 Nov Siti earns 35 points on RM35.45 (balance 1,240). On her next visit she redeems a Teh Tarik for 200 points (1,040 left). That visit's bill, RM8.00 + service charge RM0.80 + SST RM0.53 = RM9.33, earns 9 points.
-9. **Members.** Members have a name and phone (both required; the phone is a unique Malaysian mobile number) and an optional email. Members and vouchers are never deleted, only deactivated and reactivated.
-10. **Best sellers.** Ranked by quantity sold. The top 5 over the last 30 days get the Best seller label on the menu.
-11. **Cancel and refund.** A confirmed order that has not been served can be cancelled with a reason, and its stock is restored. A served order cannot be cancelled. After payment, the owner can refund all or part of a bill (never more than was paid), with a reason, back to the original payment method.
+9. **Members.** Members have a name and phone (both required; the phone is a unique Malaysian mobile number) and an optional email. Members and vouchers are never deleted, only deactivated and reactivated. Vouchers without an end date: the No end date switch disables the End date field, and the voucher runs until it is deactivated. The end-before-start error applies only when an end date is set.
+10. **Best sellers.** "Best seller: top 5 by quantity, last 30 days". The same rule and wording appear on the customer menu, the owner dish list and the Add dish page. Now: Teh Tarik, Nasi Lemak Ayam, Roti Canai, Mee Goreng Mamak and Milo Ais.
+11. **Cancel and refund.** A confirmed order that has not been served can be cancelled with a reason, and its stock is restored. Served orders show no Cancel button; the "Already served" message covers a Cancel sent from an old link or a second device. After payment, the owner can refund all or part of a bill (never more than was paid), with a reason, back to the original payment method.
 12. **Customer queue page.** Shows the number of groups ahead, never an estimated waiting time. Call waiter stays disabled until staff tap Done.
 13. **Staff roles.** There are three roles. Owner has everything. Cashier has the front of house plus dish photos and reward redemption. Kitchen can only view confirmed orders, mark them served (with undo) and record waste. A Kitchen account signs straight into the Kitchen view; any other page shows "Not available for this account" with a way back. The backend refuses every other request from a Kitchen account.
 14. **Visual rules.** The brief asked for one brand colour and a system font. The approved style uses iOS blue with decorative icon colours, and SF or Inter.
